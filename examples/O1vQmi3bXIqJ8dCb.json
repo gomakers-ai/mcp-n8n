@@ -1,0 +1,400 @@
+{
+  "createdAt": "2025-07-14T19:07:22.645Z",
+  "updatedAt": "2025-07-14T19:07:22.645Z",
+  "id": "O1vQmi3bXIqJ8dCb",
+  "name": "Amazon_Product_Search_Scraper_with_BrightData__GPT_4__and_Google_Sheets",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "model": "openai/gpt-4.1",
+        "options": {}
+      },
+      "id": "b21739d5-50bd-4ef9-a135-bcb143e047c7",
+      "name": "OpenRouter Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "position": [
+        -140,
+        220
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"array\",\n  \"items\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"name\": { \"type\": \"string\" },\n      \"description\": { \"type\": \"string\" },\n      \"rating\": { \"type\": \"number\" },\n      \"reviews\": { \"type\": \"integer\" },\n      \"price\": { \"type\": \"string\" }\n    },\n    \"required\": [\"name\", \"description\", \"rating\", \"reviews\", \"price\"]\n  }\n}"
+      },
+      "id": "f8341d03-da67-4784-af01-8eaddf968620",
+      "name": "Structured Output Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "position": [
+        140,
+        220
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.brightdata.com/request",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "{{BRIGHTDATA_TOKEN}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "zone",
+              "value": "web_unlocker1"
+            },
+            {
+              "name": "url",
+              "value": "={{ $json.url }}"
+            },
+            {
+              "name": "format",
+              "value": "raw"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "51106f8a-48ad-430d-bc27-664f45cde136",
+      "name": "scrap url",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -520,
+        40
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "content": "## Web Scraper API\n\n[Inscription - Free Trial](https://get.brightdata.com/website-scraper)"
+      },
+      "id": "5705e661-37fb-417d-8d5b-2063c592f8d9",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -600,
+        -160
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {},
+      "id": "aa36d330-0d11-4458-8980-c63ec87addf5",
+      "name": "When clicking ‘Test workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        -1200,
+        180
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "05f45a77-7a17-4396-b2fa-52754ca393ac",
+      "name": "url",
+      "type": "n8n-nodes-base.splitInBatches",
+      "position": [
+        -740,
+        180
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "documentId": "{{WEB_SHEET_ID}}",
+        "sheetName": "{{TRACK_SHEET_GID}}",
+        "options": {}
+      },
+      "id": "c7a1e7b2-1620-4bd8-9618-0261d7217d7e",
+      "name": "get urls to scrape",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        -960,
+        180
+      ],
+      "typeVersion": 4.5
+    },
+    {
+      "parameters": {
+        "jsCode": "// CleanHtmlFunction.js\n// Purpose: n8n Function node to clean HTML: remove doctype, scripts, styles, head, comments, classes, extra blank lines, and non-whitelisted tags\n\nreturn items.map(item => {\n  const rawHtml = item.json.data;\n\n  // 1) remove doctype, scripts, styles, comments and head section, and strip class attributes\n  let cleaned = rawHtml\n    .replace(/<!doctype html>/gi, '')\n    .replace(/<script[\\s\\S]*?<\\/script>/gi, '')\n    .replace(/<style[\\s\\S]*?<\\/style>/gi, '')\n    .replace(/<!--[\\s\\S]*?-->/g, '')\n    .replace(/<head[\\s\\S]*?<\\/head>/gi, '')\n    .replace(/\\sclass=\"[^\"]*\"/gi, '');\n\n  // 2) define whitelist of tags to keep\n  const allowedTags = [\n    'h1','h2','h3','h4','h5','h6',\n    'p','ul','ol','li',\n    'strong','em','a','blockquote',\n    'code','pre'\n  ];\n\n  // 3) strip out all tags not in the whitelist, reconstruct allowed tags cleanly\n  cleaned = cleaned.replace(\n    /<\\/?([a-z][a-z0-9]*)\\b[^>]*>/gi,\n    (match, tagName) => {\n      const name = tagName.toLowerCase();\n      if (allowedTags.includes(name)) {\n        return match.startsWith('</') ? `</${name}>` : `<${name}>`;\n      }\n      return '';\n    }\n  );\n\n  // 4) collapse multiple blank or whitespace-only lines into a single newline\n  cleaned = cleaned.replace(/(\\s*\\r?\\n\\s*){2,}/g, '\\n');\n\n  // 5) trim leading/trailing whitespace\n  cleaned = cleaned.trim();\n\n  return {\n    json: { cleanedHtml: cleaned }\n  };\n});"
+      },
+      "id": "725a2e7f-df95-418c-ae9b-740f742af646",
+      "name": "clean html",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -300,
+        40
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.cleanedHtml }}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=You are an expert in web page scraping. Provide a structured response in JSON format. Only the response, without commentary.\n\nExtract the product information for {{ $(‘url’).item.json.url.split(’/s?k=’)[1].split(’&’)[0] }} present on the page.\n\nname\ndescription\nrating\nreviews\nprice"
+            }
+          ]
+        }
+      },
+      "id": "1c912692-c796-458a-96fb-b4d2f8772e85",
+      "name": "extract data",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "position": [
+        -80,
+        40
+      ],
+      "typeVersion": 1.6
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": "{{WEB_SHEET_ID}}",
+        "sheetName": "{{RESULTS_SHEET_GID}}",
+        "columns": {
+          "value": {
+            "name": "={{ $json.output.name }}",
+            "price": "={{ $json.output.price }}",
+            "rating": "={{ $json.output.rating }}",
+            "reviews": "={{ $json.output.reviews }}",
+            "description": "={{ $json.output.description }}"
+          },
+          "schema": [
+            {
+              "id": "name",
+              "type": "string"
+            },
+            {
+              "id": "description",
+              "type": "string"
+            },
+            {
+              "id": "rating",
+              "type": "string"
+            },
+            {
+              "id": "reviews",
+              "type": "string"
+            },
+            {
+              "id": "price",
+              "type": "string"
+            }
+          ],
+          "mappingMode": "defineBelow"
+        },
+        "options": {}
+      },
+      "id": "8b519721-fdc8-495b-9041-2c29594cd6ca",
+      "name": "add results",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        520,
+        180
+      ],
+      "typeVersion": 4.5
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output",
+        "include": "allOtherFields",
+        "options": {}
+      },
+      "id": "c86b5d26-87a4-4fce-9712-6773138bb171",
+      "name": "Split items",
+      "type": "n8n-nodes-base.splitOut",
+      "position": [
+        300,
+        40
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## \nThis workflow automates web scraping of Amazon search result pages by retrieving raw HTML, cleaning it to retain only the relevant product elements, and then using an LLM to extract structured product data (name, description, rating, reviews, and price), before saving the results back to Google Sheets.\n\nIt integrates Google Sheets to supply and collect URLs, BrightData to fetch page HTML, a custom n8n Function node to sanitize the HTML, LangChain (OpenRouter GPT-4) to parse product details, and Google Sheets again to store the output.\n\n## Who Needs Amazon Search Result Scraping?\nThis scraping workflow is ideal for teams and businesses that need to monitor Amazon product listings at scale:\n\nE-commerce Analysts – Track competitor pricing, ratings, and inventory trends.\nMarket Researchers – Collect data on product popularity and reviews for market analysis.\nData Teams – Automate ingestion of product metadata into BI pipelines or data lakes.\nAffiliate Marketers – Keep affiliate catalogs up to date with latest product details and prices.\nIf you need reliable, structured data from Amazon search results delivered directly into your spreadsheets, this workflow saves you hours of manual copy-and-paste.\n\n## Why Use This Workflow?\nEnd-to-End Automation – From URL list to clean JSON output in Sheets.\nRobust HTML Cleaning – Strips scripts, styles, unwanted tags, and noise.\nAccurate Structured Parsing – Leverages GPT-4 via LangChain for reliable extraction.\nScalable & Repeatable – Processes thousands of URLs in batches.\n## Step-by-Step: How This Workflow Scrapes Amazon\nGet URLs from Google Sheets – Reads a list of search result URLs.\nLoop Over Items – Iterates through each URL in controlled batches.\nFetch Raw HTML – Uses BrightData’s Web Unlocker proxy to retrieve the page.\nClean HTML – A Function node removes doctype, scripts, styles, head, comments, classes, and non-whitelisted tags, collapsing extra whitespace.\nExtract with LLM – Passes cleaned HTML into LangChain → GPT-4 to output JSON for each product:\nname, description, rating, reviews, price\nSave Results – Appends the JSON fields as columns back into a “results” sheet in Google Sheets.\n## Customization: Tailor to Your Needs\nAdaptable Sites – This workflow can be adapted to any e-commerce or other website, for example Walmart or eBay.\nWhitelist Tags – Modify the allowedTags array in the Code node to keep additional HTML elements.\nSchema Changes – Update the Structured Output Parser schema to include more fields (e.g., availability, SKU).\nAlternate Data Sink – Instead of Sheets, route output to a database, CSV file, or webhook.\n## 🔑 Prerequisites\nGoogle Sheets Credentials – OAuth credentials configured in n8n.\nBrightData API token – Stored in n8n credentials as BRIGHTDATA_TOKEN.\nOpenRouter API Key – Configured for the LangChain node to call GPT-4.\nn8n Instance – Self-hosted or cloud with sufficient quota for HTTP requests and LLM calls.\n## 🚀 Installation & Setup\nConfigure Credentials\nIn n8n, set up Google Sheets OAuth under “Credentials.”\nAdd BrightData token as a new HTTP Request credential.\nCreate an OpenRouter API key credential for the LangChain node.\nImport the Workflow\nCopy the JSON workflow into n8n’s “Import” dialog.\nMap your Google Sheet IDs and GIDs to the {{WEB_SHEET_ID}}, {{TRACK_SHEET_GID}}, and {{RESULTS_SHEET_GID}} placeholders.\nEnsure the BRIGHTDATA_TOKEN credential is selected on the HTTP Request node.\nTest & Run\nAdd a few Amazon search URLs to your “track” sheet.\nExecute the workflow and verify product data appears in your “results” sheet.\nTweak batch size or parser schema as needed.\n## ⚠ Important\nAPI Rate Limits – Monitor your BrightData and OpenRouter usage to avoid throttling.\nAmazon’s Terms – Ensure your scraping complies with Amazon’s policies and legal requirements.\n",
+        "height": 2000,
+        "width": 500
+      },
+      "id": "11b6ad31-6a1f-4c61-a64c-680ab1fd4231",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1820,
+        -380
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "connections": {
+    "url": {
+      "main": [
+        [],
+        [
+          {
+            "node": "scrap url",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "scrap url": {
+      "main": [
+        [
+          {
+            "node": "clean html",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "clean html": {
+      "main": [
+        [
+          {
+            "node": "extract data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split items": {
+      "main": [
+        [
+          {
+            "node": "add results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "add results": {
+      "main": [
+        [
+          {
+            "node": "url",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "extract data": {
+      "main": [
+        [
+          {
+            "node": "Split items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get urls to scrape": {
+      "main": [
+        [
+          {
+            "node": "url",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "extract data",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "extract data",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "get urls to scrape",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {},
+  "versionId": "f6c14024-c4db-47b6-bb0a-28495857dcb9",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-07-09T21:41:38.773Z",
+      "updatedAt": "2025-07-09T21:41:38.773Z",
+      "id": "G5Lcoe2jTgqCJuSy",
+      "name": "OpenAI"
+    },
+    {
+      "createdAt": "2025-07-09T21:41:38.763Z",
+      "updatedAt": "2025-07-09T21:41:38.763Z",
+      "id": "pz5LfYMpyppJnoPT",
+      "name": "WooCommerce"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:46.039Z",
+      "updatedAt": "2025-10-25T12:28:46.039Z",
+      "role": "workflow:owner",
+      "workflowId": "O1vQmi3bXIqJ8dCb",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

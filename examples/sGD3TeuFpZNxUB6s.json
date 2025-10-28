@@ -1,0 +1,370 @@
+{
+  "createdAt": "2025-07-14T19:06:52.944Z",
+  "updatedAt": "2025-07-14T19:06:52.944Z",
+  "id": "sGD3TeuFpZNxUB6s",
+  "name": "sync-outlook-calendar-events-to-notion",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes"
+            }
+          ]
+        }
+      },
+      "id": "93bb07fd-9337-4796-9dcc-3b6de5b60a2f",
+      "name": "On schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        -2100,
+        380
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "operation": "getAll",
+        "databaseId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "6318457d-052d-4107-9c5b-8041f530fa03",
+          "cachedResultUrl": "https://www.notion.so/6318457d052d41079c5b8041f530fa03",
+          "cachedResultName": "Outlook Calendar"
+        },
+        "returnAll": true,
+        "filterType": "manual",
+        "filters": {
+          "conditions": [
+            {
+              "key": "Event ID|rich_text",
+              "condition": "equals",
+              "richTextValue": "={{ $json.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f18d67d5-1ee2-4724-b7ea-075ae6377555",
+      "name": "Try get database page",
+      "type": "n8n-nodes-base.notion",
+      "position": [
+        -1220,
+        440
+      ],
+      "typeVersion": 2,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "mergeByFields": {
+          "values": [
+            {
+              "field1": "id",
+              "field2": "property_event_id"
+            }
+          ]
+        },
+        "joinMode": "enrichInput1",
+        "options": {}
+      },
+      "id": "8ad5719b-cdd8-4299-8f3e-7a325d21334f",
+      "name": "Merge",
+      "type": "n8n-nodes-base.merge",
+      "position": [
+        -1000,
+        320
+      ],
+      "typeVersion": 2.1
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.property_event_id }}",
+              "operation": "isEmpty"
+            }
+          ]
+        }
+      },
+      "id": "6c1cb11e-487c-4b76-9f1d-c707c6d3c2e8",
+      "name": "If database page not found",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        -780,
+        380
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "databaseId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "6318457d-052d-4107-9c5b-8041f530fa03",
+          "cachedResultUrl": "https://www.notion.so/6318457d052d41079c5b8041f530fa03",
+          "cachedResultName": "Outlook Calendar"
+        },
+        "title": "={{ $json.subject }}",
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Date|date",
+              "range": true,
+              "dateStart": "={{ $json.start.dateTime }}",
+              "dateEnd": "={{ $json.end.dateTime }}",
+              "timezone": "={{ $json.start.timeZone }}"
+            },
+            {
+              "key": "Event ID|rich_text",
+              "textContent": "={{ $json.id }}"
+            },
+            {
+              "key": "Link|url",
+              "urlValue": "={{ $json.webLink }}"
+            }
+          ]
+        },
+        "options": {
+          "iconType": "file",
+          "icon": "https://avatars.githubusercontent.com/u/45487711?s=280&v=4"
+        }
+      },
+      "id": "c403ffb9-fd36-45f9-89c0-5e3c5001919d",
+      "name": "Create database page",
+      "type": "n8n-nodes-base.notion",
+      "position": [
+        -560,
+        280
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "operation": "update",
+        "pageId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $json.id }}"
+        },
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "Date|date",
+              "range": true,
+              "dateStart": "={{ $json.start.dateTime }}",
+              "dateEnd": "={{ $json.end.dateTime }}",
+              "timezone": "={{ $json.start.timeZone }}"
+            },
+            {
+              "key": "Link|url",
+              "urlValue": "={{ $json.webLink }}"
+            },
+            {
+              "key": "Name|title",
+              "title": "={{ $json.subject }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2c8de305-b41f-43ef-bcd5-53720f8c8a0b",
+      "name": "Update database page",
+      "type": "n8n-nodes-base.notion",
+      "position": [
+        -560,
+        480
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "operation": "addToDate",
+        "magnitude": "={{ $json.timestamp }}",
+        "duration": 365,
+        "outputFieldName": "Future date",
+        "options": {}
+      },
+      "id": "e98406e5-8950-40ba-a83e-89d0883804d8",
+      "name": "X days into the future",
+      "type": "n8n-nodes-base.dateTime",
+      "position": [
+        -1880,
+        380
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "value",
+        "options": {}
+      },
+      "id": "3e112c0d-85e6-4c75-8982-6be8bce986ba",
+      "name": "Split out items",
+      "type": "n8n-nodes-base.itemLists",
+      "position": [
+        -1440,
+        380
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "url": "https://graph.microsoft.com/v1.0/me/calendarview",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "oAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "startdatetime",
+              "value": "={{ new Date($('On schedule').item.json.timestamp).toISOString() }}"
+            },
+            {
+              "name": "enddatetime",
+              "value": "={{ new Date($json['Future date']).toISOString() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e67f9462-0aaf-49b0-850f-0787dcedb39e",
+      "name": "Get Outlook Calendar events",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -1660,
+        380
+      ],
+      "typeVersion": 4.1
+    }
+  ],
+  "connections": {
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "If database page not found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "On schedule": {
+      "main": [
+        [
+          {
+            "node": "X days into the future",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split out items": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Try get database page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Try get database page": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "X days into the future": {
+      "main": [
+        [
+          {
+            "node": "Get Outlook Calendar events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If database page not found": {
+      "main": [
+        [
+          {
+            "node": "Create database page",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update database page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Outlook Calendar events": {
+      "main": [
+        [
+          {
+            "node": "Split out items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {},
+  "versionId": "1667f083-c27e-433d-9c8b-c1ca09a47e3d",
+  "triggerCount": 0,
+  "tags": [],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:46.011Z",
+      "updatedAt": "2025-10-25T12:28:46.011Z",
+      "role": "workflow:owner",
+      "workflowId": "sGD3TeuFpZNxUB6s",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,1301 @@
+{
+  "createdAt": "2025-07-14T19:04:46.327Z",
+  "updatedAt": "2025-07-14T19:04:46.327Z",
+  "id": "BRHUxVlU8lpqoEwW",
+  "name": "Convert_YouTube_Videos_to_Shorts_with_Klap___Auto_Post_to_Multiple_Social_Platforms",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"instagram_id\": \"111\",\n  \"youtube_id\": \"222\",\n  \"tiktok_id\": \"333\",\n  \"facebook_id\": \"444\",\n  \"facebook_page_id\": \"555\",\n  \"threads_id\": \"666\",\n  \"twitter_id\": \"777\",\n  \"linkedin_id\": \"888\",\n  \"pinterest_id\": \"999\",\n  \"pinterest_board_id\": \"101010\",\n  \"bluesky_id\": \"111111\"\n}",
+        "options": {}
+      },
+      "id": "f94468a9-65cb-4e9b-800e-573527f7fd49",
+      "name": "Assign Social Media IDs",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        80,
+        420
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://backend.blotato.com/v2/media",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "blotato-api-key",
+              "value": "YOUR_API"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "url",
+              "value": "={{ $('Log Shorts & Schedule Info to Google Sheets').item.json['Clip URL'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "432fe8ab-947e-4ae0-96fa-b6f10f2fa882",
+      "name": "Upload Video to Blotato",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        300,
+        420
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://backend.blotato.com/v2/posts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "blotato-api-key",
+              "value": "YOUR_API"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"post\": {\n    \"accountId\": \"{{ $('Assign Social Media IDs').item.json.instagram_id }}\",\n    \"target\": {\n      \"targetType\": \"instagram\"\n    },\n    \"content\": {\n      \"text\": \"{{ $('Get my video').item.json.DESCRIPTION }}\",\n      \"platform\": \"instagram\",\n      \"mediaUrls\": [\n        \"{{ $json.url }}\"\n      ]\n    }\n  },\n  \"scheduledTime\": \"{{ $('Log Shorts & Schedule Info to Google Sheets').item.json['Schedule Time'] }}\"\n}\n\n",
+        "options": {}
+      },
+      "id": "975ad6d5-d8af-4ad9-82c3-7ac8687068fe",
+      "name": "INSTAGRAM",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        580,
+        160
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://backend.blotato.com/v2/posts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "blotato-api-key",
+              "value": "your_API"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"post\": {\n    \"accountId\": \"{{ $('Assign Social Media IDs').item.json.youtube_id }}\",\n    \"target\": {\n      \"targetType\": \"youtube\",\n      \"title\": \"{{ $('Log Shorts & Schedule Info to Google Sheets').item.json['Video Title'] }}\",\n      \"privacyStatus\": \"public\",\n      \"shouldNotifySubscribers\": true,\n      \"isMadeForKids\": false\n    },\n    \"content\": {\n      \"text\": \"{{ $('Log Shorts & Schedule Info to Google Sheets').item.json['Clip Caption'] }}\",\n      \"platform\": \"youtube\",\n      \"mediaUrls\": [\n        \"{{ $json.url }}\"\n      ]\n    }\n},\n  \"scheduledTime\": \"{{ $('Log Shorts & Schedule Info to Google Sheets').item.json['Schedule Time'] }}\"\n}",
+        "options": {}
+      },
+      "id": "8a29cf89-0053-4724-a11c-79fbb0477f98",
+      "name": "YOUTUBE",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        800,
+        160
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://backend.blotato.com/v2/posts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "blotato-api-key",
+              "value": "your_api"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"post\": {\n    \"accountId\": \"{{ $('Assign Social Media IDs').item.json.tiktok_id }}\",\n    \"target\": {\n      \"targetType\": \"tiktok\",\n      \"isYourBrand\": \"false\", \n      \"disabledDuet\": \"false\",\n      \"privacyLevel\": \"PUBLIC_TO_EVERYONE\",\n      \"isAiGenerated\": \"true\",\n      \"disabledStitch\": \"false\",\n      \"disabledComments\": \"false\",\n      \"isBrandedContent\": \"false\"\n      \n    },\n    \"content\": {\n      \"text\": \"{{ $('Log Shorts & Schedule Info to Google Sheets').item.json['Clip Caption'] }}\",\n      \"platform\": \"tiktok\",\n      \"mediaUrls\": [\n        \"{{ $json.url }}\"\n      ]\n    }\n  },\n  \"scheduledTime\": \"{{ $('Log Shorts & Schedule Info to Google Sheets').item.json['Schedule Time'] }}\"\n}\n",
+        "options": {}
+      },
+      "id": "6689b9ee-2ed1-49ba-987a-329c9d63e3e4",
+      "name": "TIKTOK",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1000,
+        160
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://backend.blotato.com/v2/posts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "blotato-api-key",
+              "value": "your_api"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"post\": {\n    \"accountId\": \"{{ $('Assign Social Media IDs').item.json.facebook_id }}\",\n    \"target\": {\n      \"targetType\": \"facebook\",\n      \"pageId\": \"{{ $('Assign Social Media IDs').item.json.facebook_page_id }}\"\n\n      \n    },\n    \"content\": {\n      \"text\": \"{{ $('Get my video').item.json.DESCRIPTION }}\",\n      \"platform\": \"facebook\",\n      \"mediaUrls\": [\n        \"{{ $json.url }}\"\n      ]\n    }\n  },\n  \"scheduledTime\": \"{{ $('Log Shorts & Schedule Info to Google Sheets').item.json['Schedule Time'] }}\"\n}",
+        "options": {}
+      },
+      "id": "39ab71a6-9415-497b-b21e-07260cc33228",
+      "name": "FACEBOOK",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        580,
+        420
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://backend.blotato.com/v2/posts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "blotato-api-key",
+              "value": "your_api"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"post\": {\n    \"accountId\": \"{{ $('Assign Social Media IDs').item.json.threads_id }}\",\n    \"target\": {\n      \"targetType\": \"threads\"\n      \n    },\n    \"content\": {\n      \"text\": \"{{ $('Get my video').item.json.DESCRIPTION }}\",\n      \"platform\": \"threads\",\n      \"mediaUrls\": [\n        \"{{ $json.url }}\"\n      ]\n    }\n  },\n  \"scheduledTime\": \"{{ $('Log Shorts & Schedule Info to Google Sheets').item.json['Schedule Time'] }}\"\n}\n",
+        "options": {}
+      },
+      "id": "38893ab9-4c9c-486d-bbda-7a4b776edb08",
+      "name": "THREADS",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        800,
+        420
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://backend.blotato.com/v2/posts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "blotato-api-key",
+              "value": "your_api"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"post\": {\n    \"accountId\": \"{{ $('Assign Social Media IDs').item.json.linkedin_id }}\",\n    \"target\": {\n      \"targetType\": \"linkedin\"\n      \n    },\n    \"content\": {\n      \"text\": \"{{ $('Get my video').item.json.DESCRIPTION }}\",\n      \"platform\": \"linkedin\",\n      \"mediaUrls\": [\n        \"{{ $json.url }}\"\n      ]\n    }\n  },\n  \"scheduledTime\": \"{{ $('Log Shorts & Schedule Info to Google Sheets').item.json['Schedule Time'] }}\"\n}\n",
+        "options": {}
+      },
+      "id": "d7a6c6f1-9358-468f-9250-512eab71bd90",
+      "name": "LINKEDIN",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        580,
+        660
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://backend.blotato.com/v2/posts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "blotato-api-key",
+              "value": "your_api"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "= {\n  \"post\": {\n    \"accountId\": \"{{ $('Assign Social Media IDs').item.json.bluesky_id }}\",\n    \"target\": {\n      \"targetType\": \"bluesky\"\n      \n    },\n    \"content\": {\n      \"text\": \"{{ $('Get my video').item.json.DESCRIPTION }}\",\n      \"platform\": \"bluesky\",\n      \"mediaUrls\": [\n        \"https://pbs.twimg.com/media/GE8MgIiWEAAfsK3.jpg\"\n      ]\n    }\n  },\n  \"scheduledTime\": \"{{ $('Log Shorts & Schedule Info to Google Sheets').item.json['Schedule Time'] }}\"\n}\n",
+        "options": {}
+      },
+      "id": "b00cc2e1-f9d5-438d-8393-7b8bb7d984c8",
+      "name": "BLUESKY",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        800,
+        660
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://backend.blotato.com/v2/posts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "blotato-api-key",
+              "value": "your_api"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"post\": {\n    \"accountId\": \"{{ $('Assign Social Media IDs').item.json.pinterest_id }}\",\n    \"target\": {\n      \"targetType\": \"pinterest\",\n      \"boardId\": \"{{ $('Assign Social Media IDs').item.json.pinterest_board_id }}\"      \n    },\n    \"content\": {\n      \"text\": \"{{ $('Get my video').item.json.DESCRIPTION }}\",\n      \"platform\": \"pinterest\",\n      \"mediaUrls\": [\n        \"https://pbs.twimg.com/media/GE8MgIiWEAAfsK3.jpg\"\n      ]\n    }\n  },\n  \"scheduledTime\": \"{{ $('Log Shorts & Schedule Info to Google Sheets').item.json['Schedule Time'] }}\"\n}\n\n",
+        "options": {}
+      },
+      "id": "502c5e47-9210-4cdb-be22-b663561156d6",
+      "name": "PINTEREST",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1000,
+        660
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "content": "# ✅ Step 1 — Convert YouTube Video to Shorts\n",
+        "height": 500,
+        "width": 2300
+      },
+      "id": "f3a750aa-1047-4e80-b0f1-aca513f385ad",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1120,
+        -460
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# ✅ Step 2 — Schedule Shorts for Publication\n",
+        "height": 760,
+        "width": 1080,
+        "color": 3
+      },
+      "id": "e6d786f6-28fb-401f-bbd6-7d511506cb50",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1120,
+        80
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# ✅ Step 3 — Publish Shorts to Social Media with Blotato\n",
+        "height": 760,
+        "width": 1180,
+        "color": 5
+      },
+      "id": "db838a5a-6d20-47c6-8716-072171836fd9",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        20,
+        80
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "id": "71e727c3-0e9f-470b-8fd3-e49d94028617",
+      "name": "Trigger: Receive YouTube URL via Telegram",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "position": [
+        -1040,
+        -360
+      ],
+      "webhookId": "a35f885c-4c5a-48fd-a2a2-c0ae7e52fe0c",
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "jsCode": "const message = $input.first().json.message.text;\nconst chatId = $input.first().json.message.chat.id;\n\n// Split by space to get URL and number\nconst parts = message.trim().split(/\\s+/);\n\n// Find the URL part\nconst urlPart = parts.find(part => part.includes('youtube.com') || part.includes('youtu.be'));\n\n// Find the number part\nconst numberPart = parts.find(part => /^\\d+$/.test(part));\n\nif (urlPart && numberPart) {\n\tconst number = parseInt(numberPart);\n\n\t// Validate number range\n\tif (number >= 1 && number <= 10) {\n\t\treturn [{\n\t\t\tjson: {\n\t\t\t\taction: 'process',\n\t\t\t\t'YouTube URL': urlPart,\n\t\t\t\t'How many shorts to generate?': number,\n\t\t\t\tchat_id: chatId\n\t\t\t}\n\t\t}];\n\t} else {\n\t\treturn [{\n\t\t\tjson: {\n\t\t\t\taction: 'invalid_number',\n\t\t\t\tchat_id: chatId,\n\t\t\t\tmessage: 'Please use a number between 1 and 10'\n\t\t\t}\n\t\t}];\n\t}\n} else {\n\treturn [{\n\t\tjson: {\n\t\t\taction: 'invalid_format',\n\t\t\tchat_id: chatId,\n\t\t\tmessage: `Send: YouTube_URL Number\\nExample:\\nhttps://youtu.be/abc123 5`\n\t\t}\n\t}];\n}\n"
+      },
+      "id": "a19a3d0a-03e2-42fb-aa03-ef25daebba35",
+      "name": "Extract YouTube URL & Number of Shorts",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -860,
+        -360
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.klap.app/v2/tasks/video-to-shorts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "YOUR_API"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"source_video_url\": \"{{ $json['YouTube URL'] }}\",\n  \"language\": \"en\",\n  \"target_clip_count\": {{ $json['How many shorts to generate?'] }},\n  \"max_clip_count\": {{ $json['How many shorts to generate?'] }},\n  \"editing_options\": {\n    \"captions\": true,\n    \"reframe\": true,\n    \"emojis\": true,\n    \"remove_silences\": true,\n    \"intro_title\": true\n  },\n  \"min_duration\": 15,\n  \"max_duration\": 60,\n  \"target_duration\": 30\n} ",
+        "options": {}
+      },
+      "id": "2fe2f9c2-60e3-4900-9ea4-561642f33f56",
+      "name": "Send Video to Klap for Shorts Generation",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -680,
+        -360
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "url": "=https://api.klap.app/v2/tasks/{{ $json.id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "YOUR_API"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b28a9b5a-689a-4b6c-b7bb-5c891f3cd174",
+      "name": "Check Shorts Generation Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -480,
+        -360
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "ffa318cf-7bdc-4ea5-bb02-ac69ae94a8c7",
+              "operator": {
+                "name": "filter.operator.equals",
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "ready"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a73b05d4-2044-481c-b7c0-77e77b9c4ee7",
+      "name": "Is Video Processing Complete?",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        -260,
+        -360
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "amount": 60
+      },
+      "id": "e302d09f-2ceb-40c9-9647-3d6a3e092eb4",
+      "name": "Wait Before Checking Status Again",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        -40,
+        -180
+      ],
+      "webhookId": "1a54337d-9f1e-4432-84c2-df2bfb731bb8",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "url": "=https://api.klap.app/v2/projects/{{ $json.output_id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "YOUR_API"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ae176d0b-07ff-42a2-89db-35bd86fcd3a2",
+      "name": "List Generated Clip Ideas",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -40,
+        -360
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.klap.app/v2/projects/{{ $('Check Shorts Generation Status').item.json.output_id }}/{{ $json.id }}/exports",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "YOUR_API"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "80a74ebf-75a0-41ab-b36f-b4e2614566d3",
+      "name": "Export HD Short from Klap",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        200,
+        -360
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "url": "=https://api.klap.app/v2/projects/{{ $('Check Shorts Generation Status').item.json.output_id }}/{{ $('List Generated Clip Ideas').item.json.id }}/exports/{{ $json.id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "YOUR_API"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "94a87a5e-e66a-4c92-a6b2-5348e8853991",
+      "name": "Fetch Final Shorts URLs",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        440,
+        -360
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "jsCode": "const allVideos = $input.all();\n\nconst totalExpected = allVideos.length;\nconst readyCount = allVideos.filter(v => v.json.status === 'ready').length;\n\n// Si tous les items sont présents et tous sont 'ready', alors true\nconst allReady = totalExpected > 0 && readyCount === totalExpected;\n\nreturn allVideos.map(video => ({\n  json: {\n    ...video.json,\n    is_everything_ready: allReady\n  }\n}));\n"
+      },
+      "id": "5456dba9-0cd7-4da8-a2a9-38bfedd58119",
+      "name": "Are All Shorts Ready?",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        720,
+        -360
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "4d35bf8e-906d-45dd-883e-570a91f06f41",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.is_everything_ready }}",
+              "rightValue": "true"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a9b956d1-324c-438d-911b-6b16b2d4f4b6",
+      "name": "Ready to Schedule Shorts?",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        940,
+        -360
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "amount": 60
+      },
+      "id": "e3364bfb-5ca6-46a5-b50b-7a33f141674f",
+      "name": "Wait Before Rechecking Final Shorts",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        940,
+        -200
+      ],
+      "webhookId": "40e3258c-a486-49b2-b18d-71770ef50173",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "url": "=https://www.youtube.com/oembed?url={{ $('Extract YouTube URL & Number of Shorts').item.json['YouTube URL'] }}&format=json ",
+        "options": {}
+      },
+      "id": "1904af03-3ec7-4ddb-82a3-809f962b07fd",
+      "name": "Fetch YouTube Video Title",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -1040,
+        280
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "="
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "id",
+          "value": "="
+        },
+        "options": {}
+      },
+      "id": "016a1480-816c-466b-a707-61710e838af6",
+      "name": "Load Publishing Schedule from Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        -780,
+        280
+      ],
+      "typeVersion": 4.6
+    },
+    {
+      "parameters": {
+        "jsCode": "let postsPerDay;\nlet startHour;\nlet endHour;\nfor (const item of items) {\nconst setting = item.json[\"Publishing Settings\"];\nconst value = item.json[\"col_2\"];\nif (setting === \"Post per Day\") {\npostsPerDay = parseInt(value, 10);\n} else if (setting === \"Start Time\") {\nstartHour = parseInt(value.split(\":\")[0], 10);\n} else if (setting === \"End Time\") {\nendHour = parseInt(value.split(\":\")[0], 10);\n}\n}\nreturn [\n{\njson: {\npostsPerDay,\nstartHour,\nendHour\n}\n}\n];"
+      },
+      "id": "d8ea440c-61a6-44db-91fa-cd8495e158fa",
+      "name": "Extract Scheduling Parameters (Posts/Day, Hours)",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -520,
+        280
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "="
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "id",
+          "value": "="
+        },
+        "options": {}
+      },
+      "id": "387cd6df-8a58-4810-92cc-0987c439c19e",
+      "name": "Fetch Already Scheduled Shorts",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        -240,
+        280
+      ],
+      "typeVersion": 4.6,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get existing scheduled posts\nconst existingPosts = $input.all();\n// Safe fallback: if the sheet is empty, use an empty object\nconst scheduleSettings = ($('Fetch Already Scheduled Shorts').first() || {\njson: {} }).json;\n// Find the latest scheduled time\nlet lastScheduledTime = new Date();\nif (existingPosts.length > 0) {\n// Get all scheduled times and find the latest\nconst scheduledTimes = existingPosts\n.map(post => new Date(post.json['Schedule Time']))\n.filter(date => !isNaN(date))\n.sort((a, b) => b - a); // Sort descending\nif (scheduledTimes.length > 0) {\nlastScheduledTime = scheduledTimes[0];\n}\n}\n// Pass this to the next node\nreturn [{\njson: {\nlastScheduledTime: lastScheduledTime.toISOString(),\npostsPerDay: scheduleSettings.postsPerDay,\nstartHour: scheduleSettings.startHour,\nendHour: scheduleSettings.endHour\n}\n}];"
+      },
+      "id": "c8db7925-5f05-4d68-ad95-354baec18174",
+      "name": "Determine Last Scheduled Time",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -1040,
+        540
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "jsCode": "const postsPerDay = parseInt($('Extract Scheduling Parameters (Posts/Day, Hours)').first().json.postsPerDay);\nconst startHour = parseInt($('Extract Scheduling Parameters (Posts/Day, Hours)').first().json.startHour);\nconst endHour = parseInt($('Extract Scheduling Parameters (Posts/Day, Hours)').first().json.endHour);\nconst lastScheduledTime = new\nDate($input.first().json.lastScheduledTime);\n// Get video data\nconst videos = $('List Generated Clip Ideas').all();\nconst finalShorts = $('Fetch Final Shorts URLs').all();\nconst now = new Date();\nconst totalHours = endHour - startHour;\nconst intervalMs = (totalHours * 60 * 60 * 1000) / postsPerDay;\n// Start from the day after the last scheduled post\nlet startDate = new Date(lastScheduledTime);\nstartDate.setDate(startDate.getDate() + 1);\nstartDate.setHours(startHour, 0, 0, 0);\n// If starting date is in the past, use tomorrow\nif (startDate < now) {\nstartDate = new Date();\nstartDate.setDate(startDate.getDate() + 1);\nstartDate.setHours(startHour, 0, 0, 0);\n}\nconst result = [];\nlet videoIndex = 0;\nlet currentDate = new Date(startDate);\nlet dailyPostCount = 0;\nwhile (videoIndex < videos.length) {\n// Calculate time slot\nconst baseTime = new Date(currentDate);\nbaseTime.setHours(startHour + (dailyPostCount * (totalHours /\npostsPerDay)), 0, 0, 0);\n// Add randomness ±30 min\nconst offset = (Math.random() - 0.5) * 60 * 60 * 1000;\nconst scheduledTime = new Date(baseTime.getTime() + offset);\n// Get video data\nconst video = videos[videoIndex].json;\nconst finalShort = finalShorts[videoIndex].json;\nresult.push({\njson: {\nscheduled_at: scheduledTime.toISOString(),\nvideo_name: video.name,\nvideo_virality_score: video.virality_score,\nvideo_caption: video.publication_captions.youtube,\nvideo_tiktok_caption: video.publication_captions.tiktok,\nvideo_url: finalShort.src_url,\nvideo_id: video.id\n}\n});\nvideoIndex++;\ndailyPostCount++;\n// Move to next day if daily limit reached\nif (dailyPostCount >= postsPerDay) {\ncurrentDate.setDate(currentDate.getDate() + 1);\ndailyPostCount = 0;\n}\n}\nreturn result;"
+      },
+      "id": "e0bf9924-178f-4443-998f-3c31dc6f0acd",
+      "name": "Calculate Publication Times for New Shorts",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -780,
+        540
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\nconst utc = item.json.scheduled_at;\nconst local = new Date(utc).toLocaleString(\"en-US\", {\ntimeZone: \"Europe/Paris\",\ntimeZoneName: \"short\",\nhour12: false\n});\nreturn {\njson: {\n...item.json, // This includes all the video data\nlocal_time: local\n}\n};\n});"
+      },
+      "id": "f771e7cf-c660-4fc8-9ba2-8000ff8738e4",
+      "name": "Convert Times to Local Timezone (Paris)",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -520,
+        540
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "="
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "id",
+          "value": "="
+        },
+        "columns": {
+          "value": {
+            "Clip URL": "={{ $json.video_url }}",
+            "Video URL": "={{ $('Extract YouTube URL & Number of Shorts').first().json['YouTube URL'] }}",
+            "Video Title": "={{ $('Fetch YouTube Video Title').first().json.title }}",
+            "Clip Caption": "={{ $json.video_tiktok_caption }}",
+            "Schedule Time": "={{ $json.scheduled_at }}",
+            "Video Clip Idea": "={{ $json.video_name }}",
+            "Clip Virality Score": "={{ $json.video_virality_score }}",
+            "Schedule Time (local)": "={{ $json.local_time }}"
+          },
+          "schema": [
+            {
+              "id": "Video Title",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "Video Title",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Video URL",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "Video URL",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Video Clip Idea",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "Video Clip Idea",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Clip Virality Score",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "Clip Virality Score",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Clip Caption",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "Clip Caption",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Clip URL",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "Clip URL",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Schedule Time",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "Schedule Time",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Schedule Time (local)",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "Schedule Time (local)",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            }
+          ],
+          "mappingMode": "defineBelow",
+          "matchingColumns": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "df01a9c0-24d8-42cf-826d-0426c6fa695b",
+      "name": "Log Shorts & Schedule Info to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        -240,
+        540
+      ],
+      "typeVersion": 4.6
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Trigger: Receive YouTube URL via Telegram').first().json.message.chat.id }}",
+        "text": "=Your YouTube video \"{{ $('Fetch YouTube Video Title').first().json.title }}\"\nwas converted into {{ $('Extract YouTube URL & Number of Shorts').first().json['How many shorts to generate?'] }} shorts and scheduled for publication on Tiktok,\nInstagram, Facebook, LinkedIn, Twitter and YouTube at these\ntimes:\n{{ $('Convert Times to Local Timezone (Paris)').all().map(item =>\nitem.json.local_time).join('\\n') }}",
+        "additionalFields": {}
+      },
+      "id": "b8ea9b9a-1051-4c8e-b6d8-5b66f239e918",
+      "name": "Send Publication Summary to Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        300,
+        160
+      ],
+      "webhookId": "7b1f7dbf-c8dc-4cb7-b538-19b6d8d0ea72",
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://backend.blotato.com/v2/posts",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "blotato-api-key",
+              "value": "your_api"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"post\": {\n    \"accountId\": \"{{ $('Assign Social Media IDs').item.json.twitter_id }}\",\n    \"target\": {\n      \"targetType\": \"twitter\"\n      \n    },\n    \"content\": {\n      \"text\": \"{{ $('Get my video').item.json.DESCRIPTION }}\",\n      \"platform\": \"twitter\",\n      \"mediaUrls\": [\n        \"{{ $json.url }}\"\n      ]\n    }\n  },\n  \"scheduledTime\": \"{{ $('Log Shorts & Schedule Info to Google Sheets').item.json['Schedule Time'] }}\"\n}\n",
+        "options": {}
+      },
+      "id": "1e5fb6c9-343d-473b-9ce6-f3aecf772daa",
+      "name": "TWITTER",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1000,
+        420
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "content": "## External Setup Guide\n[Guide](https://dr-firas.vip/)",
+        "height": 80,
+        "width": 300
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1120,
+        -560
+      ],
+      "id": "e885e358-5f1e-4e58-a389-26eac1e57e72",
+      "name": "Sticky Note4"
+    }
+  ],
+  "connections": {
+    "Are All Shorts Ready?": {
+      "main": [
+        [
+          {
+            "node": "Ready to Schedule Shorts?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Assign Social Media IDs": {
+      "main": [
+        [
+          {
+            "node": "Upload Video to Blotato",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Final Shorts URLs": {
+      "main": [
+        [
+          {
+            "node": "Are All Shorts Ready?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Video to Blotato": {
+      "main": [
+        [
+          {
+            "node": "INSTAGRAM",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "YOUTUBE",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "TIKTOK",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "FACEBOOK",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "THREADS",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "TWITTER",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "LINKEDIN",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "BLUESKY",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "PINTEREST",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Publication Summary to Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Export HD Short from Klap": {
+      "main": [
+        [
+          {
+            "node": "Fetch Final Shorts URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch YouTube Video Title": {
+      "main": [
+        [
+          {
+            "node": "Load Publishing Schedule from Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Generated Clip Ideas": {
+      "main": [
+        [
+          {
+            "node": "Export HD Short from Klap",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ready to Schedule Shorts?": {
+      "main": [
+        [
+          {
+            "node": "Fetch YouTube Video Title",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait Before Rechecking Final Shorts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Determine Last Scheduled Time": {
+      "main": [
+        [
+          {
+            "node": "Calculate Publication Times for New Shorts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Video Processing Complete?": {
+      "main": [
+        [
+          {
+            "node": "List Generated Clip Ideas",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait Before Checking Status Again",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Shorts Generation Status": {
+      "main": [
+        [
+          {
+            "node": "Is Video Processing Complete?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Already Scheduled Shorts": {
+      "main": [
+        [
+          {
+            "node": "Determine Last Scheduled Time",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait Before Checking Status Again": {
+      "main": [
+        [
+          {
+            "node": "Check Shorts Generation Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait Before Rechecking Final Shorts": {
+      "main": [
+        [
+          {
+            "node": "Fetch Final Shorts URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract YouTube URL & Number of Shorts": {
+      "main": [
+        [
+          {
+            "node": "Send Video to Klap for Shorts Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert Times to Local Timezone (Paris)": {
+      "main": [
+        [
+          {
+            "node": "Log Shorts & Schedule Info to Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Video to Klap for Shorts Generation": {
+      "main": [
+        [
+          {
+            "node": "Check Shorts Generation Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trigger: Receive YouTube URL via Telegram": {
+      "main": [
+        [
+          {
+            "node": "Extract YouTube URL & Number of Shorts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate Publication Times for New Shorts": {
+      "main": [
+        [
+          {
+            "node": "Convert Times to Local Timezone (Paris)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Publishing Schedule from Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Extract Scheduling Parameters (Posts/Day, Hours)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Shorts & Schedule Info to Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Assign Social Media IDs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Scheduling Parameters (Posts/Day, Hours)": {
+      "main": [
+        [
+          {
+            "node": "Fetch Already Scheduled Shorts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {
+    "Assign Social Media IDs": [
+      {
+        "json": {
+          "tiktok_id": "2079",
+          "bluesky_id": "932",
+          "threads_id": "507",
+          "twitter_id": "1289",
+          "youtube_id": "873",
+          "facebook_id": "1759",
+          "linkedin_id": "1446",
+          "instagram_id": "1687",
+          "pinterest_id": "363",
+          "facebook_page_id": "101603614680195",
+          "pinterest_board_id": "1146658823815436667"
+        }
+      },
+      {
+        "json": {
+          "tiktok_id": "2079",
+          "bluesky_id": "932",
+          "threads_id": "507",
+          "twitter_id": "1289",
+          "youtube_id": "873",
+          "facebook_id": "1759",
+          "linkedin_id": "1446",
+          "instagram_id": "1687",
+          "pinterest_id": "363",
+          "facebook_page_id": "101603614680195",
+          "pinterest_board_id": "1146658823815436667"
+        }
+      },
+      {
+        "json": {
+          "tiktok_id": "2079",
+          "bluesky_id": "932",
+          "threads_id": "507",
+          "twitter_id": "1289",
+          "youtube_id": "873",
+          "facebook_id": "1759",
+          "linkedin_id": "1446",
+          "instagram_id": "1687",
+          "pinterest_id": "363",
+          "facebook_page_id": "101603614680195",
+          "pinterest_board_id": "1146658823815436667"
+        }
+      },
+      {
+        "json": {
+          "tiktok_id": "2079",
+          "bluesky_id": "932",
+          "threads_id": "507",
+          "twitter_id": "1289",
+          "youtube_id": "873",
+          "facebook_id": "1759",
+          "linkedin_id": "1446",
+          "instagram_id": "1687",
+          "pinterest_id": "363",
+          "facebook_page_id": "101603614680195",
+          "pinterest_board_id": "1146658823815436667"
+        }
+      },
+      {
+        "json": {
+          "tiktok_id": "2079",
+          "bluesky_id": "932",
+          "threads_id": "507",
+          "twitter_id": "1289",
+          "youtube_id": "873",
+          "facebook_id": "1759",
+          "linkedin_id": "1446",
+          "instagram_id": "1687",
+          "pinterest_id": "363",
+          "facebook_page_id": "101603614680195",
+          "pinterest_board_id": "1146658823815436667"
+        }
+      }
+    ]
+  },
+  "versionId": "af2ec08c-842b-479f-a33b-763880616930",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-07-09T21:41:38.773Z",
+      "updatedAt": "2025-07-09T21:41:38.773Z",
+      "id": "G5Lcoe2jTgqCJuSy",
+      "name": "OpenAI"
+    },
+    {
+      "createdAt": "2025-07-09T23:31:21.052Z",
+      "updatedAt": "2025-07-09T23:31:21.052Z",
+      "id": "JXtwH1KWn3HpvHrm",
+      "name": "templates"
+    },
+    {
+      "createdAt": "2025-07-09T23:31:21.059Z",
+      "updatedAt": "2025-07-09T23:31:21.059Z",
+      "id": "giPr8wYqaJHn1OWx",
+      "name": "creator"
+    },
+    {
+      "createdAt": "2025-07-09T21:41:38.763Z",
+      "updatedAt": "2025-07-09T21:41:38.763Z",
+      "id": "pz5LfYMpyppJnoPT",
+      "name": "WooCommerce"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:45.921Z",
+      "updatedAt": "2025-10-25T12:28:45.921Z",
+      "role": "workflow:owner",
+      "workflowId": "BRHUxVlU8lpqoEwW",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

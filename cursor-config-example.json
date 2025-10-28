@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "n8n": {
+      "command": "node",
+      "args": [
+        "/ruta/completa/a/mcp-n8n/dist/index.js"
+      ],
+      "env": {
+        "N8N_BASE_URL": "https://tu-instancia-n8n.com",
+        "N8N_API_KEY": "tu-api-key-aqui"
+      }
+    }
+  }
+}

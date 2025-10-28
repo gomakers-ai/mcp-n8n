@@ -1,0 +1,72 @@
+# Dependencies
+node_modules/
+yarn.lock
+pnpm-lock.yaml
+
+# Build output
+dist/
+*.js
+*.js.map
+*.d.ts
+*.d.ts.map
+
+# Keep source files
+!src/**/*.ts
+
+# Keep dist for npm publish
+!dist/**/*.js
+!dist/**/*.js.map
+!dist/**/*.d.ts
+!dist/**/*.d.ts.map
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE & Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.claude/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Testing
+coverage/
+.nyc_output/
+test-results/
+
+# Misc
+.cache/
+tmp/
+temp/
+*.tgz
+
+# OS
+Thumbs.db
+.Spotlight-V100
+.Trashes
+
+# Scripts temporales (desarrollo)
+*-temp.js
+*-test.js
+cleanup-repo.sh
+workflow-analysis.json
+
+# Archivos de análisis
+analyze-*.js
+fix-*.js
+transform-*.js
+create-*-workflow.js
+add-*-to-*.js
+update-*.js

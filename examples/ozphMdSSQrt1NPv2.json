@@ -1,0 +1,765 @@
+{
+  "createdAt": "2025-07-14T19:09:06.898Z",
+  "updatedAt": "2025-07-14T19:09:06.898Z",
+  "id": "ozphMdSSQrt1NPv2",
+  "name": "Actioning_Your_Meeting_Next_Steps_using_Transcripts_and_AI",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "temperature": 0
+        }
+      },
+      "id": "f8c91b4f-aa94-4c18-bdf4-691b5944a817",
+      "name": "OpenAI Chat Model1",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        380,
+        400
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "url": "https://meet.googleapis.com/v2/conferenceRecords",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "filter",
+              "value": "=space.meeting_code={{ $json.conferenceData.conferenceId }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "47340f20-5065-4184-a899-79825d01dd56",
+      "name": "Get Meeting ConferenceRecords",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -420,
+        320
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "url": "=https://meet.googleapis.com/v2/{{ $json.conferenceRecords[0].name }}/transcripts",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleOAuth2Api",
+        "options": {}
+      },
+      "id": "17219103-5c66-4b24-8ff7-43cce223f73a",
+      "name": "Get Meeting Transcript Location",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -240,
+        320
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "mode": "url",
+          "value": "={{ $json.docsDestination.document }}"
+        },
+        "options": {
+          "googleFileConversion": {
+            "conversion": {
+              "docsToFormat": "application/pdf"
+            }
+          }
+        }
+      },
+      "id": "55617eb1-130a-482a-aa79-564bf977f1b2",
+      "name": "Get Transcript File",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        -60,
+        320
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {},
+      "id": "346a6ee7-2b58-4383-bade-befab1c17119",
+      "name": "When clicking \"Test workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        -920,
+        280
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "id": "ee439e49-abe9-4add-ad56-e4f4443f520d",
+      "name": "PDF Loader",
+      "type": "n8n-nodes-base.extractFromFile",
+      "position": [
+        240,
+        260
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "calendar": {
+          "__rl": true,
+          "mode": "list",
+          "value": "c_5792bdf04bc395cbcbc6f7b754268245a33779d36640cc80a357711aa2f09a0a@group.calendar.google.com",
+          "cachedResultName": "n8n-events"
+        },
+        "eventId": "abc123",
+        "options": {}
+      },
+      "id": "cdccf074-9f44-44ca-b1a8-18cb2f2eada4",
+      "name": "Get Calendar Event",
+      "type": "n8n-nodes-base.googleCalendar",
+      "position": [
+        -720,
+        280
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "jsonSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"summary\": { \"type\": \"string\" },\n    \"highlights\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"attendee\": { \"type\": \"string\" },\n          \"message\": { \"type\": \"string\" }\n        }\n      }\n    },\n   \"next_steps\": {\n      \"type\": \"array\",\n      \"items:\": {\n        \"type\": \"string\"\n      }\n   },\n   \"meetings_created\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"event_title\": { \"type\": \"string\" },\n           \"event_invite_url\": { \"type\" : \"string\" }\n        }\n      }\n   }\n  }\n}"
+      },
+      "id": "ac1e571d-6a6f-4cf5-bf43-20541f10ca5c",
+      "name": "Structured Output Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "position": [
+        620,
+        400
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {},
+      "id": "bc6f0f5c-0e69-408d-aa51-7ed2681898f0",
+      "name": "Execute Workflow Trigger",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        220,
+        940
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3c12dc11-0ff3-4c6a-9d67-1454d7b0d16d",
+              "name": "response",
+              "type": "string",
+              "value": "={{ JSON.stringify($('Create Calendar Event1').item.json) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "48b9daf1-6cf4-4ab4-a899-65c8b82222ca",
+      "name": "Response",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1360,
+        820
+      ],
+      "typeVersion": 3.3
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7263764b-8409-4cea-8db3-3278dd7ef9d8",
+              "name": "=route",
+              "type": "string",
+              "value": "={{ $json.route }}"
+            },
+            {
+              "id": "55c3b207-2e98-4137-8413-f72cbff17986",
+              "name": "query",
+              "type": "object",
+              "value": "={{ $json.query.parseJson() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1e3d4749-c669-406b-8e32-539cc1a38090",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        380,
+        940
+      ],
+      "typeVersion": 3.3
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"response\": {\n    \"ok\": false,\n    \"error\": \"The requested tool was not found or the service may be unavailable. Do not retry.\"\n  }\n}\n",
+        "options": {}
+      },
+      "id": "38e12a50-50b8-48ee-bd70-c418693c5d4b",
+      "name": "Fallback Response",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        540,
+        1080
+      ],
+      "typeVersion": 3.3
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.route }}",
+                    "rightValue": "meetings.create"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "meetings.create"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "id": "94f5d2ab-a399-46f0-b129-317fefb9b6b2",
+      "name": "Actions Router",
+      "type": "n8n-nodes-base.switch",
+      "position": [
+        540,
+        940
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "521823f4-cee1-4f69-82e7-cea9be0dbc41",
+              "name": "attendees",
+              "type": "array",
+              "value": "={{ $('Actions Router').item.json.query.attendees }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9720011f-131a-4c36-a88b-be451f0fc59b",
+      "name": "Get Attendees",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1020,
+        820
+      ],
+      "typeVersion": 3.3
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "attendees",
+        "options": {}
+      },
+      "id": "007f6b77-58c7-4439-a7a4-35be02843148",
+      "name": "Attendees List",
+      "type": "n8n-nodes-base.splitOut",
+      "position": [
+        1020,
+        960
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "calendar": {
+          "__rl": true,
+          "mode": "list",
+          "value": "c_5792bdf04bc395cbcbc6f7b754268245a33779d36640cc80a357711aa2f09a0a@group.calendar.google.com",
+          "cachedResultName": "n8n-events"
+        },
+        "eventId": "={{ $('Create Calendar Event1').item.json.id }}",
+        "updateFields": {
+          "attendees": [
+            "={{ $json.name }} <{{ $json.email }}>"
+          ]
+        }
+      },
+      "id": "92054212-1167-4c0d-b1b4-af5a458c162d",
+      "name": "Add Attendee to Invite",
+      "type": "n8n-nodes-base.googleCalendar",
+      "position": [
+        1200,
+        820
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "content": "## 4. This Tool Creates Calendar Events\nThis tool, given event details and a list of attendees, will create a new Google calendar event and add the attendees to it.",
+        "height": 445.79624302689535,
+        "width": 756.2929032891963,
+        "color": 7
+      },
+      "id": "a6288ace-9e65-4979-bb2b-c8453724c3fc",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        760,
+        680
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## 1. Retrieve Meeting Transcript\n[Read more about working with HTTP node](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.httprequest)\n\nThere's no built-in support for Google Meets transcript API however, we can solve this problem with the HTTP node. Note you may also need to setup a separate Google OAuth API Credential to obtain the required scopes.",
+        "height": 405.6964113279832,
+        "width": 586.8663941671947,
+        "color": 7
+      },
+      "id": "1c56d8ed-c7b5-4ec7-b684-95b0d2b36895",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -480,
+        140
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## 2. Let AI Agent Carry Out Follow-Up Actions\n[Read more about working with AI Agents](https://docs.n8n.io/integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.agent)\n\nThe big difference between Basic LLM chains and AI Agents is that AI agents are given the automony to perform actions. Provided the right tool exists, AI Agents can send emails, book flights and even order pizza! Here we're leaving it up to our agent to book any follow-up meetings after the call and invite all interested parties.",
+        "height": 588.2833041602365,
+        "width": 681.4281346810014,
+        "color": 7
+      },
+      "id": "e07f3ee0-79d5-49c2-8d8b-e7ed10cf2c0d",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        140,
+        60
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## 3: Using the Custom Workflow Tool\n[Read more about Workflow Triggers](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.executeworkflowtrigger)\n\nOne common implementation of tool use is to set them up as workflows which are intended triggered via other workflows. With this, we can either build a tool per workflow or for efficiency, take an API approach where multiple tools can exist behind a router (in this case our \"switch\" node).\n\nOur AI agent will therefore only passing through the parameters of the request and won't have to learn/know how to intereact directly with the tools and services.",
+        "height": 579.2725119898125,
+        "width": 591.4907024073684,
+        "color": 7
+      },
+      "id": "985c5dd2-46e4-484b-9fe3-73220a77ef5f",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        140,
+        680
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "mode": "list",
+          "value": "c_5792bdf04bc395cbcbc6f7b754268245a33779d36640cc80a357711aa2f09a0a@group.calendar.google.com",
+          "cachedResultName": "n8n-events"
+        },
+        "start": "={{ $json.query.start_date }} {{ $json.query.start_time }}",
+        "end": "={{ $json.query.end_date }} {{ $json.query.end_time }}",
+        "additionalFields": {
+          "attendees": [],
+          "description": "={{ $json.query.description }}",
+          "summary": "={{ $json.query.title }}"
+        }
+      },
+      "id": "6e9e66dd-53af-4fce-8a19-fa77dd655592",
+      "name": "Create Calendar Event1",
+      "type": "n8n-nodes-base.googleCalendar",
+      "position": [
+        820,
+        820
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "content": "## Try It Out!\n### This workflow does the following:\n* Retrieves a meeting transcript\n* Sends transcript to an AI Agent to parse and carry out follow up actions if necessary.\n* If transcript mentions a follow up meeting is required, the AI Agent will call a tool to create the meeting.\n* Additionally if able, the AI Agent will also assign attendees it thinks should attend the meeting. \n\n",
+        "height": 385.336571355038,
+        "width": 359.6648027457353
+      },
+      "id": "b63f1e0f-f4b2-412f-8772-b5aa082fd7d3",
+      "name": "Sticky Note6",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1380,
+        60
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "name": "create_calendar_event",
+        "description": "Call this tool to create an calendar event. This tool requires the following object request body.\n```\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"title\": { \"type\": \"string\" },\n    \"description\": { \"type\": \"string\" },\n    \"start_date\": { \"type\": \"string\" },\n    \"start_time\": { \"type\": \"string\" },\n    \"end_date\": { \"type\": \"string\" },\n    \"end_time\": { \"type\": \"string\" },\n    \"attendees\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"name\": { \"type\": \"string\" },\n          \"email\": { \"type\": \"string\" }\n        }\n      }\n    }\n  }\n}\n```\nNote that dates are in the format yyyy-MM-dd and times are in the format HH:mm:ss.",
+        "workflowId": "={{ $workflow.id }}",
+        "fields": {
+          "values": [
+            {
+              "name": "route",
+              "stringValue": "meetings.create"
+            }
+          ]
+        }
+      },
+      "id": "6748a224-f42a-4f4e-a949-0ab5bddc15db",
+      "name": "Schedule Meeting",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "position": [
+        500,
+        480
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "agent": "openAiFunctionsAgent",
+        "promptType": "define",
+        "text": "=system: your role is to help people get the most out of their meetings. You achieve this by helpfully summarising the meeting transcript to pull out useful information and key points of interest and delivery this in note form. You also help carry out any follow-up actions on behalf of the meeting attendees.\n1. Summarise the meeting and highlight any key goals of the meeting.\n2. Identify and list important points mentioned by each attendee. If non-applicable for an attendee, skip and proceed to the next attendee.\n3. Identify and list all next steps agreed by the attendees. If there are none, make a maximum of 3 suggestions based on the transcript instead. Please list the steps even if they've already been actioned.\n4. identify and perform follow-up actions based on a transcript of a meeting. These actions which are allowed are: creating follow-up calendar events if suggested by the attendees.\n\nThe meeting details were as follows:\n* The creator of the meeting was {{ $('Get Calendar Event').item.json[\"creator\"][\"displayName\"] }} <{{ $('Get Calendar Event').item.json[\"creator\"][\"email\"]}}>\n* The attendees were {{ $('Get Calendar Event').item.json[\"attendees\"].map(attendee => `${attendee.display_name} <${attendee.email}>`).join(', ') }}\n* The meeting was scheduled for {{ $('Get Calendar Event').item.json[\"start\"][\"dateTime\"] }}\n\nThe meeting transcript as follows:\n```\n{{ $json[\"text\"] }}\n```",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "id": "d3103f43-e0ca-4800-9baf-0ec16a615e86",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        400,
+        260
+      ],
+      "typeVersion": 1.5
+    },
+    {
+      "parameters": {
+        "content": "## 1. Get Calendar Event\n[Read more about working with Google Calendar](https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.googlecalendar)\n\nIn this demo, we've decided to go with google meet as transcripts are stored in the user google drive. First, we'll need to get the calendar event of which the google meet was attached.\nIf the meet was not arranged through Google calendar, you may need to skip this step and just reference the transcripts in google drive directly.",
+        "height": 446.9122178333584,
+        "width": 464.50696860436165,
+        "color": 7
+      },
+      "id": "23518439-8c78-475d-a4da-ce6041fabba5",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1000,
+        40
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n🚨**Required**\n* Set your calendar event ID here.",
+        "height": 299.3566512487305,
+        "width": 184.0677386144551
+      },
+      "id": "2f53ee78-76af-463f-8b22-76aa9e379404",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -760,
+        260
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### 💡 Can't find your transcript?\nOnly meetings which own and were recorded and had transcription enabled will be available.\n",
+        "height": 80,
+        "width": 349.91944442094535,
+        "color": 5
+      },
+      "id": "cdb8c665-b81a-449c-a0fe-545acf9911f8",
+      "name": "Sticky Note7",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -260,
+        560
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n🚨**Required**\n* Set your calendar ID here.",
+        "height": 299.3566512487305,
+        "width": 184.0677386144551
+      },
+      "id": "7fd7dd83-dad5-421f-863c-2e4a6b746320",
+      "name": "Sticky Note8",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        780,
+        800
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "connections": {
+    "PDF Loader": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Actions Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Attendees": {
+      "main": [
+        [
+          {
+            "node": "Attendees List",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Actions Router": {
+      "main": [
+        [
+          {
+            "node": "Create Calendar Event1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Fallback Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attendees List": {
+      "main": [
+        [
+          {
+            "node": "Add Attendee to Invite",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Meeting": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Calendar Event": {
+      "main": [
+        [
+          {
+            "node": "Get Meeting ConferenceRecords",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Transcript File": {
+      "main": [
+        [
+          {
+            "node": "PDF Loader",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Attendee to Invite": {
+      "main": [
+        [
+          {
+            "node": "Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Calendar Event1": {
+      "main": [
+        [
+          {
+            "node": "Get Attendees",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Workflow Trigger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Meeting ConferenceRecords": {
+      "main": [
+        [
+          {
+            "node": "Get Meeting Transcript Location",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking \"Test workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Get Calendar Event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Meeting Transcript Location": {
+      "main": [
+        [
+          {
+            "node": "Get Transcript File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {},
+  "versionId": "bc7703da-a81a-43f6-b35c-8262e1fe7edc",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-07-09T21:41:38.773Z",
+      "updatedAt": "2025-07-09T21:41:38.773Z",
+      "id": "G5Lcoe2jTgqCJuSy",
+      "name": "OpenAI"
+    },
+    {
+      "createdAt": "2025-07-09T21:41:38.763Z",
+      "updatedAt": "2025-07-09T21:41:38.763Z",
+      "id": "pz5LfYMpyppJnoPT",
+      "name": "WooCommerce"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:46.131Z",
+      "updatedAt": "2025-10-25T12:28:46.131Z",
+      "role": "workflow:owner",
+      "workflowId": "ozphMdSSQrt1NPv2",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

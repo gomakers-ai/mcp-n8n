@@ -1,0 +1,551 @@
+{
+  "createdAt": "2025-07-14T19:04:35.204Z",
+  "updatedAt": "2025-07-14T19:04:35.204Z",
+  "id": "AJcl5Fq5ND2bqoro",
+  "name": "Automated_Stock_Analysis_Reports_with_Technical___News_Sentiment_using_GPT_4o",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "id": "d0e10574-4b8a-449c-b6c0-5147a2e4a64e",
+      "name": "Merge",
+      "type": "n8n-nodes-base.merge",
+      "position": [
+        0,
+        120
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.html }}",
+        "options": {}
+      },
+      "id": "8e07ddf6-4f22-48d3-be26-22a6125139c7",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        580,
+        120
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "amount": 3
+      },
+      "id": "c4b47195-1fa3-43da-8ac6-b99e273cec0c",
+      "name": "Wait 3 sec",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        -20,
+        680
+      ],
+      "webhookId": "90f31c1f-6707-4f2f-b525-d3961432cd81",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "3cf5b451-9ff5-4c2a-864f-9aa7d286871a",
+              "operator": {
+                "name": "filter.operator.equals",
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "Ready"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "688c91b9-d6db-453b-a11e-abc3746c982d",
+      "name": "Is Ready?",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        400,
+        680
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "content": "# Deliver the editor with links to the images",
+        "height": 479,
+        "width": 1193
+      },
+      "id": "ea7ff9df-c543-43d2-a501-ecb39259e3ca",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -420,
+        -100
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.bfl.ml/v1/flux-pro-1.0-fill",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "prompt",
+              "value": "={{ $json.body.prompt }}"
+            },
+            {
+              "name": "steps",
+              "value": "={{ $json.body.steps }}"
+            },
+            {
+              "name": "prompt_upsampling",
+              "value": "={{ $json.body.prompt_upsampling }}"
+            },
+            {
+              "name": "guidance",
+              "value": "={{ $json.body.guidance }}"
+            },
+            {
+              "name": "output_format",
+              "value": "png"
+            },
+            {
+              "name": "safety_tolerance",
+              "value": "6"
+            },
+            {
+              "name": "image",
+              "value": "={{ $json.body.image.split(',')[1] }}"
+            },
+            {
+              "name": "mask",
+              "value": "={{ $json.body.mask.split(',')[1] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2bf8b5f6-d7f6-41a9-9e3c-b932f995d36a",
+      "name": "FLUX Fill",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -280,
+        680
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "url": "https://api.bfl.ml/v1/get_result",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "id",
+              "value": "={{ $json.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "0d90636b-ce3e-46fd-9138-863ba704fab0",
+      "name": "Check FLUX status",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        180,
+        680
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.result.sample }}",
+        "options": {}
+      },
+      "id": "51bdb84e-6d32-4f46-ab97-110cc75beafa",
+      "name": "Get Fill Image",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        620,
+        780
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "respondWith": "binary",
+        "responseDataSource": "set",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Content-Type",
+                "value": "={{ $binary.data.mimeType }}"
+              }
+            ]
+          }
+        }
+      },
+      "id": "e58680ef-b790-4171-9db1-569221694319",
+      "name": "Show the image to user",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        960,
+        780
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "content": "# Image processing part",
+        "height": 502,
+        "width": 1142,
+        "color": 4
+      },
+      "id": "e44c9372-2666-4899-93a9-de33892a31e7",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -380,
+        420
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# Send back edited image\n## Add extra steps to save an edited image",
+        "height": 272,
+        "width": 506
+      },
+      "id": "8be3f835-abaa-4476-b01a-e98775d3e70c",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        780,
+        660
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "20c39c67-3cf8-4e29-b871-3202f2e20a3c",
+              "name": "Images",
+              "type": "array",
+              "value": "={{\n[\n{\"url\":\"https://byuroscope.fra1.digitaloceanspaces.com/nc/uploads/noco/fluxtest/creative-arrangement-minimalist-podium_23-2148959328.jpg\",\n \"title\":\"Stage\" },\n{\"url\":\"https://byuroscope.fra1.digitaloceanspaces.com/nc/uploads/noco/fluxtest/Standing-Big-Paper-Bag-Mockup.jpg\",\n \"title\":\"Paper Bag\" },\n{\"url\":\"https://byuroscope.fra1.digitaloceanspaces.com/nc/uploads/noco/fluxtest/Ceramic-Mug-on-Table-Mockup.jpg\",\n \"title\":\"Big Mug\" },\n{\"url\":\"https://byuroscope.fra1.digitaloceanspaces.com/nc/uploads/noco/fluxtest/Transparent-Bottle-on-Sunny-Beach-Mockup-D.jpg\",\n \"title\":\"Transparent-Bottle\" },\n{\"url\":\"https://byuroscope.fra1.digitaloceanspaces.com/nc/uploads/noco/fluxtest/skin-products-arrangement-wooden-blocks_23-2148761445.jpg\",\n \"title\":\"Cosmetics\" }\n]\n}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "12aa00fa-a117-4dea-aced-bf151a54c0e0",
+      "name": "Mockups",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -280,
+        220
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "multipleMethods": true,
+        "path": "flux-fill",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "8eedf624-055c-4282-b599-dfa3d13c9fa2",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "position": [
+        -680,
+        120
+      ],
+      "webhookId": "9c864ee6-e4d3-46e7-98d4-bea43739963e",
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "html": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Konva Image Editor</title>\n    <script src=\"https://unpkg.com/konva@9/konva.min.js\"></script>\n    <script defer src=\"https://unpkg.com/img-comparison-slider@8/dist/index.js\"></script>\n    <link rel=\"stylesheet\" href=\"https://unpkg.com/img-comparison-slider@8/dist/styles.css\" />\n    <link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/gh/ed-parsadanyan/n8n-flux-fill-demo/flux-fill-style.css\" />\n    <script src=\"https://cdn.jsdelivr.net/gh/ed-parsadanyan/n8n-flux-fill-demo/flux-fill-canvas.js\"></script>\n</head>\n<body>\n    <div class=\"controls-wrapper\">\n        <div class=\"left-panel\">\n            <div class=\"image-controls\">\n                <select id=\"imageSelector\">\n                    <option value=\"\">Select an image...</option>\n                    <option value=\"local\">Load from PC...</option>\n                </select>\n                <input type=\"file\" id=\"fileInput\" style=\"display: none\" accept=\"image/*\">\n                <button id=\"clearButton\">Clear All</button>\n            </div>\n            \n            <div class=\"brush-controls\">\n                <label for=\"brushSize\" title=\"Use mouse wheel to adjust brush size\">Brush Size:</label>\n                <div class=\"slider-container\">\n                    <input type=\"range\" id=\"brushSize\" min=\"5\" max=\"40\" value=\"20\">\n                    <span class=\"slider-value\" id=\"brushSizeValue\">20px</span>\n                </div>\n            </div>\n        </div>\n\n        <div class=\"right-panel\">\n            <div class=\"prompt-row\">\n                <input type=\"text\" id=\"promptInput\" placeholder=\"Enter your prompt (optional)\">\n            </div>\n            \n            <div class=\"main-controls\">\n                <label class=\"checkbox-container\">\n                    <input type=\"checkbox\" id=\"improvePrompt\" checked>\n                    <span>Improve prompt</span>\n                </label>\n                \n                <div>\n                    <button id=\"sendButton\">Generate</button>\n                    <span class=\"loading\" id=\"loadingIndicator\">Processing...</span>\n                </div>\n            </div>\n            \n            <div class=\"parameters\">\n                <div class=\"slider-container\">\n                    <label for=\"stepsSlider\">Steps:</label>\n                    <input type=\"range\" id=\"stepsSlider\" min=\"15\" max=\"50\" value=\"40\">\n                    <span class=\"slider-value\" id=\"stepsValue\">40</span>\n                </div>\n                \n                <div class=\"slider-container\">\n                    <label for=\"guidanceSlider\">Guidance:</label>\n                    <input type=\"range\" id=\"guidanceSlider\" min=\"1.5\" max=\"100\" value=\"60\" step=\"0.1\">\n                    <span class=\"slider-value\" id=\"guidanceValue\">60.0</span>\n                </div>\n            </div>\n        </div>\n    </div>\n\n    <div class=\"info\" id=\"imageInfo\"></div>\n    <div id=\"container\"></div>\n    <div id=\"cursor\"></div>\n\n    <div id=\"resultModal\" class=\"modal\">\n        <div class=\"modal-content\">\n            <div class=\"modal-image-container\">\n                <div class=\"comparison-container\">\n                    <div class=\"image-container\">\n                        <img class=\"image-before\" id=\"originalImage\" src=\"\" alt=\"Original\">\n                        <img class=\"image-after\" id=\"resultImage\" src=\"\" alt=\"Generated\">\n                    </div>\n                    <input type=\"range\" min=\"0\" max=\"100\" value=\"10\" class=\"slider\">\n                    <div class=\"slider-line\"></div>\n                      <div class=\"slider-button\" aria-hidden=\"true\">\n                          &lt; &gt;\n                      </div>\n                    <div class=\"labels\">\n                        <div class=\"label-before\">Original</div>\n                        <div class=\"label-after\">Generated</div>\n                    </div>\n                </div>\n            </div>\n            <div class=\"modal-buttons\">\n                <button id=\"reuseButton\">Use Generated</button>\n                <button id=\"saveButton\">Save Image</button>\n                <button id=\"closeButton\">Close</button>\n            </div>\n        </div>\n    </div>\n\n<script>\n    const urlParams = new URLSearchParams(window.location.search);\n    const pageId = urlParams.get('id');\n\n    // Image data will be populated by n8n\n    const imageData = {{ JSON.stringify($json.Images,'',2) }};\n    const webhookUrl = '{{ $json.webhookUrl }}';\n\n    // Initialize the editor when the page loads\n    document.addEventListener('DOMContentLoaded', function() {\n        initializeEditor({\n            images: imageData,\n            webhookUrl: webhookUrl,\n            pageId: pageId\n        });\n    });\n</script>\n</body>\n</html>\n"
+      },
+      "id": "07fd4ec6-a84a-46c4-a52a-d664099a660e",
+      "name": "Editor page",
+      "type": "n8n-nodes-base.html",
+      "position": [
+        300,
+        120
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "content": "## Image array\n* Load from PC\n* Select one of the default images\n\n### Change this node to\n### get image URLs from your data source",
+        "height": 340,
+        "width": 360,
+        "color": 5
+      },
+      "id": "4d2cf893-76b3-4c42-8234-428b8d9f58ea",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -400,
+        20
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## HTML code of the editor\n* Konva.js\n* img-comparison-slider to compare edits vs original file\n* Additional css + js files for the editor logic",
+        "height": 300,
+        "width": 400,
+        "color": 5
+      },
+      "id": "eaebcf28-06da-4b5d-ab56-01c72f4d3299",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        140,
+        -20
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Call FLUX-Fill Tool\nPass the following data:\n* original image\n* alpha mask from the editor\n* text prompt\n* additional settings",
+        "height": 340,
+        "width": 280,
+        "color": 5
+      },
+      "id": "441d5a51-b777-4e59-be9d-31157f136876",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -360,
+        500
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {},
+      "id": "68b074e5-f5c4-4ed6-82fe-fe6685dee73d",
+      "name": "NO OP",
+      "type": "n8n-nodes-base.noOp",
+      "position": [
+        -520,
+        680
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "connections": {
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Editor page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "NO OP": {
+      "main": [
+        [
+          {
+            "node": "FLUX Fill",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mockups": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Mockups",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "NO OP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "FLUX Fill": {
+      "main": [
+        [
+          {
+            "node": "Wait 3 sec",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Ready?": {
+      "main": [
+        [
+          {
+            "node": "Get Fill Image",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait 3 sec",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 3 sec": {
+      "main": [
+        [
+          {
+            "node": "Check FLUX status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Editor page": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Fill Image": {
+      "main": [
+        [
+          {
+            "node": "Show the image to user",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check FLUX status": {
+      "main": [
+        [
+          {
+            "node": "Is Ready?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {
+    "Webhook": []
+  },
+  "versionId": "5b68ed10-d092-40c0-ac6c-96e912b7018b",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-07-09T21:41:38.773Z",
+      "updatedAt": "2025-07-09T21:41:38.773Z",
+      "id": "G5Lcoe2jTgqCJuSy",
+      "name": "OpenAI"
+    },
+    {
+      "createdAt": "2025-07-09T23:31:21.052Z",
+      "updatedAt": "2025-07-09T23:31:21.052Z",
+      "id": "JXtwH1KWn3HpvHrm",
+      "name": "templates"
+    },
+    {
+      "createdAt": "2025-07-09T23:31:21.059Z",
+      "updatedAt": "2025-07-09T23:31:21.059Z",
+      "id": "giPr8wYqaJHn1OWx",
+      "name": "creator"
+    },
+    {
+      "createdAt": "2025-07-09T21:41:38.763Z",
+      "updatedAt": "2025-07-09T21:41:38.763Z",
+      "id": "pz5LfYMpyppJnoPT",
+      "name": "WooCommerce"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:45.906Z",
+      "updatedAt": "2025-10-25T12:28:45.906Z",
+      "role": "workflow:owner",
+      "workflowId": "AJcl5Fq5ND2bqoro",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,306 @@
+{
+  "createdAt": "2025-07-14T19:08:23.251Z",
+  "updatedAt": "2025-07-14T19:08:23.251Z",
+  "id": "J2zsV8reeuJaPLNr",
+  "name": "Extract_and_process_information_directly_from_PDF_using_Claude_and_Gemini",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "526d231a-5644-45f1-bcc9-d478fdd55aea",
+      "name": "When clicking 'Test workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        -340,
+        200
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "options": {}
+      },
+      "id": "4baf8803-28e7-485d-84e5-a593c51b43ca",
+      "name": "Extract from File",
+      "type": "n8n-nodes-base.extractFromFile",
+      "position": [
+        340,
+        200
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "18Ac2xorxirIBm9FNFDDB5aVUSPBCCg1U",
+          "cachedResultUrl": "https://drive.google.com/file/d/18Ac2xorxirIBm9FNFDDB5aVUSPBCCg1U/view?usp=drivesdk",
+          "cachedResultName": "Invoice-798FE2FA-0004.pdf"
+        },
+        "options": {}
+      },
+      "id": "33fe4cee-323e-4893-9d6a-4023809d1414",
+      "name": "Google Drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        140,
+        200
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googlePalmApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"inline_data\": {\n            \"mime_type\": \"application/pdf\",\n            \"data\": \"{{ $json.data }}\"\n          }\n        },\n        {\n          \"text\": \"{{ $('Define Prompt').item.json.prompt }}\"\n        }\n      ]\n    }\n  ]\n}",
+        "options": {}
+      },
+      "id": "b80936ff-f7dd-4dce-b9f1-e470cd252e8d",
+      "name": "Call Gemini 2.0 Flash with PDF Capabilities",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        600,
+        420
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "anthropicApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"claude-3-5-sonnet-20241022\",\n    \"max_tokens\": 1024,\n    \"messages\": [{\n        \"role\": \"user\",\n        \"content\": [{\n            \"type\": \"document\",\n            \"source\": {\n                \"type\": \"base64\",\n                \"media_type\": \"application/pdf\",\n                \"data\": \"{{$json.data}}\"\n            }\n        },\n        {\n            \"type\": \"text\",\n            \"text\": \"{{ $('Define Prompt').item.json.prompt }}\"\n        }]\n    }]\n}",
+        "options": {}
+      },
+      "id": "93fb23c8-1959-4d10-b19e-45efbb3c7d7b",
+      "name": "Call Claude 3.5 Sonnet with PDF Capabilities",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        600,
+        60
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "content": "## Workflow: Extract data from PDF with Claude 3.5 Sonnet or Gemini 2.0 Flash\n\n**Overview**\n- This workflow helps you compare Claude 3.5 Sonnet and Gemini 2.0 Flash when extracting data from a PDF\n- This workflow extracts and processes the data within a PDF in **one single step**, **instead of calling an OCR and then an LLM”**\n\n\n**How it works**\n- The initial 2 steps download the PDF and convert it to base64.\n- This base64 string is then sent to both Claude 3.5 Sonnet and Gemini 2.0 Flash to extract information.\n- This workflow is made to let you compare results, latency, and cost (in their dedicated dashboard).\n\n\n**How to use it**\n- Set up your Google Drive if not already done\n- Select a document on your Google Drive\n- Modify the prompt in \"Define Prompt\" to extract the information you need and transform it as wanted.\n- Get a [Claude API key](https://console.anthropic.com/settings/keys) and/or [Gemini API key](https://aistudio.google.com/app/apikey)\n- Note that you can deactivate one of the 2 API calls if you don't want to try both\n- Test the Workflow\n",
+        "height": 585,
+        "width": 601,
+        "color": 7
+      },
+      "id": "24a8b886-8249-4203-be96-9037c2db8ebe",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1000,
+        -80
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "You can output the result as JSON by adding the following:\n```\n\"generationConfig\": {\n    \"responseMimeType\": \"application/json\"\n```\nor even use a structured output.\n[Check the documentation](https://ai.google.dev/gemini-api/docs/structured-output?lang=rest)",
+        "height": 360,
+        "width": 320,
+        "color": 5
+      },
+      "id": "e71b64a5-23e0-4441-b007-914c0997dfd3",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        540,
+        260
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "dba23ef5-95df-496a-8e24-c7c1544533d2",
+              "name": "prompt",
+              "type": "string",
+              "value": "Extract the VAT numbers for each country"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "59488e5f-1923-4987-a4e3-c69f0e4ef0ba",
+      "name": "Define Prompt",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -120,
+        200
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "content": "You can force Claude to output JSON with [Prefill response format](https://docs.anthropic.com/en/docs/test-and-evaluate/strengthen-guardrails/increase-consistency#prefill-claudes-response)",
+        "height": 240,
+        "width": 320,
+        "color": 5
+      },
+      "id": "470fa8c3-e420-44b4-8d25-491003d2106f",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        540,
+        0
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "These 2 steps first download the PDF file, and then convert it to base64.\nThis is required by both APIs to process the file.",
+        "height": 280,
+        "width": 380,
+        "color": 5
+      },
+      "id": "0bd7f821-06f6-4b98-ac72-f9ffd632f95e",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        100,
+        80
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "This prompt is used in both Gemini’s and Claude’s calls to define what information should be extracted and processed.",
+        "height": 280,
+        "width": 220,
+        "color": 5
+      },
+      "id": "4d5151b6-8da4-4b68-9090-e4f93e45df47",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -180,
+        80
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "connections": {
+    "Google Drive": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Define Prompt": {
+      "main": [
+        [
+          {
+            "node": "Google Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Call Claude 3.5 Sonnet with PDF Capabilities",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Call Gemini 2.0 Flash with PDF Capabilities",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking 'Test workflow'": {
+      "main": [
+        [
+          {
+            "node": "Define Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {},
+  "versionId": "7781b5b5-c69e-482a-8eed-564bed28f42a",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-07-09T21:41:38.773Z",
+      "updatedAt": "2025-07-09T21:41:38.773Z",
+      "id": "G5Lcoe2jTgqCJuSy",
+      "name": "OpenAI"
+    },
+    {
+      "createdAt": "2025-07-09T21:41:38.763Z",
+      "updatedAt": "2025-07-09T21:41:38.763Z",
+      "id": "pz5LfYMpyppJnoPT",
+      "name": "WooCommerce"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:46.094Z",
+      "updatedAt": "2025-10-25T12:28:46.094Z",
+      "role": "workflow:owner",
+      "workflowId": "J2zsV8reeuJaPLNr",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,635 @@
+{
+  "createdAt": "2025-07-14T19:08:12.442Z",
+  "updatedAt": "2025-07-14T19:08:12.442Z",
+  "id": "ObCSdDVajfhBYY4A",
+  "name": "Automated_Generation_of_AI_Advertising_Photos_for_Product_Marketing",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "options": {}
+      },
+      "id": "369f85f2-53df-4332-bb40-bbf878d1eb6f",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        440,
+        840
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "id": "a4593ffd-35d7-446d-b3e4-152403b89650",
+      "name": "Merge",
+      "type": "n8n-nodes-base.merge",
+      "position": [
+        860,
+        320
+      ],
+      "typeVersion": 3.1
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "17zQUytFekDK305wvgxYdEYm4N5QEQ1mrwsfccNn872I",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17zQUytFekDK305wvgxYdEYm4N5QEQ1mrwsfccNn872I/edit?usp=drivesdk",
+          "cachedResultName": "Image Generation"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17zQUytFekDK305wvgxYdEYm4N5QEQ1mrwsfccNn872I/edit#gid=0",
+          "cachedResultName": "Product Images"
+        },
+        "options": {}
+      },
+      "id": "254a049c-778a-40f6-8d09-70164b6552e0",
+      "name": "Read Image URLs",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        -280,
+        300
+      ],
+      "typeVersion": 4.5
+    },
+    {
+      "parameters": {
+        "url": "={{ $json['Image-URL'] }}",
+        "options": {}
+      },
+      "id": "8f38e252-f6c7-420a-aef4-ad6df6801588",
+      "name": "Download Images",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -80,
+        300
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "text": "Briefly explain in less than 5 words what this image is about.",
+        "inputType": "base64",
+        "options": {}
+      },
+      "id": "c4d0da23-4cea-4130-8411-0d8a18f54df7",
+      "name": "Analyze Images",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "position": [
+        280,
+        640
+      ],
+      "typeVersion": 1.8
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Image description: {{ $json.content }}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=Create a short prompt for an AI image generator that receives a photo of a product to ultimately produce professional product photography.\n\nIf the product is wearable, it must be worn by a human model with visible face; if it's not wearable, it must be held or interacted with by a model.\n\nThe product must ALWAYS be shown together with a human model with the model's face visible.\n\nEnsure that instructions for optimal realism, best lighting, best angle, best colors, best model positioning, etc. are included according to the product type.\n\nAlways formulate the prompt to refer to the product as \"this [PRODUCT]\" so the AI image generator knows that an input photo of the product is being submitted.\n\nAlways add subtle grain for a cinematic look.\nThe description of the product will be sent to you. Respond exclusively with the final prompt, nothing else, not even quotation marks."
+            }
+          ]
+        }
+      },
+      "id": "d1058693-462b-4817-bb45-b41d9524cd97",
+      "name": "Product Photography Prompt",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "position": [
+        480,
+        640
+      ],
+      "typeVersion": 1.6
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/images/edits",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "gpt-image-1"
+            },
+            {
+              "name": "prompt",
+              "value": "={{ $json.text }}"
+            },
+            {
+              "parameterType": "formBinaryData",
+              "name": "image[]",
+              "inputDataFieldName": "data"
+            },
+            {
+              "name": "quality",
+              "value": "high"
+            },
+            {
+              "name": "size",
+              "value": "1536x1024"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6419eb2e-0984-4347-bed8-adabcc0ff896",
+      "name": "Send Image with Prompt to OpenAI",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1120,
+        320
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "data[0].b64_json",
+        "options": {}
+      },
+      "id": "d88fa91f-5dd7-4b7d-9b02-4c508c267242",
+      "name": "Convert Base64 to File",
+      "type": "n8n-nodes-base.convertToFile",
+      "position": [
+        1320,
+        320
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "name": "={{ $('Analyze Images').item.json.content }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "1mAV3g0eR5XZ2wknZTbcfZOkLlq8GZryP",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1mAV3g0eR5XZ2wknZTbcfZOkLlq8GZryP",
+          "cachedResultName": "Product Images"
+        },
+        "options": {}
+      },
+      "id": "fe344784-6e05-422e-819c-80cb3a07db36",
+      "name": "Upload to Drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        1620,
+        320
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "17zQUytFekDK305wvgxYdEYm4N5QEQ1mrwsfccNn872I",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17zQUytFekDK305wvgxYdEYm4N5QEQ1mrwsfccNn872I/edit?usp=drivesdk",
+          "cachedResultName": "Image Generation"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17zQUytFekDK305wvgxYdEYm4N5QEQ1mrwsfccNn872I/edit#gid=0",
+          "cachedResultName": "Product Images"
+        },
+        "columns": {
+          "value": {
+            "Output": "={{ $json.webViewLink }}",
+            "Prompt": "={{ $('Product Photography Prompt').item.json.text }}",
+            "Image-URL": "={{ $('Read Image URLs').item.json['Image-URL'] }}"
+          },
+          "schema": [
+            {
+              "id": "Image-URL",
+              "type": "string",
+              "display": true,
+              "removed": false,
+              "required": false,
+              "displayName": "Image-URL",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Prompt",
+              "type": "string",
+              "display": true,
+              "removed": false,
+              "required": false,
+              "displayName": "Prompt",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Output",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "Output",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "type": "string",
+              "display": true,
+              "removed": false,
+              "readOnly": true,
+              "required": false,
+              "displayName": "row_number",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            }
+          ],
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "Image-URL"
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "4b31a110-18a6-4b2e-9d0f-b1e084c670a2",
+      "name": "Insert Image URL in Table",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        1840,
+        320
+      ],
+      "typeVersion": 4.5
+    },
+    {
+      "parameters": {
+        "content": "## Extract Product Images from Template",
+        "height": 360,
+        "width": 600
+      },
+      "id": "cc41e41c-04df-4f96-a511-ceb41c5039b9",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -520,
+        200
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Analyze Images and Create Prompt for Product Photography",
+        "height": 360,
+        "width": 600,
+        "color": 4
+      },
+      "id": "fb08157e-d190-43ff-862c-92ecab0db9e1",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        200,
+        540
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## gpt-image-1 creates the Product Photography",
+        "height": 360,
+        "width": 460,
+        "color": 5
+      },
+      "id": "aa114e25-6175-453f-92f4-797f7b81b424",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1040,
+        200
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Output is uploaded to Drive and the Image URLs are saved in the table",
+        "height": 360,
+        "width": 520,
+        "color": 3
+      },
+      "id": "1e5db9bd-cf0e-465c-953f-9ffae1afbfb4",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1540,
+        200
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {},
+      "id": "37b515e6-cb8a-47ef-b8df-92c658e000e6",
+      "name": "When clicking 'Test workflow'",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        -480,
+        300
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "data[0].b64_json",
+        "options": {}
+      },
+      "id": "bf68b9c7-7cc9-4fd8-b8a2-a26c6e20cd06",
+      "name": "Convert to File",
+      "type": "n8n-nodes-base.convertToFile",
+      "position": [
+        -60,
+        -300
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "content": "## Simple Image Generation\n### Don't forget the manual trigger ;)",
+        "height": 260,
+        "width": 660,
+        "color": 6
+      },
+      "id": "0f9c8382-2c55-4685-abe8-957b4a36586b",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -520,
+        -400
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/images/generations",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "model",
+              "value": "gpt-image-1"
+            },
+            {
+              "name": "prompt",
+              "value": "A childrens book drawing of a veterinarian using a stethoscope to listen to the heartbeat of a baby otter."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f68d8eac-ac35-4c23-b06a-7429331dcab1",
+      "name": "Generate Image",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -240,
+        -300
+      ],
+      "typeVersion": 4.2
+    }
+  ],
+  "connections": {
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Send Image with Prompt to OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze Images": {
+      "main": [
+        [
+          {
+            "node": "Product Photography Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Image": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Images": {
+      "main": [
+        [
+          {
+            "node": "Analyze Images",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Image URLs": {
+      "main": [
+        [
+          {
+            "node": "Download Images",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to Drive": {
+      "main": [
+        [
+          {
+            "node": "Insert Image URL in Table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Product Photography Prompt",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert Base64 to File": {
+      "main": [
+        [
+          {
+            "node": "Upload to Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Product Photography Prompt": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "When clicking 'Test workflow'": {
+      "main": [
+        [
+          {
+            "node": "Read Image URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Image with Prompt to OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Convert Base64 to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {
+    "Read Image URLs": [
+      {
+        "json": {
+          "Output": "",
+          "Prompt": "",
+          "Image-URL": "https://www.chamelo.com/cdn/shop/files/image_143.png?v=1727088856",
+          "row_number": 2
+        }
+      },
+      {
+        "json": {
+          "Output": "",
+          "Prompt": "",
+          "Image-URL": "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcQLTiQY-Gk_H9uIqBRFFx_C_R8qQqwh2Ob1wWyUnEaLPMlrKxlu1OmQA_zfFWeoSLIFwRUZoNUlcABIZ9VUCx6dJ6ce455OHY2wn7khZdr0BKuFpvgoM6SlFg",
+          "row_number": 3
+        }
+      },
+      {
+        "json": {
+          "Output": "",
+          "Prompt": "",
+          "Image-URL": "https://www.spierandmackay.com/files/catalog/PRODUCT_IMAGES/Spier&Mackay-JSBH2110-3-Taupe%20-%20Wool%20Scarf%20(3).jpg",
+          "row_number": 4
+        }
+      }
+    ],
+    "When clicking 'Test workflow'": [
+      {
+        "json": {}
+      }
+    ]
+  },
+  "versionId": "f24ca2a1-dc5b-4be8-828f-7d29bf5e384c",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-07-09T21:41:38.773Z",
+      "updatedAt": "2025-07-09T21:41:38.773Z",
+      "id": "G5Lcoe2jTgqCJuSy",
+      "name": "OpenAI"
+    },
+    {
+      "createdAt": "2025-07-09T21:41:38.763Z",
+      "updatedAt": "2025-07-09T21:41:38.763Z",
+      "id": "pz5LfYMpyppJnoPT",
+      "name": "WooCommerce"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:46.084Z",
+      "updatedAt": "2025-10-25T12:28:46.084Z",
+      "role": "workflow:owner",
+      "workflowId": "ObCSdDVajfhBYY4A",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,368 @@
+{
+  "createdAt": "2025-07-14T19:10:05.699Z",
+  "updatedAt": "2025-07-14T19:10:05.699Z",
+  "id": "SzxB0IQBRthioBDR",
+  "name": "Translate_Telegram_audio_messages_with_AI__55_supported_languages_",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "*"
+        ],
+        "additionalFields": {}
+      },
+      "id": "39c1b094-2ae6-41af-a74f-61b69676983a",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "position": [
+        40,
+        140
+      ],
+      "webhookId": "c537cfcc-6c4a-436a-8871-d32f8ce016cb",
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Translation\n\n- Converts from speech to text.\n\n- Translates the language from the native language to translated language (as specified in settings node)\n\n",
+        "height": 586.6978417266175,
+        "width": 556.5162909529794
+      },
+      "id": "b0b9dbad-d694-4dd5-b77f-a35630027d82",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        840,
+        -80
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "bbccaa1e-e8c2-4237-8aa5-79e2d02f0e21",
+      "name": "Text reply",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        1840,
+        140
+      ],
+      "typeVersion": 1,
+      "webhookId": "0f7ce661-cfc7-404c-bf64-d084268e8e76"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $('Telegram Trigger').item.json.message.voice.file_id }}"
+      },
+      "id": "0afece55-4e0b-41ff-a032-c6adac2900de",
+      "name": "Telegram1",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        660,
+        140
+      ],
+      "typeVersion": 1.1,
+      "webhookId": "d0906fc4-e2ce-469f-b588-3c5882ed78f4"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "3d7f54af-436b-4367-ac55-d141421e41e2",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        1120,
+        320
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "fields": {
+          "values": [
+            {
+              "name": "message.text",
+              "stringValue": "={{ $json?.message?.text || \"\" }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "46088295-6f38-4af2-b1c4-e07405408245",
+      "name": "Input Error Handling",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        460,
+        140
+      ],
+      "typeVersion": 3.2
+    },
+    {
+      "parameters": {
+        "content": "## Telegram output\n\n- Provide the output in both text as well as speech. \n\n- Many languages are supported including English,French, German, Spanish, Chinese, Japanese.\n\nFull list here:\nhttps://platform.openai.com/docs/guides/speech-to-text/supported-languages\n",
+        "height": 583.7625899280566,
+        "width": 585.8688089385912
+      },
+      "id": "800d1b9f-a88c-4759-ac16-34bdbda2c4b2",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1520,
+        -80
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Multi-lingual AI Powered Universal Translator with Speech ⭐\n\n### Key capabilities\nThis flow enables a Telegram bot that can \n- accept speech in one of 55 languages \n- translates to another language and returns result in speech\n\n### Use case:\n- Learning a new language\n- Communicate with others while traveling to another country\n\n### Setup\n- Open the Settings node and specify the languages you would like to work with",
+        "height": 573.4892086330929,
+        "width": 489.00549958607303,
+        "color": 4
+      },
+      "id": "8d757ad2-1f39-4373-b755-d10a41a765c7",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -540,
+        -80
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "501ac5cc-73e8-4e9c-bf91-df312aa9ff88",
+              "name": "language_native",
+              "type": "string",
+              "value": "english"
+            },
+            {
+              "id": "efb9a7b2-5baa-44cc-b94d-c8030f17e890",
+              "name": "language_translate",
+              "type": "string",
+              "value": "french"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3f0b16c4-6c31-4782-bc3a-d6c4303a51b8",
+      "name": "Settings",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        260,
+        140
+      ],
+      "typeVersion": 3.3
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Detect the language of the text that follows.  \n- If it is  {{ $('Settings').item.json.language_native }} translate to {{ $('Settings').item.json.language_translate }}.  \n- If it is in  {{ $('Settings').item.json.language_translate }} translate to {{ $('Settings').item.json.language_native }} .  \n- In the output just provide the translation and do not explain it.  Just provide the translation without anything else.\n\nText:\n {{ $json.text }}\n"
+      },
+      "id": "53043b30-b1ed-4821-8f19-23720fed7761",
+      "name": "Auto-detect and translate",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "position": [
+        1100,
+        140
+      ],
+      "typeVersion": 1.4
+    },
+    {
+      "parameters": {
+        "operation": "sendAudio",
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "binaryData": true,
+        "additionalFields": {}
+      },
+      "id": "ea8e8e64-d8ce-4d48-b039-5ad616ccc4ef",
+      "name": "Audio reply",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        1840,
+        320
+      ],
+      "typeVersion": 1.1,
+      "webhookId": "4d4627fe-18e3-4d49-9b09-522557401735"
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "id": "30a32992-e0ab-40c5-a49f-cdeab867c945",
+      "name": "OpenAI2",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "position": [
+        900,
+        140
+      ],
+      "typeVersion": 1.3
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "input": "={{ $json.text }}",
+        "options": {}
+      },
+      "id": "9708a131-7c89-4794-97a8-ed3ffaa50a43",
+      "name": "OpenAI",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "position": [
+        1620,
+        320
+      ],
+      "typeVersion": 1.3
+    }
+  ],
+  "connections": {
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Audio reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI2": {
+      "main": [
+        [
+          {
+            "node": "Auto-detect and translate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Settings": {
+      "main": [
+        [
+          {
+            "node": "Input Error Handling",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram1": {
+      "main": [
+        [
+          {
+            "node": "OpenAI2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Auto-detect and translate",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Input Error Handling": {
+      "main": [
+        [
+          {
+            "node": "Telegram1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Auto-detect and translate": {
+      "main": [
+        [
+          {
+            "node": "Text reply",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {},
+  "versionId": "6d4da551-bdc6-440f-be1c-37bea8b1adea",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-07-09T21:41:38.773Z",
+      "updatedAt": "2025-07-09T21:41:38.773Z",
+      "id": "G5Lcoe2jTgqCJuSy",
+      "name": "OpenAI"
+    },
+    {
+      "createdAt": "2025-07-09T21:41:38.763Z",
+      "updatedAt": "2025-07-09T21:41:38.763Z",
+      "id": "pz5LfYMpyppJnoPT",
+      "name": "WooCommerce"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:46.180Z",
+      "updatedAt": "2025-10-25T12:28:46.180Z",
+      "role": "workflow:owner",
+      "workflowId": "SzxB0IQBRthioBDR",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

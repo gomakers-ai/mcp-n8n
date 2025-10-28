@@ -1,0 +1,2632 @@
+{
+  "templates": [
+    {
+      "id": "077bV810y5Q4jUZ5",
+      "file": "077bV810y5Q4jUZ5.json",
+      "name": "Automatic_Shopify_Order_Fulfillment_Process",
+      "category": "E-commerce/Automation",
+      "description": "Automated workflow: Automatic Shopify Order Fulfillment Process",
+      "tags": [
+        "ecommerce",
+        "automation",
+        "orders",
+        "ai",
+        "chatbot"
+      ],
+      "keywords": [
+        "automatic",
+        "shopify",
+        "order",
+        "fulfillment",
+        "process"
+      ],
+      "useCases": [
+        "automatic shopify order fulfillment process",
+        "automate automatic shopify order"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "0MCRs1IboWc6GRUd",
+      "file": "0MCRs1IboWc6GRUd.json",
+      "name": "search-linkedin-companies,-score-with-ai-and-add-them-to-google-sheet-crm",
+      "category": "Sales/CRM",
+      "description": "Automated workflow: search linkedin companies, score with ai and add them to google sheet crm",
+      "tags": [
+        "social media",
+        "marketing",
+        "content",
+        "sales",
+        "crm",
+        "leads"
+      ],
+      "keywords": [
+        "search",
+        "linkedin",
+        "companies,",
+        "score",
+        "them",
+        "google",
+        "sheet"
+      ],
+      "useCases": [
+        "search linkedin companies, score with ai and add them to google sheet crm",
+        "automate search linkedin companies,"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "0aWdCuqrqJEfmvgX",
+      "file": "0aWdCuqrqJEfmvgX.json",
+      "name": "Gmail_MCP_Server___Your_All_in_One_AI_Email_Toolkit",
+      "category": "Communication/Email",
+      "description": "Automated workflow: Gmail MCP Server   Your All in One AI Email Toolkit",
+      "tags": [
+        "email",
+        "gmail",
+        "automation"
+      ],
+      "keywords": [
+        "gmail",
+        "server",
+        "your",
+        "email",
+        "toolkit"
+      ],
+      "useCases": [
+        "gmail mcp server   your all in one ai email toolkit",
+        "automate gmail mcp server"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "0iaqtcZ2nm2ARTHt",
+      "file": "0iaqtcZ2nm2ARTHt.json",
+      "name": "Analyze_Reddit_Posts_with_AI_to_Identify_Business_Opportunities",
+      "category": "General/Automation",
+      "description": "Automated workflow: Analyze Reddit Posts with AI to Identify Business Opportunities",
+      "tags": [],
+      "keywords": [
+        "analyze",
+        "reddit",
+        "posts",
+        "identify",
+        "business",
+        "opportunities"
+      ],
+      "useCases": [
+        "analyze reddit posts with ai to identify business opportunities",
+        "automate analyze reddit posts"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "1PDBTJsZ1pNgzeQ0",
+      "file": "1PDBTJsZ1pNgzeQ0.json",
+      "name": "Automate_WhatsApp_Booking_System_with_GPT_4_Assistant__Cal_com_and_SMS_Reminders",
+      "category": "Productivity/Scheduling",
+      "description": "Automated workflow: Automate WhatsApp Booking System with GPT 4 Assistant  Cal com and SMS Reminders",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation",
+        "whatsapp",
+        "messaging",
+        "calendar",
+        "scheduling"
+      ],
+      "keywords": [
+        "automate",
+        "whatsapp",
+        "booking",
+        "system",
+        "assistant",
+        "reminders"
+      ],
+      "useCases": [
+        "automate whatsapp booking system with gpt 4 assistant  cal com and sms reminders",
+        "automate automate whatsapp booking"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "2TIXtqSAWxX1QjP9",
+      "file": "2TIXtqSAWxX1QjP9.json",
+      "name": "upload-to-instagram-and-tiktok-from-google-drive",
+      "category": "Social Media/Marketing",
+      "description": "Automated workflow: upload to instagram and tiktok from google drive",
+      "tags": [
+        "social media",
+        "marketing",
+        "content",
+        "video",
+        "content creation"
+      ],
+      "keywords": [
+        "upload",
+        "instagram",
+        "tiktok",
+        "google",
+        "drive"
+      ],
+      "useCases": [
+        "upload to instagram and tiktok from google drive",
+        "automate upload to instagram"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "2vsMJm8sVOmqtBjR",
+      "file": "2vsMJm8sVOmqtBjR.json",
+      "name": "Automate_Blog_Content_Creation_with_Notion_MCP__DeepSeek_AI__and_WordPress",
+      "category": "Productivity/Notion",
+      "description": "Automated workflow: Automate Blog Content Creation with Notion MCP  DeepSeek AI  and WordPress",
+      "tags": [
+        "blog",
+        "content",
+        "seo",
+        "wordpress",
+        "notion",
+        "productivity",
+        "automation"
+      ],
+      "keywords": [
+        "automate",
+        "blog",
+        "content",
+        "creation",
+        "notion",
+        "deepseek",
+        "wordpress"
+      ],
+      "useCases": [
+        "automate blog content creation with notion mcp  deepseek ai  and wordpress",
+        "automate automate blog content"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "3T4zuEH0Ysf6mThU",
+      "file": "3T4zuEH0Ysf6mThU.json",
+      "name": "Control_your_discord_server_with_natural_language_via_GPT4o_and_MCP_Client",
+      "category": "AI/Chat",
+      "description": "Automated workflow: Control your discord server with natural language via GPT4o and MCP Client",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation"
+      ],
+      "keywords": [
+        "control",
+        "your",
+        "discord",
+        "server",
+        "natural",
+        "language",
+        "gpt4o",
+        "client"
+      ],
+      "useCases": [
+        "control your discord server with natural language via gpt4o and mcp client",
+        "automate control your discord"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "3mG8pAcZfH6AiWtP",
+      "file": "3mG8pAcZfH6AiWtP.json",
+      "name": "Generate_AI_Viral_Videos_with_Seedance_and_Upload_to_TikTok__YouTube___Instagram",
+      "category": "Social Media/Marketing",
+      "description": "Automated workflow: Generate AI Viral Videos with Seedance and Upload to TikTok  YouTube   Instagram",
+      "tags": [
+        "social media",
+        "marketing",
+        "content",
+        "video",
+        "content creation"
+      ],
+      "keywords": [
+        "generate",
+        "viral",
+        "videos",
+        "seedance",
+        "upload",
+        "tiktok",
+        "youtube",
+        "instagram"
+      ],
+      "useCases": [
+        "generate ai viral videos with seedance and upload to tiktok  youtube   instagram",
+        "automate generate ai viral"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "4Bs80edTasB3Dwxy",
+      "file": "4Bs80edTasB3Dwxy.json",
+      "name": "Automate_LinkedIn_Candidates_Sourcing_with_Google_X_ray_Boolean_Search",
+      "category": "HR/Recruitment",
+      "description": "Automated workflow: Automate LinkedIn Candidates Sourcing with Google X ray Boolean Search",
+      "tags": [
+        "social media",
+        "marketing",
+        "content",
+        "hr",
+        "recruitment",
+        "hiring"
+      ],
+      "keywords": [
+        "automate",
+        "linkedin",
+        "candidates",
+        "sourcing",
+        "google",
+        "boolean",
+        "search"
+      ],
+      "useCases": [
+        "automate linkedin candidates sourcing with google x ray boolean search",
+        "automate automate linkedin candidates"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "4ZwAofqjnHnShiDL",
+      "file": "4ZwAofqjnHnShiDL.json",
+      "name": "ai-generated-linkedin-posts-with-openai,-google-sheets-&-email-approval-workflow",
+      "category": "Communication/Email",
+      "description": "Automated workflow: ai generated linkedin posts with openai, google sheets & email approval workflow",
+      "tags": [
+        "social media",
+        "marketing",
+        "content",
+        "ai",
+        "chatbot",
+        "automation",
+        "email",
+        "gmail"
+      ],
+      "keywords": [
+        "generated",
+        "linkedin",
+        "posts",
+        "openai,",
+        "google",
+        "sheets",
+        "email",
+        "approval",
+        "workflow"
+      ],
+      "useCases": [
+        "ai generated linkedin posts with openai, google sheets & email approval workflow",
+        "automate ai generated linkedin"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "4wscpGzlhWwSwJdX",
+      "file": "4wscpGzlhWwSwJdX.json",
+      "name": "Enhance Customer Chat Buffer Messages with Twilio and Redis",
+      "category": "AI/Chat",
+      "description": "Automated workflow: Enhance Customer Chat Buffer Messages with Twilio and Redis",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation"
+      ],
+      "keywords": [
+        "enhance",
+        "customer",
+        "chat",
+        "buffer",
+        "messages",
+        "twilio",
+        "redis"
+      ],
+      "useCases": [
+        "enhance customer chat buffer messages with twilio and redis",
+        "automate enhance customer chat"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "5D7MXjr4LQdypZqk",
+      "file": "5D7MXjr4LQdypZqk.json",
+      "name": "Post_New_YouTube_Videos_to_X",
+      "category": "Social Media/Marketing",
+      "description": "Automated workflow: Post New YouTube Videos to X",
+      "tags": [
+        "social media",
+        "marketing",
+        "content",
+        "video",
+        "content creation"
+      ],
+      "keywords": [
+        "post",
+        "youtube",
+        "videos"
+      ],
+      "useCases": [
+        "post new youtube videos to x",
+        "automate post new youtube"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "62MN6oqxOs3levjh",
+      "file": "62MN6oqxOs3levjh.json",
+      "name": "AI_Youtube_Trend_Finder_Based_On_Niche",
+      "category": "Social Media/Marketing",
+      "description": "Automated workflow: AI Youtube Trend Finder Based On Niche",
+      "tags": [
+        "social media",
+        "marketing",
+        "content",
+        "video",
+        "content creation"
+      ],
+      "keywords": [
+        "youtube",
+        "trend",
+        "finder",
+        "based",
+        "niche"
+      ],
+      "useCases": [
+        "ai youtube trend finder based on niche",
+        "automate ai youtube trend"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "7D9mWt3zJePCco3Q",
+      "file": "7D9mWt3zJePCco3Q.json",
+      "name": "scrape-business-emails-from-google-maps-without-the-use-of-any-third-party-apis",
+      "category": "Data/Scraping",
+      "description": "Automated workflow: scrape business emails from google maps without the use of any third party apis",
+      "tags": [
+        "email",
+        "gmail",
+        "automation",
+        "scraping",
+        "data"
+      ],
+      "keywords": [
+        "scrape",
+        "business",
+        "emails",
+        "google",
+        "maps",
+        "without",
+        "third",
+        "party",
+        "apis"
+      ],
+      "useCases": [
+        "scrape business emails from google maps without the use of any third party apis",
+        "automate scrape business emails"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "7WUUv3Cneyug0nd3",
+      "file": "7WUUv3Cneyug0nd3.json",
+      "name": "Invoice_data_extraction_with_LlamaParse_and_OpenAI",
+      "category": "Finance/Analytics",
+      "description": "Automated workflow: Invoice data extraction with LlamaParse and OpenAI",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation",
+        "finance",
+        "analytics"
+      ],
+      "keywords": [
+        "invoice",
+        "data",
+        "extraction",
+        "llamaparse",
+        "openai"
+      ],
+      "useCases": [
+        "invoice data extraction with llamaparse and openai",
+        "automate invoice data extraction"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "7sHYts3pBkYe3Kon",
+      "file": "7sHYts3pBkYe3Kon.json",
+      "name": "simple-telegram-ai-chatbot",
+      "category": "Communication/Telegram",
+      "description": "Automated workflow: simple telegram ai chatbot",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation",
+        "telegram",
+        "messaging",
+        "bot"
+      ],
+      "keywords": [
+        "simple",
+        "telegram",
+        "chatbot"
+      ],
+      "useCases": [
+        "simple telegram ai chatbot",
+        "automate simple telegram ai"
+      ],
+      "complexity": "beginner"
+    },
+    {
+      "id": "8UpqTxZE8W7papQu",
+      "file": "8UpqTxZE8W7papQu.json",
+      "name": "Auto_Publish_Social_Videos_to_9_Platforms_via_Google_Sheets_and_Blotato",
+      "category": "Social Media/Marketing",
+      "description": "Automated workflow: Auto Publish Social Videos to 9 Platforms via Google Sheets and Blotato",
+      "tags": [
+        "social media",
+        "marketing",
+        "content",
+        "video",
+        "content creation"
+      ],
+      "keywords": [
+        "auto",
+        "publish",
+        "social",
+        "videos",
+        "platforms",
+        "google",
+        "sheets",
+        "blotato"
+      ],
+      "useCases": [
+        "auto publish social videos to 9 platforms via google sheets and blotato",
+        "automate auto publish social"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "8o6MezK5LYNn7CBL",
+      "file": "8o6MezK5LYNn7CBL.json",
+      "name": "analyze-any-website-with-openai-and-get-on-page-seo-audit",
+      "category": "Content/Blogging",
+      "description": "Automated workflow: analyze any website with openai and get on page seo audit",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation",
+        "blog",
+        "content",
+        "seo",
+        "wordpress"
+      ],
+      "keywords": [
+        "analyze",
+        "website",
+        "openai",
+        "page",
+        "audit"
+      ],
+      "useCases": [
+        "analyze any website with openai and get on page seo audit",
+        "automate analyze any website"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "99yXL5T7suCrTvYB",
+      "file": "99yXL5T7suCrTvYB.json",
+      "name": "ai-agent-google-calendar-assistant-using-openai",
+      "category": "Productivity/Scheduling",
+      "description": "Automated workflow: ai agent google calendar assistant using openai",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation",
+        "calendar",
+        "scheduling"
+      ],
+      "keywords": [
+        "agent",
+        "google",
+        "calendar",
+        "assistant",
+        "openai"
+      ],
+      "useCases": [
+        "ai agent google calendar assistant using openai",
+        "automate ai agent google"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "AJcl5Fq5ND2bqoro",
+      "file": "AJcl5Fq5ND2bqoro.json",
+      "name": "Automated_Stock_Analysis_Reports_with_Technical___News_Sentiment_using_GPT_4o",
+      "category": "Finance/Analytics",
+      "description": "Automated workflow: Automated Stock Analysis Reports with Technical   News Sentiment using GPT 4o",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation",
+        "finance",
+        "analytics"
+      ],
+      "keywords": [
+        "automated",
+        "stock",
+        "analysis",
+        "reports",
+        "technical",
+        "news",
+        "sentiment"
+      ],
+      "useCases": [
+        "automated stock analysis reports with technical   news sentiment using gpt 4o",
+        "automate automated stock analysis"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "AevCEffvMg3JjcQC",
+      "file": "AevCEffvMg3JjcQC.json",
+      "name": "Telegram_Messaging_Agent_for_Text_Audio_Images",
+      "category": "Communication/Telegram",
+      "description": "Automated workflow: Telegram Messaging Agent for Text Audio Images",
+      "tags": [
+        "telegram",
+        "messaging",
+        "bot"
+      ],
+      "keywords": [
+        "telegram",
+        "messaging",
+        "agent",
+        "text",
+        "audio",
+        "images"
+      ],
+      "useCases": [
+        "telegram messaging agent for text audio images",
+        "automate telegram messaging agent"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "AyB7JjSTzAwt9myC",
+      "file": "AyB7JjSTzAwt9myC.json",
+      "name": "Respond to WhatsApp Messages with AI",
+      "category": "Communication/WhatsApp",
+      "description": "Automated workflow: Respond to WhatsApp Messages with AI",
+      "tags": [
+        "whatsapp",
+        "messaging",
+        "ai"
+      ],
+      "keywords": [
+        "respond",
+        "whatsapp",
+        "messages"
+      ],
+      "useCases": [
+        "respond to whatsapp messages with ai",
+        "automate respond to whatsapp"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "BRHUxVlU8lpqoEwW",
+      "file": "BRHUxVlU8lpqoEwW.json",
+      "name": "Convert_YouTube_Videos_to_Shorts_with_Klap___Auto_Post_to_Multiple_Social_Platforms",
+      "category": "Social Media/Marketing",
+      "description": "Automated workflow: Convert YouTube Videos to Shorts with Klap   Auto Post to Multiple Social Platforms",
+      "tags": [
+        "social media",
+        "marketing",
+        "content",
+        "video",
+        "content creation"
+      ],
+      "keywords": [
+        "convert",
+        "youtube",
+        "videos",
+        "shorts",
+        "klap",
+        "auto",
+        "post",
+        "multiple",
+        "social",
+        "platforms"
+      ],
+      "useCases": [
+        "convert youtube videos to shorts with klap   auto post to multiple social platforms",
+        "automate convert youtube videos"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "BlH769YZbjQ0rT4I",
+      "file": "BlH769YZbjQ0rT4I.json",
+      "name": "Automate_New_Customer_Onboarding_with_HubSpot__Google_Calendar__and_AI_Powered_Gmail",
+      "category": "Productivity/Scheduling",
+      "description": "Automated workflow: Automate New Customer Onboarding with HubSpot  Google Calendar  and AI Powered Gmail",
+      "tags": [
+        "email",
+        "gmail",
+        "automation",
+        "calendar",
+        "scheduling"
+      ],
+      "keywords": [
+        "automate",
+        "customer",
+        "onboarding",
+        "hubspot",
+        "google",
+        "calendar",
+        "powered",
+        "gmail"
+      ],
+      "useCases": [
+        "automate new customer onboarding with hubspot  google calendar  and ai powered gmail",
+        "automate automate new customer"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "CGjSu6Enk5oPngL6",
+      "file": "CGjSu6Enk5oPngL6.json",
+      "name": "Clone_Viral_TikToks_with_AI_Avatars___Auto_Post_to_9_Platforms_using_Perplexity___Blotato",
+      "category": "Social Media/Marketing",
+      "description": "Automated workflow: Clone Viral TikToks with AI Avatars   Auto Post to 9 Platforms using Perplexity   Blotato",
+      "tags": [
+        "social media",
+        "marketing",
+        "content",
+        "video",
+        "content creation"
+      ],
+      "keywords": [
+        "clone",
+        "viral",
+        "tiktoks",
+        "avatars",
+        "auto",
+        "post",
+        "platforms",
+        "perplexity",
+        "blotato"
+      ],
+      "useCases": [
+        "clone viral tiktoks with ai avatars   auto post to 9 platforms using perplexity   blotato",
+        "automate clone viral tiktoks"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "CjloFf9OZBafHB9o",
+      "file": "CjloFf9OZBafHB9o.json",
+      "name": "HR_Job_Posting_and_Evaluation_with_AI",
+      "category": "HR/Recruitment",
+      "description": "Automated workflow: HR Job Posting and Evaluation with AI",
+      "tags": [
+        "hr",
+        "recruitment",
+        "hiring"
+      ],
+      "keywords": [
+        "posting",
+        "evaluation"
+      ],
+      "useCases": [
+        "hr job posting and evaluation with ai",
+        "automate hr job posting"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "D9SZmib0atDn3Qno",
+      "file": "D9SZmib0atDn3Qno.json",
+      "name": "fully-automated-ai-video-generation-&-multi-platform-publishing",
+      "category": "Content/Video",
+      "description": "Automated workflow: fully automated ai video generation & multi platform publishing",
+      "tags": [
+        "video",
+        "content creation"
+      ],
+      "keywords": [
+        "fully",
+        "automated",
+        "video",
+        "generation",
+        "multi",
+        "platform",
+        "publishing"
+      ],
+      "useCases": [
+        "fully automated ai video generation & multi platform publishing",
+        "automate fully automated ai"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "EeroWXsAytgZm3ee",
+      "file": "EeroWXsAytgZm3ee.json",
+      "name": "Automate Multi-Platform Social Media Content Creation",
+      "category": "Content/Blogging",
+      "description": "Automated workflow: Automate Multi Platform Social Media Content Creation",
+      "tags": [
+        "social media",
+        "marketing",
+        "content",
+        "blog",
+        "seo",
+        "wordpress"
+      ],
+      "keywords": [
+        "automate",
+        "multi",
+        "platform",
+        "social",
+        "media",
+        "content",
+        "creation"
+      ],
+      "useCases": [
+        "automate multi platform social media content creation",
+        "automate automate multi platform"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "FIdLhfE1md7YYU2c",
+      "file": "FIdLhfE1md7YYU2c.json",
+      "name": "ai-marketing-report-(google-analytics-&-ads,-meta-ads),-sent-via-email_telegram",
+      "category": "Data/Scraping",
+      "description": "Automated workflow: ai marketing report (google analytics & ads, meta ads), sent via email telegram",
+      "tags": [
+        "telegram",
+        "messaging",
+        "bot",
+        "email",
+        "gmail",
+        "automation",
+        "scraping",
+        "data"
+      ],
+      "keywords": [
+        "marketing",
+        "report",
+        "(google",
+        "analytics",
+        "ads,",
+        "meta",
+        "ads),",
+        "sent",
+        "email",
+        "telegram"
+      ],
+      "useCases": [
+        "ai marketing report (google analytics & ads, meta ads), sent via email telegram",
+        "automate ai marketing report"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "FLcj4EWmaPvsQmpj",
+      "file": "FLcj4EWmaPvsQmpj.json",
+      "name": "building-your-first-whatsapp-chatbot",
+      "category": "Communication/WhatsApp",
+      "description": "Automated workflow: building your first whatsapp chatbot",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation",
+        "whatsapp",
+        "messaging"
+      ],
+      "keywords": [
+        "building",
+        "your",
+        "first",
+        "whatsapp",
+        "chatbot"
+      ],
+      "useCases": [
+        "building your first whatsapp chatbot",
+        "automate building your first"
+      ],
+      "complexity": "beginner"
+    },
+    {
+      "id": "FNvLFgtHlZ65P3O0",
+      "file": "FNvLFgtHlZ65P3O0.json",
+      "name": "ai-prompt-generator-workflow",
+      "category": "General/Automation",
+      "description": "Automated workflow: ai prompt generator workflow",
+      "tags": [],
+      "keywords": [
+        "prompt",
+        "generator",
+        "workflow"
+      ],
+      "useCases": [
+        "ai prompt generator workflow",
+        "automate ai prompt generator"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "FhOqTJ2lAtR6MRWp",
+      "file": "FhOqTJ2lAtR6MRWp.json",
+      "name": "Real_Estate_Lead_Generation_with_BatchData_Skip_Tracing___CRM_Integration",
+      "category": "Sales/CRM",
+      "description": "Automated workflow: Real Estate Lead Generation with BatchData Skip Tracing   CRM Integration",
+      "tags": [
+        "sales",
+        "crm",
+        "leads"
+      ],
+      "keywords": [
+        "real",
+        "estate",
+        "lead",
+        "generation",
+        "batchdata",
+        "skip",
+        "tracing",
+        "integration"
+      ],
+      "useCases": [
+        "real estate lead generation with batchdata skip tracing   crm integration",
+        "automate real estate lead"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "HEd07Mg7zIbBp2ti",
+      "file": "HEd07Mg7zIbBp2ti.json",
+      "name": "Daily_AI_News_Translation___Summary_with_GPT_4_and_Telegram_Delivery",
+      "category": "Communication/Telegram",
+      "description": "Automated workflow: Daily AI News Translation   Summary with GPT 4 and Telegram Delivery",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation",
+        "telegram",
+        "messaging",
+        "bot"
+      ],
+      "keywords": [
+        "daily",
+        "news",
+        "translation",
+        "summary",
+        "telegram",
+        "delivery"
+      ],
+      "useCases": [
+        "daily ai news translation   summary with gpt 4 and telegram delivery",
+        "automate daily ai news"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "HKHtYpK4qR2dlwHe",
+      "file": "HKHtYpK4qR2dlwHe.json",
+      "name": "automated-ai-content-creation-&-instagram-publishing-from-google-sheets-",
+      "category": "Social Media/Marketing",
+      "description": "Automated workflow: automated ai content creation & instagram publishing from google sheets ",
+      "tags": [
+        "social media",
+        "marketing",
+        "content"
+      ],
+      "keywords": [
+        "automated",
+        "content",
+        "creation",
+        "instagram",
+        "publishing",
+        "google",
+        "sheets"
+      ],
+      "useCases": [
+        "automated ai content creation & instagram publishing from google sheets ",
+        "automate automated ai content"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "IBbRJV2G7DyFN020",
+      "file": "IBbRJV2G7DyFN020.json",
+      "name": "Automatic_Shopify_Order_Fulfillment_Process",
+      "category": "E-commerce/Automation",
+      "description": "Automated workflow: Automatic Shopify Order Fulfillment Process",
+      "tags": [
+        "ecommerce",
+        "automation",
+        "orders",
+        "ai",
+        "chatbot"
+      ],
+      "keywords": [
+        "automatic",
+        "shopify",
+        "order",
+        "fulfillment",
+        "process"
+      ],
+      "useCases": [
+        "automatic shopify order fulfillment process",
+        "automate automatic shopify order"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "ILMUPuNWbBEtoWTk",
+      "file": "ILMUPuNWbBEtoWTk.json",
+      "name": "scrape-and-summarize-webpages-with-ai",
+      "category": "Data/Scraping",
+      "description": "Automated workflow: scrape and summarize webpages with ai",
+      "tags": [
+        "scraping",
+        "data",
+        "automation"
+      ],
+      "keywords": [
+        "scrape",
+        "summarize",
+        "webpages"
+      ],
+      "useCases": [
+        "scrape and summarize webpages with ai",
+        "automate scrape and summarize"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "J2zsV8reeuJaPLNr",
+      "file": "J2zsV8reeuJaPLNr.json",
+      "name": "Extract_and_process_information_directly_from_PDF_using_Claude_and_Gemini",
+      "category": "General/Automation",
+      "description": "Automated workflow: Extract and process information directly from PDF using Claude and Gemini",
+      "tags": [],
+      "keywords": [
+        "extract",
+        "process",
+        "information",
+        "directly",
+        "claude",
+        "gemini"
+      ],
+      "useCases": [
+        "extract and process information directly from pdf using claude and gemini",
+        "automate extract and process"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "JzBBDAfhcex4YIH6",
+      "file": "JzBBDAfhcex4YIH6.json",
+      "name": "multiple-websites-monitoring-with-notifications-including-phone-calls",
+      "category": "Monitoring/DevOps",
+      "description": "Automated workflow: multiple websites monitoring with notifications including phone calls",
+      "tags": [
+        "monitoring",
+        "alerts",
+        "devops"
+      ],
+      "keywords": [
+        "multiple",
+        "websites",
+        "monitoring",
+        "notifications",
+        "including",
+        "phone",
+        "calls"
+      ],
+      "useCases": [
+        "multiple websites monitoring with notifications including phone calls",
+        "automate multiple websites monitoring"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "KLlvvroNA04WBiE6",
+      "file": "KLlvvroNA04WBiE6.json",
+      "name": "content-farming---_-ai-powered-blog-automation-for-wordpress-",
+      "category": "Content/Blogging",
+      "description": "Automated workflow: content farming     ai powered blog automation for wordpress ",
+      "tags": [
+        "blog",
+        "content",
+        "seo",
+        "wordpress"
+      ],
+      "keywords": [
+        "content",
+        "farming",
+        "powered",
+        "blog",
+        "automation",
+        "wordpress"
+      ],
+      "useCases": [
+        "content farming     ai powered blog automation for wordpress ",
+        "automate content farming ai"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "MvNmMAAtuakYjEfQ",
+      "file": "MvNmMAAtuakYjEfQ.json",
+      "name": "personalize-marketing-emails-using-customer-data-and-ai",
+      "category": "Communication/Email",
+      "description": "Automated workflow: personalize marketing emails using customer data and ai",
+      "tags": [
+        "email",
+        "gmail",
+        "automation"
+      ],
+      "keywords": [
+        "personalize",
+        "marketing",
+        "emails",
+        "customer",
+        "data"
+      ],
+      "useCases": [
+        "personalize marketing emails using customer data and ai",
+        "automate personalize marketing emails"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "NfyiIZRuRiwTl1no",
+      "file": "NfyiIZRuRiwTl1no.json",
+      "name": "Breakdown_Documents_into_Study_Notes_using_Templating_MistralAI_and_Qdrant",
+      "category": "General/Automation",
+      "description": "Automated workflow: Breakdown Documents into Study Notes using Templating MistralAI and Qdrant",
+      "tags": [],
+      "keywords": [
+        "breakdown",
+        "documents",
+        "into",
+        "study",
+        "notes",
+        "templating",
+        "mistralai",
+        "qdrant"
+      ],
+      "useCases": [
+        "breakdown documents into study notes using templating mistralai and qdrant",
+        "automate breakdown documents into"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "Ntql6WamxvFSvBQW",
+      "file": "Ntql6WamxvFSvBQW.json",
+      "name": "Create_LinkedIn_Contributions_with_AI_and_Notify_Users_On_Slack",
+      "category": "Social Media/Marketing",
+      "description": "Automated workflow: Create LinkedIn Contributions with AI and Notify Users On Slack",
+      "tags": [
+        "social media",
+        "marketing",
+        "content"
+      ],
+      "keywords": [
+        "create",
+        "linkedin",
+        "contributions",
+        "notify",
+        "users",
+        "slack"
+      ],
+      "useCases": [
+        "create linkedin contributions with ai and notify users on slack",
+        "automate create linkedin contributions"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "O1vQmi3bXIqJ8dCb",
+      "file": "O1vQmi3bXIqJ8dCb.json",
+      "name": "Amazon_Product_Search_Scraper_with_BrightData__GPT_4__and_Google_Sheets",
+      "category": "Data/Scraping",
+      "description": "Automated workflow: Amazon Product Search Scraper with BrightData  GPT 4  and Google Sheets",
+      "tags": [
+        "ecommerce",
+        "automation",
+        "orders",
+        "ai",
+        "chatbot",
+        "scraping",
+        "data"
+      ],
+      "keywords": [
+        "amazon",
+        "product",
+        "search",
+        "scraper",
+        "brightdata",
+        "google",
+        "sheets"
+      ],
+      "useCases": [
+        "amazon product search scraper with brightdata  gpt 4  and google sheets",
+        "automate amazon product search"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "OGn6dGGPCNUqvzJP",
+      "file": "OGn6dGGPCNUqvzJP.json",
+      "name": "transcribe-audio-files,-summarize-with-gpt-4-and-store-in-notion",
+      "category": "Productivity/Notion",
+      "description": "Automated workflow: transcribe audio files, summarize with gpt 4 and store in notion",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation",
+        "notion",
+        "productivity"
+      ],
+      "keywords": [
+        "transcribe",
+        "audio",
+        "files,",
+        "summarize",
+        "store",
+        "notion"
+      ],
+      "useCases": [
+        "transcribe audio files, summarize with gpt 4 and store in notion",
+        "automate transcribe audio files,"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "ObCSdDVajfhBYY4A",
+      "file": "ObCSdDVajfhBYY4A.json",
+      "name": "Automated_Generation_of_AI_Advertising_Photos_for_Product_Marketing",
+      "category": "E-commerce/Automation",
+      "description": "Automated workflow: Automated Generation of AI Advertising Photos for Product Marketing",
+      "tags": [
+        "ecommerce",
+        "automation",
+        "orders"
+      ],
+      "keywords": [
+        "automated",
+        "generation",
+        "advertising",
+        "photos",
+        "product",
+        "marketing"
+      ],
+      "useCases": [
+        "automated generation of ai advertising photos for product marketing",
+        "automate automated generation of"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "OiHsGnrs0QJyemfO",
+      "file": "OiHsGnrs0QJyemfO.json",
+      "name": "ask-questions-about-a-pdf-using-ai",
+      "category": "General/Automation",
+      "description": "Automated workflow: ask questions about a pdf using ai",
+      "tags": [],
+      "keywords": [
+        "questions",
+        "about"
+      ],
+      "useCases": [
+        "ask questions about a pdf using ai",
+        "automate ask questions about"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "Ok1bO3wdBvjttlhF",
+      "file": "Ok1bO3wdBvjttlhF.json",
+      "name": "Automate_Lead_Qualification_with_RetellAI_Phone_Agent__OpenAI_GPT___Google_Sheet",
+      "category": "Sales/CRM",
+      "description": "Automated workflow: Automate Lead Qualification with RetellAI Phone Agent  OpenAI GPT   Google Sheet",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation",
+        "sales",
+        "crm",
+        "leads"
+      ],
+      "keywords": [
+        "automate",
+        "lead",
+        "qualification",
+        "retellai",
+        "phone",
+        "agent",
+        "openai",
+        "google",
+        "sheet"
+      ],
+      "useCases": [
+        "automate lead qualification with retellai phone agent  openai gpt   google sheet",
+        "automate automate lead qualification"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "RU6ZaTA3nCZeWdy9",
+      "file": "RU6ZaTA3nCZeWdy9.json",
+      "name": "Automated_Stock_Analysis_Reports_with_Technical___News_Sentiment_using_GPT_4o",
+      "category": "Finance/Analytics",
+      "description": "Automated workflow: Automated Stock Analysis Reports with Technical   News Sentiment using GPT 4o",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation",
+        "finance",
+        "analytics"
+      ],
+      "keywords": [
+        "automated",
+        "stock",
+        "analysis",
+        "reports",
+        "technical",
+        "news",
+        "sentiment"
+      ],
+      "useCases": [
+        "automated stock analysis reports with technical   news sentiment using gpt 4o",
+        "automate automated stock analysis"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "S3Yx1gWQAJYy7mYM",
+      "file": "S3Yx1gWQAJYy7mYM.json",
+      "name": "ai-voice-chatbot-with-elevenlabs-&-openai-for-customer-service-and-restaurants",
+      "category": "AI/Chat",
+      "description": "Automated workflow: ai voice chatbot with elevenlabs & openai for customer service and restaurants",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation"
+      ],
+      "keywords": [
+        "voice",
+        "chatbot",
+        "elevenlabs",
+        "openai",
+        "customer",
+        "service",
+        "restaurants"
+      ],
+      "useCases": [
+        "ai voice chatbot with elevenlabs & openai for customer service and restaurants",
+        "automate ai voice chatbot"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "SzxB0IQBRthioBDR",
+      "file": "SzxB0IQBRthioBDR.json",
+      "name": "Translate_Telegram_audio_messages_with_AI__55_supported_languages_",
+      "category": "Customer Support/AI",
+      "description": "Automated workflow: Translate Telegram audio messages with AI  55 supported languages ",
+      "tags": [
+        "telegram",
+        "messaging",
+        "bot",
+        "customer support",
+        "ai",
+        "automation"
+      ],
+      "keywords": [
+        "translate",
+        "telegram",
+        "audio",
+        "messages",
+        "supported",
+        "languages"
+      ],
+      "useCases": [
+        "translate telegram audio messages with ai  55 supported languages ",
+        "automate translate telegram audio"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "T3VNbFLsRZEQjhAo",
+      "file": "T3VNbFLsRZEQjhAo.json",
+      "name": "Integrating_AI_with_Open_Meteo_API_for_Enhanced_Weather_Forecasting",
+      "category": "General/Automation",
+      "description": "Automated workflow: Integrating AI with Open Meteo API for Enhanced Weather Forecasting",
+      "tags": [],
+      "keywords": [
+        "integrating",
+        "open",
+        "meteo",
+        "enhanced",
+        "weather",
+        "forecasting"
+      ],
+      "useCases": [
+        "integrating ai with open meteo api for enhanced weather forecasting",
+        "automate integrating ai with"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "TcVKslh4l9CriUx0",
+      "file": "TcVKslh4l9CriUx0.json",
+      "name": "Daily_AI_News_Translation___Summary_with_GPT_4_and_Telegram_Delivery",
+      "category": "Communication/Telegram",
+      "description": "Automated workflow: Daily AI News Translation   Summary with GPT 4 and Telegram Delivery",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation",
+        "telegram",
+        "messaging",
+        "bot"
+      ],
+      "keywords": [
+        "daily",
+        "news",
+        "translation",
+        "summary",
+        "telegram",
+        "delivery"
+      ],
+      "useCases": [
+        "daily ai news translation   summary with gpt 4 and telegram delivery",
+        "automate daily ai news"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "Ufd0oZjrQuUixrU2",
+      "file": "Ufd0oZjrQuUixrU2.json",
+      "name": "ai-researcher-for-sales",
+      "category": "Sales/CRM",
+      "description": "Automated workflow: ai researcher for sales",
+      "tags": [
+        "sales",
+        "crm",
+        "leads"
+      ],
+      "keywords": [
+        "researcher",
+        "sales"
+      ],
+      "useCases": [
+        "ai researcher for sales",
+        "automate ai researcher for"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "X0uSjcINb8pNndoU",
+      "file": "X0uSjcINb8pNndoU.json",
+      "name": "notion-ai-assistant-generator",
+      "category": "Productivity/Notion",
+      "description": "Automated workflow: notion ai assistant generator",
+      "tags": [
+        "notion",
+        "productivity",
+        "automation"
+      ],
+      "keywords": [
+        "notion",
+        "assistant",
+        "generator"
+      ],
+      "useCases": [
+        "notion ai assistant generator",
+        "automate notion ai assistant"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "X1efkOass1xPVcCw",
+      "file": "X1efkOass1xPVcCw.json",
+      "name": "Transform_Gmail_Newsletters_into_Insightful_LinkedIn_Posts_Using_OpenAI",
+      "category": "Communication/Email",
+      "description": "Automated workflow: Transform Gmail Newsletters into Insightful LinkedIn Posts Using OpenAI",
+      "tags": [
+        "social media",
+        "marketing",
+        "content",
+        "ai",
+        "chatbot",
+        "automation",
+        "email",
+        "gmail"
+      ],
+      "keywords": [
+        "transform",
+        "gmail",
+        "newsletters",
+        "into",
+        "insightful",
+        "linkedin",
+        "posts",
+        "openai"
+      ],
+      "useCases": [
+        "transform gmail newsletters into insightful linkedin posts using openai",
+        "automate transform gmail newsletters"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "XS6osnLbJDbsmeLe",
+      "file": "XS6osnLbJDbsmeLe.json",
+      "name": "Automate_Customer_Support_Issue_Resolution_using_AI_Text_Classifier",
+      "category": "Customer Support/AI",
+      "description": "Automated workflow: Automate Customer Support Issue Resolution using AI Text Classifier",
+      "tags": [
+        "customer support",
+        "ai",
+        "automation"
+      ],
+      "keywords": [
+        "automate",
+        "customer",
+        "support",
+        "issue",
+        "resolution",
+        "text",
+        "classifier"
+      ],
+      "useCases": [
+        "automate customer support issue resolution using ai text classifier",
+        "automate automate customer support"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "Y2MJTGvUzvOCkozQ",
+      "file": "Y2MJTGvUzvOCkozQ.json",
+      "name": "Automate_Multi_Platform_Social_Media_Content_Creation",
+      "category": "Social Media/Marketing",
+      "description": "Automated workflow: Automate Multi Platform Social Media Content Creation",
+      "tags": [
+        "social media",
+        "marketing",
+        "content"
+      ],
+      "keywords": [
+        "automate",
+        "multi",
+        "platform",
+        "social",
+        "media",
+        "content",
+        "creation"
+      ],
+      "useCases": [
+        "automate multi platform social media content creation",
+        "automate automate multi platform"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "Y4t0DOPGdYXQFoyx",
+      "file": "Y4t0DOPGdYXQFoyx.json",
+      "name": "Auto_create_and_publish_AI_social_videos_with_Telegram__GPT_4_and_Blotato",
+      "category": "Content/Video",
+      "description": "Automated workflow: Auto create and publish AI social videos with Telegram  GPT 4 and Blotato",
+      "tags": [
+        "social media",
+        "marketing",
+        "content",
+        "ai",
+        "chatbot",
+        "automation",
+        "telegram",
+        "messaging"
+      ],
+      "keywords": [
+        "auto",
+        "create",
+        "publish",
+        "social",
+        "videos",
+        "telegram",
+        "blotato"
+      ],
+      "useCases": [
+        "auto create and publish ai social videos with telegram  gpt 4 and blotato",
+        "automate auto create and"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "Ybas1LAHGiMWtSM5",
+      "file": "Ybas1LAHGiMWtSM5.json",
+      "name": "generate-instagram-content-from-top-trends-with-ai-image-generation",
+      "category": "Social Media/Marketing",
+      "description": "Automated workflow: generate instagram content from top trends with ai image generation",
+      "tags": [
+        "social media",
+        "marketing",
+        "content"
+      ],
+      "keywords": [
+        "generate",
+        "instagram",
+        "content",
+        "trends",
+        "image",
+        "generation"
+      ],
+      "useCases": [
+        "generate instagram content from top trends with ai image generation",
+        "automate generate instagram content"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "YfVJeScFyVKodWwA",
+      "file": "YfVJeScFyVKodWwA.json",
+      "name": "Get_notified_when_your_competitors_change_their_pricing_with_Airtop_and_Slack",
+      "category": "General/Automation",
+      "description": "Automated workflow: Get notified when your competitors change their pricing with Airtop and Slack",
+      "tags": [],
+      "keywords": [
+        "notified",
+        "when",
+        "your",
+        "competitors",
+        "change",
+        "their",
+        "pricing",
+        "airtop",
+        "slack"
+      ],
+      "useCases": [
+        "get notified when your competitors change their pricing with airtop and slack",
+        "automate get notified when"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "aJ0ZM1g2Z1dFhZnm",
+      "file": "aJ0ZM1g2Z1dFhZnm.json",
+      "name": "turn-google-sheets-ideas-into-ai-videos-with-gpt-4o-and-fal.ai-veo-3",
+      "category": "Content/Video",
+      "description": "Automated workflow: turn google sheets ideas into ai videos with gpt 4o and fal.ai veo 3",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation",
+        "video",
+        "content creation"
+      ],
+      "keywords": [
+        "turn",
+        "google",
+        "sheets",
+        "ideas",
+        "into",
+        "videos",
+        "fal.ai"
+      ],
+      "useCases": [
+        "turn google sheets ideas into ai videos with gpt 4o and fal.ai veo 3",
+        "automate turn google sheets"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "ayIVK6sa3ymy7lU7",
+      "file": "ayIVK6sa3ymy7lU7.json",
+      "name": "Automatic_Background_Removal_for_Images_in_Google_Drive",
+      "category": "General/Automation",
+      "description": "Automated workflow: Automatic Background Removal for Images in Google Drive",
+      "tags": [],
+      "keywords": [
+        "automatic",
+        "background",
+        "removal",
+        "images",
+        "google",
+        "drive"
+      ],
+      "useCases": [
+        "automatic background removal for images in google drive",
+        "automate automatic background removal"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "bTiwxsf3heQmsDcA",
+      "file": "bTiwxsf3heQmsDcA.json",
+      "name": "build-custom-workflows-automatically-with-gpt-4o,-rag,-and-web-search",
+      "category": "AI/Chat",
+      "description": "Automated workflow: build custom workflows automatically with gpt 4o, rag, and web search",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation"
+      ],
+      "keywords": [
+        "build",
+        "custom",
+        "workflows",
+        "automatically",
+        "rag,",
+        "search"
+      ],
+      "useCases": [
+        "build custom workflows automatically with gpt 4o, rag, and web search",
+        "automate build custom workflows"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "cDkui7UtHcN4JJBo",
+      "file": "cDkui7UtHcN4JJBo.json",
+      "name": "flux-ai-image-generator",
+      "category": "General/Automation",
+      "description": "Automated workflow: flux ai image generator",
+      "tags": [],
+      "keywords": [
+        "flux",
+        "image",
+        "generator"
+      ],
+      "useCases": [
+        "flux ai image generator",
+        "automate flux ai image"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "dkILwdJwtinnWZ97",
+      "file": "dkILwdJwtinnWZ97.json",
+      "name": "Invoice_data_extraction_with_LlamaParse_and_OpenAI",
+      "category": "Finance/Analytics",
+      "description": "Automated workflow: Invoice data extraction with LlamaParse and OpenAI",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation",
+        "finance",
+        "analytics"
+      ],
+      "keywords": [
+        "invoice",
+        "data",
+        "extraction",
+        "llamaparse",
+        "openai"
+      ],
+      "useCases": [
+        "invoice data extraction with llamaparse and openai",
+        "automate invoice data extraction"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "dvCmBSenNjiJlh1J",
+      "file": "dvCmBSenNjiJlh1J.json",
+      "name": "Generate_SEO_Optimized_WordPress_Content_with_AI_Powered_Perplexity_Research",
+      "category": "Content/Blogging",
+      "description": "Automated workflow: Generate SEO Optimized WordPress Content with AI Powered Perplexity Research",
+      "tags": [
+        "blog",
+        "content",
+        "seo",
+        "wordpress"
+      ],
+      "keywords": [
+        "generate",
+        "optimized",
+        "wordpress",
+        "content",
+        "powered",
+        "perplexity",
+        "research"
+      ],
+      "useCases": [
+        "generate seo optimized wordpress content with ai powered perplexity research",
+        "automate generate seo optimized"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "e7YOBL7bWtBgsz6B",
+      "file": "e7YOBL7bWtBgsz6B.json",
+      "name": "Collect_LinkedIn_Profiles_with_AI_Processing_using_SerpAPI__OpenAI__and_NocoDB",
+      "category": "AI/Chat",
+      "description": "Automated workflow: Collect LinkedIn Profiles with AI Processing using SerpAPI  OpenAI  and NocoDB",
+      "tags": [
+        "social media",
+        "marketing",
+        "content",
+        "ai",
+        "chatbot",
+        "automation"
+      ],
+      "keywords": [
+        "collect",
+        "linkedin",
+        "profiles",
+        "processing",
+        "serpapi",
+        "openai",
+        "nocodb"
+      ],
+      "useCases": [
+        "collect linkedin profiles with ai processing using serpapi  openai  and nocodb",
+        "automate collect linkedin profiles"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "eyXPtwAYcbebUEkJ",
+      "file": "eyXPtwAYcbebUEkJ.json",
+      "name": "Google_Calendar_Reminder_System_with_GPT_4o_and_Telegram",
+      "category": "Productivity/Scheduling",
+      "description": "Automated workflow: Google Calendar Reminder System with GPT 4o and Telegram",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation",
+        "telegram",
+        "messaging",
+        "bot",
+        "calendar",
+        "scheduling"
+      ],
+      "keywords": [
+        "google",
+        "calendar",
+        "reminder",
+        "system",
+        "telegram"
+      ],
+      "useCases": [
+        "google calendar reminder system with gpt 4o and telegram",
+        "automate google calendar reminder"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "fdummfmXRr5tXHRR",
+      "file": "fdummfmXRr5tXHRR.json",
+      "name": "Automate_Product_Training___Customer_Support_via_WhatsApp__GPT_4___Google_Sheets",
+      "category": "Customer Support/AI",
+      "description": "Automated workflow: Automate Product Training   Customer Support via WhatsApp  GPT 4   Google Sheets",
+      "tags": [
+        "ecommerce",
+        "automation",
+        "orders",
+        "ai",
+        "chatbot",
+        "whatsapp",
+        "messaging",
+        "customer support"
+      ],
+      "keywords": [
+        "automate",
+        "product",
+        "training",
+        "customer",
+        "support",
+        "whatsapp",
+        "google",
+        "sheets"
+      ],
+      "useCases": [
+        "automate product training   customer support via whatsapp  gpt 4   google sheets",
+        "automate automate product training"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "hsMut1IvWs7WmrlR",
+      "file": "hsMut1IvWs7WmrlR.json",
+      "name": "Build_Your_Own_Counseling_Chatbot_on_LINE_to_Support_Mental_Health_Conversations",
+      "category": "Customer Support/AI",
+      "description": "Automated workflow: Build Your Own Counseling Chatbot on LINE to Support Mental Health Conversations",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation",
+        "customer support"
+      ],
+      "keywords": [
+        "build",
+        "your",
+        "counseling",
+        "chatbot",
+        "line",
+        "support",
+        "mental",
+        "health",
+        "conversations"
+      ],
+      "useCases": [
+        "build your own counseling chatbot on line to support mental health conversations",
+        "automate build your own"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "i36e0Jd36SjBAaUa",
+      "file": "i36e0Jd36SjBAaUa.json",
+      "name": "Extract_Amazon_Best_Seller_Electronic_Info_with_Bright_Data_and_Google_Gemini",
+      "category": "General/Automation",
+      "description": "Automated workflow: Extract Amazon Best Seller Electronic Info with Bright Data and Google Gemini",
+      "tags": [],
+      "keywords": [
+        "extract",
+        "amazon",
+        "best",
+        "seller",
+        "electronic",
+        "info",
+        "bright",
+        "data",
+        "google",
+        "gemini"
+      ],
+      "useCases": [
+        "extract amazon best seller electronic info with bright data and google gemini",
+        "automate extract amazon best"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "ip9QrWYS9byvDaRV",
+      "file": "ip9QrWYS9byvDaRV.json",
+      "name": "gmail-ai-auto-responder_-create-draft-replies-to-incoming-emails",
+      "category": "Communication/Email",
+      "description": "Automated workflow: gmail ai auto responder  create draft replies to incoming emails",
+      "tags": [
+        "email",
+        "gmail",
+        "automation"
+      ],
+      "keywords": [
+        "gmail",
+        "auto",
+        "responder",
+        "create",
+        "draft",
+        "replies",
+        "incoming",
+        "emails"
+      ],
+      "useCases": [
+        "gmail ai auto responder  create draft replies to incoming emails",
+        "automate gmail ai auto"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "kmzPOEewpVzQMOd9",
+      "file": "kmzPOEewpVzQMOd9.json",
+      "name": "Automated_Resume_Review_System_Using_OpenAI___Google_Sheets",
+      "category": "HR/Recruitment",
+      "description": "Automated workflow: Automated Resume Review System Using OpenAI   Google Sheets",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation",
+        "hr",
+        "recruitment",
+        "hiring"
+      ],
+      "keywords": [
+        "automated",
+        "resume",
+        "review",
+        "system",
+        "openai",
+        "google",
+        "sheets"
+      ],
+      "useCases": [
+        "automated resume review system using openai   google sheets",
+        "automate automated resume review"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "kzmOC4VXnTZe0PiO",
+      "file": "kzmOC4VXnTZe0PiO.json",
+      "name": "Summarise_MS_Teams_Channel_Activity_for_Weekly_Reports_with_AI",
+      "category": "General/Automation",
+      "description": "Automated workflow: Summarise MS Teams Channel Activity for Weekly Reports with AI",
+      "tags": [],
+      "keywords": [
+        "summarise",
+        "teams",
+        "channel",
+        "activity",
+        "weekly",
+        "reports"
+      ],
+      "useCases": [
+        "summarise ms teams channel activity for weekly reports with ai",
+        "automate summarise ms teams"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "oUG64DakWCzEe1Wv",
+      "file": "oUG64DakWCzEe1Wv.json",
+      "name": "ai-automated-hr-workflow-for-cv-analysis-and-candidate-evaluation",
+      "category": "HR/Recruitment",
+      "description": "Automated workflow: ai automated hr workflow for cv analysis and candidate evaluation",
+      "tags": [
+        "hr",
+        "recruitment",
+        "hiring"
+      ],
+      "keywords": [
+        "automated",
+        "workflow",
+        "analysis",
+        "candidate",
+        "evaluation"
+      ],
+      "useCases": [
+        "ai automated hr workflow for cv analysis and candidate evaluation",
+        "automate ai automated hr"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "ozphMdSSQrt1NPv2",
+      "file": "ozphMdSSQrt1NPv2.json",
+      "name": "Actioning_Your_Meeting_Next_Steps_using_Transcripts_and_AI",
+      "category": "General/Automation",
+      "description": "Automated workflow: Actioning Your Meeting Next Steps using Transcripts and AI",
+      "tags": [],
+      "keywords": [
+        "actioning",
+        "your",
+        "meeting",
+        "next",
+        "steps",
+        "transcripts"
+      ],
+      "useCases": [
+        "actioning your meeting next steps using transcripts and ai",
+        "automate actioning your meeting"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "pHL12UGf8Tt5IBIS",
+      "file": "pHL12UGf8Tt5IBIS.json",
+      "name": "Build_a_Document_QA_System_with_RAG_using_Milvus__Cohere__and_OpenAI_for_Google_Drive",
+      "category": "AI/Chat",
+      "description": "Automated workflow: Build a Document QA System with RAG using Milvus  Cohere  and OpenAI for Google Drive",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation"
+      ],
+      "keywords": [
+        "build",
+        "document",
+        "system",
+        "milvus",
+        "cohere",
+        "openai",
+        "google",
+        "drive"
+      ],
+      "useCases": [
+        "build a document qa system with rag using milvus  cohere  and openai for google drive",
+        "automate build a document"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "pNrfCo3EeTXnvTIr",
+      "file": "pNrfCo3EeTXnvTIr.json",
+      "name": "Scrape_Indeed_Job_Listings_for_Hiring_Signals_Using_Bright_Data_and_LLMs",
+      "category": "Data/Scraping",
+      "description": "Automated workflow: Scrape Indeed Job Listings for Hiring Signals Using Bright Data and LLMs",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation",
+        "hr",
+        "recruitment",
+        "hiring",
+        "scraping",
+        "data"
+      ],
+      "keywords": [
+        "scrape",
+        "indeed",
+        "listings",
+        "hiring",
+        "signals",
+        "bright",
+        "data",
+        "llms"
+      ],
+      "useCases": [
+        "scrape indeed job listings for hiring signals using bright data and llms",
+        "automate scrape indeed job"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "pegNjHaDbrHH5X43",
+      "file": "pegNjHaDbrHH5X43.json",
+      "name": "Auto_Categorize_blog_posts_in_wordpress_using_A_I_",
+      "category": "Content/Blogging",
+      "description": "Automated workflow: Auto Categorize blog posts in wordpress using A I ",
+      "tags": [
+        "blog",
+        "content",
+        "seo",
+        "wordpress"
+      ],
+      "keywords": [
+        "auto",
+        "categorize",
+        "blog",
+        "posts",
+        "wordpress"
+      ],
+      "useCases": [
+        "auto categorize blog posts in wordpress using a i ",
+        "automate auto categorize blog"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "px2ufO6KTxKcAMGC",
+      "file": "px2ufO6KTxKcAMGC.json",
+      "name": "Appointment_Scheduling_with_Twilio__Cal_com__and_AI",
+      "category": "Productivity/Scheduling",
+      "description": "Automated workflow: Appointment Scheduling with Twilio  Cal com  and AI",
+      "tags": [
+        "calendar",
+        "scheduling",
+        "automation"
+      ],
+      "keywords": [
+        "appointment",
+        "scheduling",
+        "twilio"
+      ],
+      "useCases": [
+        "appointment scheduling with twilio  cal com  and ai",
+        "automate appointment scheduling with"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "q76O5UMoA8Btm5yQ",
+      "file": "q76O5UMoA8Btm5yQ.json",
+      "name": "Generate_Graphic_Wallpaper_with_Midjourney__GPT_4o_mini_and_Canvas_APIs",
+      "category": "AI/Chat",
+      "description": "Automated workflow: Generate Graphic Wallpaper with Midjourney  GPT 4o mini and Canvas APIs",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation"
+      ],
+      "keywords": [
+        "generate",
+        "graphic",
+        "wallpaper",
+        "midjourney",
+        "mini",
+        "canvas",
+        "apis"
+      ],
+      "useCases": [
+        "generate graphic wallpaper with midjourney  gpt 4o mini and canvas apis",
+        "automate generate graphic wallpaper"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "rgR2jrzNgxoSOkI7",
+      "file": "rgR2jrzNgxoSOkI7.json",
+      "name": "AI_Powered_WooCommerce_Support_Agent",
+      "category": "Customer Support/AI",
+      "description": "Automated workflow: AI Powered WooCommerce Support Agent",
+      "tags": [
+        "ecommerce",
+        "automation",
+        "orders",
+        "customer support",
+        "ai"
+      ],
+      "keywords": [
+        "powered",
+        "woocommerce",
+        "support",
+        "agent"
+      ],
+      "useCases": [
+        "ai powered woocommerce support agent",
+        "automate ai powered woocommerce"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "sGD3TeuFpZNxUB6s",
+      "file": "sGD3TeuFpZNxUB6s.json",
+      "name": "sync-outlook-calendar-events-to-notion",
+      "category": "Productivity/Notion",
+      "description": "Automated workflow: sync outlook calendar events to notion",
+      "tags": [
+        "calendar",
+        "scheduling",
+        "automation",
+        "notion",
+        "productivity"
+      ],
+      "keywords": [
+        "sync",
+        "outlook",
+        "calendar",
+        "events",
+        "notion"
+      ],
+      "useCases": [
+        "sync outlook calendar events to notion",
+        "automate sync outlook calendar"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "ssXTKiWQzvM8XaHj",
+      "file": "ssXTKiWQzvM8XaHj.json",
+      "name": "Generate___Auto_Post_Social_Videos_to_Multiple_Platforms_with_GPT_4_and_Kling_AI",
+      "category": "Content/Video",
+      "description": "Automated workflow: Generate   Auto Post Social Videos to Multiple Platforms with GPT 4 and Kling AI",
+      "tags": [
+        "social media",
+        "marketing",
+        "content",
+        "ai",
+        "chatbot",
+        "automation",
+        "video",
+        "content creation"
+      ],
+      "keywords": [
+        "generate",
+        "auto",
+        "post",
+        "social",
+        "videos",
+        "multiple",
+        "platforms",
+        "kling"
+      ],
+      "useCases": [
+        "generate   auto post social videos to multiple platforms with gpt 4 and kling ai",
+        "automate generate auto post"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "swSsUPvmiHAqz07J",
+      "file": "swSsUPvmiHAqz07J.json",
+      "name": "Scrape_business_leads_from_Google_Maps_using_OpenAI_and_Google_Sheets__Use_for_free",
+      "category": "Data/Scraping",
+      "description": "Automated workflow: Scrape business leads from Google Maps using OpenAI and Google Sheets  Use for free",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation",
+        "sales",
+        "crm",
+        "leads",
+        "scraping",
+        "data"
+      ],
+      "keywords": [
+        "scrape",
+        "business",
+        "leads",
+        "google",
+        "maps",
+        "openai",
+        "sheets",
+        "free"
+      ],
+      "useCases": [
+        "scrape business leads from google maps using openai and google sheets  use for free",
+        "automate scrape business leads"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "tjmj6VvZdpWuJYQD",
+      "file": "tjmj6VvZdpWuJYQD.json",
+      "name": "Zoom_AI_Meeting_Assistant_creates_mail_summary__ClickUp_tasks_and_follow_up_call",
+      "category": "General/Automation",
+      "description": "Automated workflow: Zoom AI Meeting Assistant creates mail summary  ClickUp tasks and follow up call",
+      "tags": [],
+      "keywords": [
+        "zoom",
+        "meeting",
+        "assistant",
+        "creates",
+        "mail",
+        "summary",
+        "clickup",
+        "tasks",
+        "follow",
+        "call"
+      ],
+      "useCases": [
+        "zoom ai meeting assistant creates mail summary  clickup tasks and follow up call",
+        "automate zoom ai meeting"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "tm0g3UZ3Tl0ZxMb0",
+      "file": "tm0g3UZ3Tl0ZxMb0.json",
+      "name": "Automate_Blog_Content_Creation_with_GPT_4__Perplexity___WordPress",
+      "category": "Content/Blogging",
+      "description": "Automated workflow: Automate Blog Content Creation with GPT 4  Perplexity   WordPress",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation",
+        "blog",
+        "content",
+        "seo",
+        "wordpress"
+      ],
+      "keywords": [
+        "automate",
+        "blog",
+        "content",
+        "creation",
+        "perplexity",
+        "wordpress"
+      ],
+      "useCases": [
+        "automate blog content creation with gpt 4  perplexity   wordpress",
+        "automate automate blog content"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "u0Br3FJn0P2P7BY2",
+      "file": "u0Br3FJn0P2P7BY2.json",
+      "name": "automate-sales-cold-calling-pipeline-with-apify,-gpt-4o,-and-whatsapp",
+      "category": "Sales/CRM",
+      "description": "Automated workflow: automate sales cold calling pipeline with apify, gpt 4o, and whatsapp",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation",
+        "whatsapp",
+        "messaging",
+        "sales",
+        "crm",
+        "leads"
+      ],
+      "keywords": [
+        "automate",
+        "sales",
+        "cold",
+        "calling",
+        "pipeline",
+        "apify,",
+        "whatsapp"
+      ],
+      "useCases": [
+        "automate sales cold calling pipeline with apify, gpt 4o, and whatsapp",
+        "automate automate sales cold"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "uAEfLPaShxPUoLSw",
+      "file": "uAEfLPaShxPUoLSw.json",
+      "name": "personalized-ai-tech-newsletter-using-rss,-openai-and-gmail",
+      "category": "Communication/Email",
+      "description": "Automated workflow: personalized ai tech newsletter using rss, openai and gmail",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation",
+        "email",
+        "gmail"
+      ],
+      "keywords": [
+        "personalized",
+        "tech",
+        "newsletter",
+        "rss,",
+        "openai",
+        "gmail"
+      ],
+      "useCases": [
+        "personalized ai tech newsletter using rss, openai and gmail",
+        "automate personalized ai tech"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "uvF34jcQCb3yOIVC",
+      "file": "uvF34jcQCb3yOIVC.json",
+      "name": "Daily_Podcast_Summary",
+      "category": "General/Automation",
+      "description": "Automated workflow: Daily Podcast Summary",
+      "tags": [],
+      "keywords": [
+        "daily",
+        "podcast",
+        "summary"
+      ],
+      "useCases": [
+        "daily podcast summary",
+        "automate daily podcast summary"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "w5TYszsGokwF3cjn",
+      "file": "w5TYszsGokwF3cjn.json",
+      "name": "Create_Animated_Stories_using_GPT_4o_mini__Midjourney__Kling_and_Creatomate_API",
+      "category": "AI/Chat",
+      "description": "Automated workflow: Create Animated Stories using GPT 4o mini  Midjourney  Kling and Creatomate API",
+      "tags": [
+        "ai",
+        "chatbot",
+        "automation"
+      ],
+      "keywords": [
+        "create",
+        "animated",
+        "stories",
+        "mini",
+        "midjourney",
+        "kling",
+        "creatomate"
+      ],
+      "useCases": [
+        "create animated stories using gpt 4o mini  midjourney  kling and creatomate api",
+        "automate create animated stories"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "xqyQlvHel6vXea5R",
+      "file": "xqyQlvHel6vXea5R.json",
+      "name": "Private___Local_Ollama_Self_Hosted_AI_Assistant",
+      "category": "General/Automation",
+      "description": "Automated workflow: Private   Local Ollama Self Hosted AI Assistant",
+      "tags": [],
+      "keywords": [
+        "private",
+        "local",
+        "ollama",
+        "self",
+        "hosted",
+        "assistant"
+      ],
+      "useCases": [
+        "private   local ollama self hosted ai assistant",
+        "automate private local ollama"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "yrAIdTytSsUczphy",
+      "file": "yrAIdTytSsUczphy.json",
+      "name": "WooCommerce AI Chatbot Workflow for Post Sales Support",
+      "category": "Sales/CRM",
+      "description": "Automated workflow: WooCommerce AI Chatbot Workflow for Post Sales Support",
+      "tags": [
+        "ecommerce",
+        "automation",
+        "orders",
+        "ai",
+        "chatbot",
+        "customer support",
+        "sales",
+        "crm"
+      ],
+      "keywords": [
+        "woocommerce",
+        "chatbot",
+        "workflow",
+        "post",
+        "sales",
+        "support"
+      ],
+      "useCases": [
+        "woocommerce ai chatbot workflow for post sales support",
+        "automate woocommerce ai chatbot"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "ytKgfEaDImS0HBTU",
+      "file": "ytKgfEaDImS0HBTU.json",
+      "name": "Twitter_Virtual_AI_Influencer",
+      "category": "Social Media/Marketing",
+      "description": "Automated workflow: Twitter Virtual AI Influencer",
+      "tags": [
+        "social media",
+        "marketing",
+        "content"
+      ],
+      "keywords": [
+        "twitter",
+        "virtual",
+        "influencer"
+      ],
+      "useCases": [
+        "twitter virtual ai influencer",
+        "automate twitter virtual ai"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "zDsWN5ePbHLxyXRf",
+      "file": "zDsWN5ePbHLxyXRf.json",
+      "name": "AI-Powered WooCommerce Support Agent",
+      "category": "Customer Support/AI",
+      "description": "Automated workflow: AI Powered WooCommerce Support Agent",
+      "tags": [
+        "ecommerce",
+        "automation",
+        "orders",
+        "customer support",
+        "ai"
+      ],
+      "keywords": [
+        "powered",
+        "woocommerce",
+        "support",
+        "agent"
+      ],
+      "useCases": [
+        "ai powered woocommerce support agent",
+        "automate ai powered woocommerce"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "zIJ0SQy81T36FRIu",
+      "file": "zIJ0SQy81T36FRIu.json",
+      "name": "Breakdown_Documents_into_Study_Notes_using_Templating_MistralAI_and_Qdrant",
+      "category": "General/Automation",
+      "description": "Automated workflow: Breakdown Documents into Study Notes using Templating MistralAI and Qdrant",
+      "tags": [],
+      "keywords": [
+        "breakdown",
+        "documents",
+        "into",
+        "study",
+        "notes",
+        "templating",
+        "mistralai",
+        "qdrant"
+      ],
+      "useCases": [
+        "breakdown documents into study notes using templating mistralai and qdrant",
+        "automate breakdown documents into"
+      ],
+      "complexity": "intermediate"
+    },
+    {
+      "id": "zUWf79L0yzlMdCMK",
+      "file": "zUWf79L0yzlMdCMK.json",
+      "name": "Automate_Sales_Meeting_Prep_with_AI___APIFY_Sent_To_WhatsApp",
+      "category": "Sales/CRM",
+      "description": "Automated workflow: Automate Sales Meeting Prep with AI   APIFY Sent To WhatsApp",
+      "tags": [
+        "whatsapp",
+        "messaging",
+        "ai",
+        "sales",
+        "crm",
+        "leads"
+      ],
+      "keywords": [
+        "automate",
+        "sales",
+        "meeting",
+        "prep",
+        "apify",
+        "sent",
+        "whatsapp"
+      ],
+      "useCases": [
+        "automate sales meeting prep with ai   apify sent to whatsapp",
+        "automate automate sales meeting"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "zoCQQgL9Ag9bLYWW",
+      "file": "zoCQQgL9Ag9bLYWW.json",
+      "name": "scrape-tiktok-influencer-profiles-with-bright-data-api-to-google-sheets",
+      "category": "Data/Scraping",
+      "description": "Automated workflow: scrape tiktok influencer profiles with bright data api to google sheets",
+      "tags": [
+        "social media",
+        "marketing",
+        "content",
+        "video",
+        "content creation",
+        "scraping",
+        "data",
+        "automation"
+      ],
+      "keywords": [
+        "scrape",
+        "tiktok",
+        "influencer",
+        "profiles",
+        "bright",
+        "data",
+        "google",
+        "sheets"
+      ],
+      "useCases": [
+        "scrape tiktok influencer profiles with bright data api to google sheets",
+        "automate scrape tiktok influencer"
+      ],
+      "complexity": "advanced"
+    },
+    {
+      "id": "zwo0bDvYzyO0iZY1",
+      "file": "zwo0bDvYzyO0iZY1.json",
+      "name": "Generate___Auto_post_AI_Videos_to_Social_Media_with_Veo3_and_Blotato",
+      "category": "Social Media/Marketing",
+      "description": "Automated workflow: Generate   Auto post AI Videos to Social Media with Veo3 and Blotato",
+      "tags": [
+        "social media",
+        "marketing",
+        "content",
+        "video",
+        "content creation"
+      ],
+      "keywords": [
+        "generate",
+        "auto",
+        "post",
+        "videos",
+        "social",
+        "media",
+        "veo3",
+        "blotato"
+      ],
+      "useCases": [
+        "generate   auto post ai videos to social media with veo3 and blotato",
+        "automate generate auto post"
+      ],
+      "complexity": "intermediate"
+    }
+  ]
+}

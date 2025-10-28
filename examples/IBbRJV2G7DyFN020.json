@@ -1,0 +1,369 @@
+{
+  "createdAt": "2025-07-14T19:08:26.805Z",
+  "updatedAt": "2025-07-14T19:08:26.805Z",
+  "id": "IBbRJV2G7DyFN020",
+  "name": "Automatic_Shopify_Order_Fulfillment_Process",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "7871eec6-dbee-420d-adf0-ae29aa521df2",
+      "name": "When clicking ‘Test workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        -360,
+        240
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Filtering orders for fulfillment 👇\nFilter the valid orders for programatically fulfillments\n\n- you exclusively sell digital downloads or digital gift cards\n- you use fulfillment services for all your products\n",
+        "height": 440
+      },
+      "id": "3aff87b3-c664-407a-a8e4-f9c8bb963de8",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        340,
+        -140
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "c8020621-c96e-4bed-966c-de37e07bf183",
+      "name": "Loop Over Items",
+      "type": "n8n-nodes-base.splitInBatches",
+      "position": [
+        700,
+        140
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "content": "## Get fulfillment orders 👇\n[Retrieves a list of fulfillment orders for a specific order.](https://shopify.dev/docs/api/admin-rest/2025-01/resources/fulfillmentorder#get-orders-order-id-fulfillment-orders)\n\n\n",
+        "height": 340
+      },
+      "id": "3aab66d5-e081-4aa8-ade9-3099a1e9c8c3",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        960,
+        -40
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "id": "20108ef9-169f-4024-bdfd-07952fb6eee4",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        -360,
+        -20
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "loose"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "3fdde26b-82ef-42f1-ba36-d4fe667f8866",
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              },
+              "leftValue": "={{ (new Date().getTime() - new Date($json.created_at).getTime()) / (1000 * 60 * 60) }}\n",
+              "rightValue": 24
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "d456dbf7-e381-46c4-91df-d14dd7398749",
+      "name": "Filter Orders",
+      "type": "n8n-nodes-base.filter",
+      "position": [
+        400,
+        140
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "url": "=https://{{ $('Set Global').item.json['store-id'] }}.myshopify.com/admin/api/2025-01/orders/{{ $json.id }}/fulfillment_orders.json",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "shopifyAccessTokenApi",
+        "options": {}
+      },
+      "id": "3053f3e6-0d3d-4921-afdc-d81dd593ef34",
+      "name": "Get Fulfillment Orders",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1020,
+        160
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "content": "## Edit this node 👇\n\nGet your store ID and replace in the GET url",
+        "height": 346,
+        "width": 232
+      },
+      "id": "ab9482cc-fbb8-4699-969c-b9f17c0a7e26",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -120,
+        -40
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "78289fb1-8a1a-46a2-973e-f5f2a7309993",
+              "name": "store-id",
+              "type": "string",
+              "value": "{store-id}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "09b92b5b-0075-4c54-99bd-66307f9a3a51",
+      "name": "Set Global",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -60,
+        140
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "content": "## Create fulfillment  👇\n\n[Creates a fulfillment for one or many fulfillment orders](https://shopify.dev/docs/api/admin-rest/2025-04/resources/fulfillment#post-fulfillments)\n- `notify_customer` to send notifications to customer",
+        "height": 346,
+        "width": 232
+      },
+      "id": "1952cc1a-3bb6-48ec-8de4-48968baff64d",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1320,
+        -40
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Shopify Fulfillment Automation with n8n\nShopify store owners who want to automate the fulfillment process, whether for entire orders or specific products (like personalization items). However, the challenge lies in retrieving the [Fulfillment Order ID](https://shopify.dev/docs/api/admin-rest/2025-01/resources/fulfillmentorder#get-orders-order-id-fulfillment-orders) (not [Order ID](https://shopify.dev/docs/api/admin-rest/2025-01/resources/order#get-orders-order-id?fields=id,line-items,name,total-price))—a crucial piece needed to trigger fulfillment.\n\nThis n8n workflow can:\n\n- Get all unfulfilled orders from Shopify store.\n\n- Retrieve the Fulfillment Order ID (using the \"List Fulfillment Orders\" action).\n\n- Create a fulfillment request (using \"Mark fulfillment orders as fulfilled\").\n\n- Handle edge cases, like partially fulfilled orders or errors in API responses.\n\n",
+        "height": 546,
+        "width": 372
+      },
+      "id": "4df9d75b-cd50-4414-94a8-8e842315adfe",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -800,
+        -160
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "authentication": "accessToken",
+        "operation": "getAll",
+        "returnAll": true,
+        "options": {
+          "fulfillmentStatus": "unfulfilled"
+        }
+      },
+      "id": "eca6d6e1-9a6b-4f06-a534-5ad522a39d50",
+      "name": "Get all Unfulfilled orders",
+      "type": "n8n-nodes-base.shopify",
+      "position": [
+        180,
+        140
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://{{ $('Set Global').item.json['store-id'] }}.myshopify.com/admin/api/2025-01/fulfillments.json",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "shopifyAccessTokenApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"fulfillment\":{\"line_items_by_fulfillment_order\":[{\"fulfillment_order_id\":{{ $json.fulfillment_orders[0].id }}}],\"notify_customer\":true}}",
+        "options": {}
+      },
+      "id": "91f5ecc4-14db-47ff-ad35-38f6ec8c20b1",
+      "name": "Mark fulfillment orders as fulfilled",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1380,
+        160
+      ],
+      "typeVersion": 4.2
+    }
+  ],
+  "connections": {
+    "Set Global": {
+      "main": [
+        [
+          {
+            "node": "Get all Unfulfilled orders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Orders": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Get Fulfillment Orders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Set Global",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Fulfillment Orders": {
+      "main": [
+        [
+          {
+            "node": "Mark fulfillment orders as fulfilled",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get all Unfulfilled orders": {
+      "main": [
+        [
+          {
+            "node": "Filter Orders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Set Global",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mark fulfillment orders as fulfilled": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {},
+  "versionId": "096c80da-b38a-4d30-946e-5fafd0d114e0",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-07-09T21:41:38.773Z",
+      "updatedAt": "2025-07-09T21:41:38.773Z",
+      "id": "G5Lcoe2jTgqCJuSy",
+      "name": "OpenAI"
+    },
+    {
+      "createdAt": "2025-07-09T21:41:38.763Z",
+      "updatedAt": "2025-07-09T21:41:38.763Z",
+      "id": "pz5LfYMpyppJnoPT",
+      "name": "WooCommerce"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:46.098Z",
+      "updatedAt": "2025-10-25T12:28:46.098Z",
+      "role": "workflow:owner",
+      "workflowId": "IBbRJV2G7DyFN020",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

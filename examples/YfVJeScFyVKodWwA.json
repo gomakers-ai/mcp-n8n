@@ -1,0 +1,381 @@
+{
+  "createdAt": "2025-07-14T19:09:48.110Z",
+  "updatedAt": "2025-07-14T19:09:48.110Z",
+  "id": "YfVJeScFyVKodWwA",
+  "name": "Get_notified_when_your_competitors_change_their_pricing_with_Airtop_and_Slack",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "f14f5314-af62-479a-af5f-36235e7f8fc6",
+      "name": "When clicking ‘Test workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        -1660,
+        -340
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "1MER5ftlYyfPZR-N9ZwwVT7Ea0wwqQYxln8l1HuBqjhA",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1MER5ftlYyfPZR-N9ZwwVT7Ea0wwqQYxln8l1HuBqjhA/edit?usp=drivesdk",
+          "cachedResultName": "Copy of Monitor Pricing"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1MER5ftlYyfPZR-N9ZwwVT7Ea0wwqQYxln8l1HuBqjhA/edit#gid=0",
+          "cachedResultName": "Sheet1"
+        },
+        "options": {}
+      },
+      "id": "50d547b7-e1d8-4e0d-8abe-3f364d89fe85",
+      "name": "Get Pricing URLs",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        -1440,
+        -340
+      ],
+      "typeVersion": 4.5
+    },
+    {
+      "parameters": {
+        "resource": "extraction",
+        "operation": "query",
+        "sessionMode": "new",
+        "url": "={{ $json[\"Pricing URL\"] }}",
+        "prompt": "=This is a pricing page. Please summarize it concisely by including every plan. For each plan, list the price and the top 3 features it includes. Compare the current plan to the previous plan described here: \n[{{ $json.Pricing }}].\n\nRETURN ONLY 3 FIELDS:\n1. `pricing_summary` - A textual description of the pricing, including the  plan's name, price, and top 3 features.\n2. `differences_summary` - If there are significant differences in the PRICES between the previous plan and the current one, summarize the differences concisely in a textual description, focusing only on the changes in prices.\n3. `status` - In a status field, return [DIFF] if the new plan and pricing are substantially different from the previous one, [SIMILAR] if they are similar, or [NEW] if the previous pricing is empty.\n\n- important, do not guess or estimate, just report things that are clearly mentioned in pricing page\n",
+        "additionalFields": {
+          "outputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"pricing_summary\": {\n      \"type\": \"string\",\n      \"description\": \"A textual description of the pricing, including the plan's name, price, and top 3 features.\"\n    },\n    \"differences_summary\": {\n      \"type\": \"string\",\n      \"description\": \"A concise summary of the differences between the previous and current plans, focusing on changes.\"\n    },\n    \"status\": {\n      \"type\": \"string\",\n      \"description\": \"Indicates if the new plan is substantially different from the previous one.\"\n    }\n  },\n  \"required\": [\n    \"pricing_summary\",\n    \"differences_summary\",\n    \"status\"\n  ],\n  \"additionalProperties\": false,\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\"\n}"
+        }
+      },
+      "id": "433190e0-9e0e-4d00-9ab9-b512d30605e8",
+      "name": "Check pricing",
+      "type": "n8n-nodes-base.airtop",
+      "position": [
+        -1220,
+        -420
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const response = JSON.parse($json.data.modelResponse)\n\nreturn { json: {\n  ...response,\n  row_number: $json['row_number'],\n  \"Pricing URL\": $json[\"Pricing URL\"]\n}}"
+      },
+      "id": "b60a7fef-366a-4ce3-8732-d92280e17a32",
+      "name": "Parse response",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -780,
+        -340
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "id": "c6fd3e6b-aec9-4d81-9dc4-176b0b2756df",
+      "name": "Merge",
+      "type": "n8n-nodes-base.merge",
+      "position": [
+        -1000,
+        -340
+      ],
+      "typeVersion": 3.1
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "1MER5ftlYyfPZR-N9ZwwVT7Ea0wwqQYxln8l1HuBqjhA",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1MER5ftlYyfPZR-N9ZwwVT7Ea0wwqQYxln8l1HuBqjhA/edit?usp=drivesdk",
+          "cachedResultName": "Copy of Monitor Pricing"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1MER5ftlYyfPZR-N9ZwwVT7Ea0wwqQYxln8l1HuBqjhA/edit#gid=0",
+          "cachedResultName": "Sheet1"
+        },
+        "columns": {
+          "value": {
+            "Time": "={{ $now }}",
+            "Pricing": "={{ $json.pricing_summary }}",
+            "row_number": "={{ $json.row_number }}",
+            "Pricing URL": "="
+          },
+          "schema": [
+            {
+              "id": "Pricing URL",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "Pricing URL",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Pricing",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "Pricing",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Time",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "Time",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "type": "string",
+              "display": true,
+              "removed": false,
+              "readOnly": true,
+              "required": false,
+              "displayName": "row_number",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            }
+          ],
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "row_number"
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "a7764759-9856-41fa-9a0c-80cc43a689f8",
+      "name": "Update pricing",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        -340,
+        -440
+      ],
+      "typeVersion": 4.5
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "C087FK3J0MC",
+          "cachedResultName": "pricing-changes"
+        },
+        "text": "={{ $json[\"Pricing URL\"] + \" - \" + $json.differences_summary }}",
+        "otherOptions": {}
+      },
+      "id": "440c93d9-6080-4f68-9e98-8f15fc248a82",
+      "name": "Notify pricing change",
+      "type": "n8n-nodes-base.slack",
+      "position": [
+        -340,
+        -240
+      ],
+      "webhookId": "539892f2-e877-4dd5-85e7-d10e1be6daf1",
+      "typeVersion": 2.3
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "5142d433-519e-4e9d-ab8e-3a97d1177b51",
+              "operator": {
+                "type": "string",
+                "operation": "notContains"
+              },
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "SIMILAR"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e8eaa77d-a1a9-43af-b0f4-3af0fd5822e3",
+      "name": "Filter out similar",
+      "type": "n8n-nodes-base.filter",
+      "position": [
+        -560,
+        -340
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "content": "\n## About the Automation\nStaying on top of competitor pricing changes can be a full-time job. Manual price tracking is time-consuming and prone to errors, especially when dealing with complex pricing structures and multiple subscription tiers. Paid competitor price monitoring tools like Competera, Visualping and Fluxguard can be expensive. What if you could automate this process and get instant alerts when competitors adjust their pricing?\n\n## How to easily monitor competitor pricing\nWith this automation, you'll learn how to set up automated price monitoring system using Airtop's built-in node in n8n. By the end, your system will automatically track competitor pricing changes and notify you of any modifications.\n\n## What You'll Need\nA free [Airtop API Key](https://portal.airtop.ai/?utm_campaign=n8n)\nGoogle Sheets account with a copy of this [sheet](https://docs.google.com/spreadsheets/d/1qXuUU2RuxPkwoEqPk0hwQufNZvwXXIAAHKnn9SxW12s/copy)\nURLs of competitors' pricing pages\n## Understanding the Process\nThis automation continuously monitors competitor pricing pages and compares them against your baseline data. The workflow:\n\nTracks all different pricing plans (monthly, yearly, etc.).\nMonitors feature changes across different tiers.\nDetects and logs pricing structure modifications.\nAlerts you via Slack when changes are detected\n\n## Setting Up Your Automation\nWe've created a ready-to-use blueprint for seamless price monitoring. Here's how to get started:\n\nConnect your Google Sheets\nSet up your Airtop API connection\nDefine update frequency\nimage.png\n\n## Customization Options\nEnhance the basic template with these popular modifications:\n\nAdd other notification channels (Email, Telegram, etc.).\nInclude feature comparison tracking.\nSet up threshold-based alerts for significant price changes\nTrack historical pricing trends\n\n## Real-World Applications\nCase Study 1: A B2B SaaS company can use this automation to track competitors' pricing changes. When they identify a market-wide pricing shift, they can adjust their strategy proactively within minutes.\n\nCase Study 2: An online Ecommerce retailer automates monitoring of 100+ competitor products, maintaining optimal pricing positions and increasing profit margins.\n\n## Best Practices\nTo ensure accurate tracking:\n\nInclude detailed baseline data for each pricing tier\nSpecify both monthly and annual pricing clearly\nList all features included in each plan\nUpdate your baseline data whenever you verify changes\nInclude any promotional pricing or special offers\nDocument currency and regional variations if applicable\nExample Structure in Google Sheets:\n\nCompetitor: Acme Tools\nBasic Plan:\n- Monthly: $29\n- Annual: $290 ($24.17/mo)\n- Features: 5 users, 10GB storage, basic support\nPro Plan:\n- Monthly: $79\n- Annual: $790 ($65.83/mo)\n- Features: 20 users, 50GB storage, priority support\nWhat's Next?\nAfter setting up your price monitoring automation, consider the following:\n\n## Creating automated competitive analysis reports\nSetting up market trend analysis\nImplementing automatic pricing recommendations\nExpanding monitoring to feature changes\nHappy monitoring!",
+        "height": 1920,
+        "width": 500
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -2220,
+        -1080
+      ],
+      "id": "f88118b7-0c78-4001-8139-871aa8eeb039",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1600,
+        -80
+      ],
+      "id": "55513339-924b-445a-9307-a4ca29d52861",
+      "name": "Sticky Note1"
+    }
+  ],
+  "connections": {
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Parse response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check pricing": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse response": {
+      "main": [
+        [
+          {
+            "node": "Filter out similar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Pricing URLs": {
+      "main": [
+        [
+          {
+            "node": "Check pricing",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Filter out similar": {
+      "main": [
+        [
+          {
+            "node": "Update pricing",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Notify pricing change",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get Pricing URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {},
+  "versionId": "f0f3aa25-8baf-4f5c-b0c6-fff060b90d76",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-07-09T21:41:38.773Z",
+      "updatedAt": "2025-07-09T21:41:38.773Z",
+      "id": "G5Lcoe2jTgqCJuSy",
+      "name": "OpenAI"
+    },
+    {
+      "createdAt": "2025-07-09T21:41:38.763Z",
+      "updatedAt": "2025-07-09T21:41:38.763Z",
+      "id": "pz5LfYMpyppJnoPT",
+      "name": "WooCommerce"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:46.167Z",
+      "updatedAt": "2025-10-25T12:28:46.167Z",
+      "role": "workflow:owner",
+      "workflowId": "YfVJeScFyVKodWwA",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

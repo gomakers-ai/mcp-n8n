@@ -1,0 +1,213 @@
+{
+  "createdAt": "2025-07-14T19:07:51.850Z",
+  "updatedAt": "2025-07-14T19:07:51.850Z",
+  "id": "5D7MXjr4LQdypZqk",
+  "name": "Post_New_YouTube_Videos_to_X",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "text": "={{ $json.message.content }}",
+        "additionalFields": {}
+      },
+      "id": "a2e4f752-9b02-419e-8a2f-8019914997c6",
+      "name": "Post to X",
+      "type": "n8n-nodes-base.twitter",
+      "position": [
+        300,
+        -20
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "content": "🆔 Ensure you enter your YouTube Channel ID in the \"Channel ID\" field of this node. You can find your [Channel ID here](https://youtube.com/account_advanced).",
+        "height": 308.7901234567902,
+        "width": 221.82716049382665,
+        "color": 3
+      },
+      "id": "fb1e7427-e296-4929-8861-a260dc538cff",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -360,
+        -140
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-3.5-turbo",
+          "cachedResultName": "GPT-3.5-TURBO"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Write an engaging post about my latest YouTube video for X (Twitter) of no more than 140 characters in length. Link to the video at https://youtu.be/{{ $json.id.videoId }} use this title and description:  {{ $json.snippet.title }}  {{ $json.snippet.description }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f3e70a4c-9c15-42ae-80ad-3df4406fa416",
+      "name": "Generate Post for X with ChatGPT",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "position": [
+        -80,
+        -20
+      ],
+      "typeVersion": 1.3
+    },
+    {
+      "parameters": {
+        "content": "**Use AI to Promote Your New YouTube Videos on X**\n\n🎬 Watch the [Setup Video Here](https://mrc.fm/ai2x)",
+        "height": 102.81481481481477,
+        "width": 244.34567901234558
+      },
+      "id": "8e5c47d3-9e6e-47ce-99d4-39ccba5b05b1",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -620,
+        -140
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "limit": 1,
+        "filters": {
+          "channelId": "UC08Fah8EIryeOZRkjBRohcQ",
+          "publishedAfter": "={{ new Date(new Date().getTime() - 30 * 60000).toISOString() }}"
+        },
+        "options": {}
+      },
+      "id": "702b5c69-b080-4876-80d9-0ceb7b40f791",
+      "name": "Fetch Latest Videos",
+      "type": "n8n-nodes-base.youTube",
+      "position": [
+        -300,
+        -20
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 30
+            }
+          ]
+        }
+      },
+      "id": "2b7a203f-3f1e-4ab4-8fdb-c889814d6793",
+      "name": "Check Every 30 Min",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        -520,
+        -20
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "content": "**Automated YouTube Video Promotion Workflow**\nAutomate the promotion of new YouTube videos on X (formerly Twitter) with minimal effort. This workflow is perfect for content creators, marketers, and social media managers who want to keep their audience updated with fresh content consistently.\n\n**How it works**\nThis workflow triggers every 30 minutes to check for new YouTube videos from a specified channel. If a new video is found, it utilizes OpenAI's ChatGPT to craft an engaging, promotional message for X. Finally, the workflow posts the generated message to Twitter, ensuring your latest content is shared with your audience promptly.\n\n**Set up steps**\n-Schedule the workflow to run at your desired frequency.\n-Connect to your YouTube account and set up the node to fetch new videos based on your Channel ID.\n-Integrate with OpenAI to generate promotional messages using GPT-3.5 turbo.\n-Link to your X account and set up the node to post the generated content.\n\nPlease note, you'll need API keys and credentials for YouTube, OpenAI, and X. Check out this quick video tutorial to make the setup process a breeze.\n\n**Additional Tips**\nCustomize the workflow to match your branding and messaging tone.\nTest each step to ensure your workflow runs smoothly before going live.",
+        "height": 643,
+        "width": 504
+      },
+      "id": "f6465f48-caf5-43d3-bf85-2f6341072f56",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1140,
+        -140
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "connections": {
+    "Check Every 30 Min": {
+      "main": [
+        [
+          {
+            "node": "Fetch Latest Videos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Latest Videos": {
+      "main": [
+        [
+          {
+            "node": "Generate Post for X with ChatGPT",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Post for X with ChatGPT": {
+      "main": [
+        [
+          {
+            "node": "Post to X",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {},
+  "versionId": "c93b0993-111f-4c33-9ea9-ed00cfbcdeeb",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-07-09T21:41:38.773Z",
+      "updatedAt": "2025-07-09T21:41:38.773Z",
+      "id": "G5Lcoe2jTgqCJuSy",
+      "name": "OpenAI"
+    },
+    {
+      "createdAt": "2025-07-09T21:41:38.763Z",
+      "updatedAt": "2025-07-09T21:41:38.763Z",
+      "id": "pz5LfYMpyppJnoPT",
+      "name": "WooCommerce"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:46.066Z",
+      "updatedAt": "2025-10-25T12:28:46.066Z",
+      "role": "workflow:owner",
+      "workflowId": "5D7MXjr4LQdypZqk",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

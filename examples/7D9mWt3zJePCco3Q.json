@@ -1,0 +1,719 @@
+{
+  "createdAt": "2025-07-14T19:05:37.405Z",
+  "updatedAt": "2025-07-14T19:05:37.405Z",
+  "id": "7D9mWt3zJePCco3Q",
+  "name": "scrape-business-emails-from-google-maps-without-the-use-of-any-third-party-apis",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "7eff332d-7c0b-4640-a791-3d96410c3f2a",
+      "name": "Remove Duplicate URLs",
+      "type": "n8n-nodes-base.removeDuplicates",
+      "position": [
+        700,
+        540
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "3dbbad89-eba5-474d-a170-eb1a9539b312",
+      "name": "Loop over queries",
+      "type": "n8n-nodes-base.splitInBatches",
+      "position": [
+        400,
+        60
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "url": "=https://www.google.com/maps/search/{{ $json.query }}",
+        "options": {
+          "allowUnauthorizedCerts": false
+        }
+      },
+      "id": "206666d1-d48c-47c9-bf7f-c22637e5acac",
+      "name": "Search Google Maps with query",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        100,
+        540
+      ],
+      "executeOnce": false,
+      "typeVersion": 4.2,
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json.data\n\nconst regex = /https?:\\/\\/[^\\/]+/g\n\nconst urls = data.match(regex)\n\nreturn urls.map(url => ({json: {url: url}}))"
+      },
+      "id": "11ba97a1-9416-4817-972e-e101523ec519",
+      "name": "Scrape URLs from results",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        300,
+        540
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "041797f2-2fe2-41dc-902a-d34050b9b304",
+              "operator": {
+                "type": "string",
+                "operation": "notRegex"
+              },
+              "leftValue": "={{ $json.url }}",
+              "rightValue": "=(google|gstatic|ggpht|schema\\.org|example\\.com|sentry-next\\.wixpress\\.com|imli\\.com|sentry\\.wixpress\\.com|ingest\\.sentry\\.io)"
+            },
+            {
+              "id": "eb499a7e-17bc-453c-be08-a47286f726dd",
+              "operator": {
+                "name": "filter.operator.equals",
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a0b47a44-02b8-45a9-b442-66370bfe402f",
+      "name": "Filter irrelevant URLs",
+      "type": "n8n-nodes-base.filter",
+      "position": [
+        500,
+        540
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {}
+      },
+      "id": "518f9354-a587-4e4d-8338-5354a5dab888",
+      "name": "Request web page for URL",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1100,
+        620
+      ],
+      "typeVersion": 4.2,
+      "alwaysOutputData": false,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "options": {
+          "reset": false
+        }
+      },
+      "id": "37b04424-7b4d-4c43-b9b9-096a0cbc80ff",
+      "name": "Loop over URLs",
+      "type": "n8n-nodes-base.splitInBatches",
+      "position": [
+        900,
+        540
+      ],
+      "typeVersion": 3,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "a1594705-e862-4a62-83cb-8a3db54df549",
+      "name": "Loop over pages",
+      "type": "n8n-nodes-base.splitInBatches",
+      "position": [
+        1120,
+        280
+      ],
+      "typeVersion": 3,
+      "alwaysOutputData": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "jsCode": "const data = $json.data\n\nconst emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.(?!png|jpg|gif|jpeg)[a-zA-Z]{2,}/g\n\nconst emails = data.match(emailRegex)\n\nreturn {json: {emails: emails}}"
+      },
+      "id": "f1d89100-8124-446a-b82a-ecc528b1f71a",
+      "name": "Scrape emails from page",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        1280,
+        380
+      ],
+      "typeVersion": 2,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "emails"
+            }
+          ]
+        },
+        "options": {
+          "mergeLists": true
+        }
+      },
+      "id": "59365e85-ab4a-4c6e-b4ab-9d4249692d95",
+      "name": "Aggregate arrays of emails",
+      "type": "n8n-nodes-base.aggregate",
+      "position": [
+        1440,
+        260
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "emails",
+        "options": {}
+      },
+      "id": "45b0829a-8873-4fd0-8666-fd979f849222",
+      "name": "Split out into default data structure",
+      "type": "n8n-nodes-base.splitOut",
+      "position": [
+        1660,
+        260
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "compare": "selectedFields",
+        "fieldsToCompare": "emails",
+        "options": {}
+      },
+      "id": "dd70c30f-2d39-4784-8943-dd04089f2296",
+      "name": "Remove duplicate emails",
+      "type": "n8n-nodes-base.removeDuplicates",
+      "position": [
+        1880,
+        260
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "041797f2-2fe2-41dc-902a-d34050b9b304",
+              "operator": {
+                "type": "string",
+                "operation": "notRegex"
+              },
+              "leftValue": "={{ $json.emails }}",
+              "rightValue": "=(google|gstatic|ggpht|schema\\.org|example\\.com|sentry\\.wixpress\\.com|sentry-next\\.wixpress\\.com|ingest\\.sentry\\.io|sentry\\.io|imli\\.com)"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b232a75a-8c47-4920-ab0c-db2be540871c",
+      "name": "Filter irrelevant emails",
+      "type": "n8n-nodes-base.filter",
+      "position": [
+        2080,
+        260
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "id": "40dd8e46-b292-463c-b901-08a991e54778",
+      "name": "Save emails to Google Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        2280,
+        260
+      ],
+      "typeVersion": 4.5
+    },
+    {
+      "parameters": {},
+      "id": "08b52fcd-4809-4041-9e9f-aea54370590a",
+      "name": "Starts scraper workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        -120,
+        540
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {},
+      "id": "f18cd02d-27e1-4786-8de6-efdcca0df08a",
+      "name": "Run workflow",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        160,
+        60
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "amount": 2
+      },
+      "id": "d0bc6d62-cc48-41bc-97ed-ed17a19e4dbb",
+      "name": "Wait between executions",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        780,
+        160
+      ],
+      "webhookId": "40eb11a9-0f7d-4932-993e-0052b69dbf9b",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $workflow.id }}"
+        },
+        "mode": "each",
+        "options": {
+          "waitForSubWorkflow": false
+        }
+      },
+      "id": "2c3ee15c-222c-4f64-82fd-58b65882678e",
+      "name": "Execute scraper for query",
+      "type": "n8n-nodes-base.executeWorkflow",
+      "position": [
+        600,
+        160
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "content": "**Optional** 👇\nSet wait time between each query workflow execution. Default is 2 seconds.",
+        "height": 100,
+        "color": 6
+      },
+      "id": "ba90b775-9599-45d0-972b-bea589b1cc05",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        780,
+        40
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### Scraper 👇\nThis workflow will be executed in the background for each query. Click the **All executions** tab in the left sidebar to see the executions running.",
+        "height": 100,
+        "width": 480
+      },
+      "id": "c3075e33-b7eb-45ec-aa23-be3e40d09124",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -120,
+        420
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Google Maps Automatic Email Scraper\n\nThis workflow automatically scrapes emails from businesses on Google Maps based on a list of queries that you provide.",
+        "height": 140,
+        "width": 480,
+        "color": 7
+      },
+      "id": "dca7396e-9788-441f-a224-b5615f68a02e",
+      "name": "Sticky Note6",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -140,
+        -160
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "**Optional** 👆\nAdd or change the regex for filtering irrelevant URLs.",
+        "height": 100,
+        "width": 160,
+        "color": 6
+      },
+      "id": "f03c13d6-0baa-4f19-bc4f-02365ea04628",
+      "name": "Sticky Note7",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        480,
+        700
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "**Optional** 👆\nAdd or change the regex for filtering irrelevant/incorrect email addresses.",
+        "height": 100,
+        "width": 200,
+        "color": 6
+      },
+      "id": "0b257b00-cabe-4bb7-9dd2-63547260ed34",
+      "name": "Sticky Note8",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2060,
+        420
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "connections": {
+    "Run workflow": {
+      "main": [
+        [
+          {
+            "node": "Loop over queries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop over URLs": {
+      "main": [
+        [
+          {
+            "node": "Loop over pages",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Request web page for URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop over pages": {
+      "main": [
+        [
+          {
+            "node": "Aggregate arrays of emails",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Scrape emails from page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop over queries": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Execute scraper for query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Duplicate URLs": {
+      "main": [
+        [
+          {
+            "node": "Loop over URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter irrelevant URLs": {
+      "main": [
+        [
+          {
+            "node": "Remove Duplicate URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove duplicate emails": {
+      "main": [
+        [
+          {
+            "node": "Filter irrelevant emails",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape emails from page": {
+      "main": [
+        [
+          {
+            "node": "Loop over pages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Starts scraper workflow": {
+      "main": [
+        [
+          {
+            "node": "Search Google Maps with query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait between executions": {
+      "main": [
+        [
+          {
+            "node": "Loop over queries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter irrelevant emails": {
+      "main": [
+        [
+          {
+            "node": "Save emails to Google Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Request web page for URL": {
+      "main": [
+        [
+          {
+            "node": "Loop over URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scrape URLs from results": {
+      "main": [
+        [
+          {
+            "node": "Filter irrelevant URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute scraper for query": {
+      "main": [
+        [
+          {
+            "node": "Wait between executions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate arrays of emails": {
+      "main": [
+        [
+          {
+            "node": "Split out into default data structure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Google Maps with query": {
+      "main": [
+        [
+          {
+            "node": "Scrape URLs from results",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split out into default data structure": {
+      "main": [
+        [
+          {
+            "node": "Remove duplicate emails",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {
+    "Run workflow": [
+      {
+        "json": {
+          "query": "hollywood+dentist"
+        }
+      },
+      {
+        "json": {
+          "query": "downtown+los+angeles+dentist"
+        }
+      },
+      {
+        "json": {
+          "query": "santa+monica+dentist"
+        }
+      },
+      {
+        "json": {
+          "query": "westwood+dentist"
+        }
+      },
+      {
+        "json": {
+          "query": "west+l.a.+dentist"
+        }
+      },
+      {
+        "json": {
+          "query": "the+valley+dentist"
+        }
+      },
+      {
+        "json": {
+          "query": "echo+park+dentist"
+        }
+      },
+      {
+        "json": {
+          "query": "culver+city+dentist"
+        }
+      },
+      {
+        "json": {
+          "query": "pasadena+dentist"
+        }
+      },
+      {
+        "json": {
+          "query": "silver+lake+dentist"
+        }
+      },
+      {
+        "json": {
+          "query": "mid-wilshire+dentist"
+        }
+      },
+      {
+        "json": {
+          "query": "beverly+hills+dentist"
+        }
+      },
+      {
+        "json": {
+          "query": "north+hills+dentist"
+        }
+      },
+      {
+        "json": {
+          "query": "south+los+angeles+dentist"
+        }
+      }
+    ]
+  },
+  "versionId": "e02944cc-daa6-4378-953f-93652aa266f0",
+  "triggerCount": 0,
+  "tags": [],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:45.960Z",
+      "updatedAt": "2025-10-25T12:28:45.960Z",
+      "role": "workflow:owner",
+      "workflowId": "7D9mWt3zJePCco3Q",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

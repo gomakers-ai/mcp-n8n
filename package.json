@@ -1,0 +1,52 @@
+{
+  "name": "mcp-n8n",
+  "version": "1.0.0",
+  "description": "MCP server for n8n API - Complete integration for workflow automation",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "mcp-n8n": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "dev": "tsc --watch",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "n8n",
+    "n8n-api",
+    "automation",
+    "workflow",
+    "workflow-automation",
+    "cursor",
+    "claude",
+    "claude-desktop",
+    "ai",
+    "ai-automation",
+    "no-code",
+    "low-code"
+  ],
+  "author": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gomakers-ai/mcp-n8n.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gomakers-ai/mcp-n8n/issues"
+  },
+  "homepage": "https://github.com/gomakers-ai/mcp-n8n#readme",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "axios": "^1.7.9",
+    "dotenv": "^17.2.3",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  }
+}

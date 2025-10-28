@@ -1,0 +1,649 @@
+{
+  "createdAt": "2025-07-14T19:08:33.925Z",
+  "updatedAt": "2025-07-14T19:08:33.925Z",
+  "id": "e7YOBL7bWtBgsz6B",
+  "name": "Collect_LinkedIn_Profiles_with_AI_Processing_using_SerpAPI__OpenAI__and_NocoDB",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "1958bfdd-8edb-4112-8478-810f50246a16",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        20,
+        20
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "url": "https://serpapi.com/search",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "serpApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "=site:{{ $json.site }} {{ $json.Keyword }} {{ $json.Location }}"
+            },
+            {
+              "name": "hl",
+              "value": "={{ $json['Host langauge'] }}"
+            },
+            {
+              "name": "gl",
+              "value": "={{ $json.Geolocation }}"
+            },
+            {
+              "name": "num",
+              "value": "={{ $json['Number of search results to be returned'] }}"
+            },
+            {
+              "name": "engine",
+              "value": "={{ $json['Search engine'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "29568980-90f3-4fed-9b8b-fcc3e52d8d6d",
+      "name": "Google search w/ SerpAPI",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        500,
+        20
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ab7399a3-8fe8-447b-b9c6-33240e07e2b6",
+              "name": "NameInLinkedinProfile",
+              "type": "string",
+              "value": "={{ $json.title }}"
+            },
+            {
+              "id": "6f9a2bd6-e46d-4294-adbf-29aec0b8b2eb",
+              "name": "linkedinUrl",
+              "type": "string",
+              "value": "={{ $json.link }}"
+            },
+            {
+              "id": "e1e87eb4-ecc8-4b50-ab74-4c0a0016f84d",
+              "name": "Snippet",
+              "type": "string",
+              "value": "={{ $json.snippet }}"
+            },
+            {
+              "id": "632ee133-06be-4730-9178-6edde40e087a",
+              "name": "linkedinUrl",
+              "type": "string",
+              "value": "={{ $json.link }}"
+            },
+            {
+              "id": "9ce26329-eedf-47ae-815b-f19fc34b2e83",
+              "name": "Followers",
+              "type": "string",
+              "value": "={{ $json.displayed_link }}"
+            },
+            {
+              "id": "39b81062-afd1-468d-95aa-e158bd34b773",
+              "name": "Keyword",
+              "type": "string",
+              "value": "={{ $('Search parameter').item.json.Keyword }}"
+            },
+            {
+              "id": "9e1ab1fc-86eb-44c0-bdcb-bc5dc63f069c",
+              "name": "Location",
+              "type": "string",
+              "value": "={{ $('Search parameter').item.json.Location }}"
+            },
+            {
+              "id": "f9e0eb5e-e81d-4cd3-8b47-d301ae7920e8",
+              "name": "Rich snippet",
+              "type": "string",
+              "value": "={{ $json.rich_snippet.top.extensions }}"
+            },
+            {
+              "id": "fca0eaa4-70e0-4c1e-99a9-bf66477aad0f",
+              "name": "snippet_highlighted_words",
+              "type": "string",
+              "value": "={{ $json.snippet_highlighted_words }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "028d5e99-7b26-4263-b0bf-89a902468405",
+      "name": "Edit Fields",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        940,
+        20
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "content": "### Adaptation required\nGet a free tier for serpAPI (Google Search) at serpapi.com\n\nSet up the credentials for serpAPI\n\nExplanations in the [n8n docs](https://docs.n8n.io/integrations/builtin/cluster-nodes/sub-nodes/n8n-nodes-langchain.toolserpapi/)",
+        "height": 520,
+        "width": 220
+      },
+      "id": "727f1c6d-73fa-4382-996a-853bcde98c03",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        440,
+        -340
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### NO adaptation required\nThe search metadata is being discarded and only the \"organic results\" being preserved as individual list items as they are containing the relevant data\n",
+        "height": 520,
+        "width": 180
+      },
+      "id": "a1a5c82f-55bf-4c80-94ba-399d7037c458",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        680,
+        -340
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### NO adaptation required\nDiscard irrelevant search result (meta)data\n",
+        "height": 520,
+        "width": 180
+      },
+      "id": "7d7495f3-a1e3-4cb8-9a85-1ad18a8bfbf4",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        900,
+        -340
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### Adaptation required\n\n**This node does the following**:\n- Identify where possible the company name the LinkedIn profile is working in.\n- Turn the number of followers into a real number, e.g. \"3.3k+\" &rarr; 3300\n\n\n\n**Set up**\n- Get API credentials from openai.com\n- Set up credentials in n8n\n- Select the OpenAI model you want to use, e.g. GPT-4o\n- The prompt is already included but can be improved\n\n\n[n8n documentation](https://docs.n8n.io/integrations/builtin/cluster-nodes/sub-nodes/n8n-nodes-langchain.lmchatopenai/) for more explanations",
+        "height": 520,
+        "width": 520
+      },
+      "id": "c4da7e60-9c60-49bc-8f97-99417a37a075",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1100,
+        -340
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a821b4a3-d4e2-4f37-a154-8606426078ef",
+              "name": "followers_number",
+              "type": "number",
+              "value": "={{ $json.message.content.followers }}"
+            },
+            {
+              "id": "e1ac8cc3-4a51-4c01-9e75-8d92dff3b70d",
+              "name": "NameOfCompany",
+              "type": "string",
+              "value": "={{ $json.message.content.company_name }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "9a5f57bd-09eb-4c39-beea-7367d3675a59",
+      "name": "Discard meta data",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1680,
+        20
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {}
+      },
+      "id": "3d72b194-7879-4cfb-b5ac-ab6087a00460",
+      "name": "LinkedIn profiles in Excel for download",
+      "type": "n8n-nodes-base.convertToFile",
+      "position": [
+        2200,
+        20
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "content": "## What problem does this solve? \n\nIt fetches **LinkedIn profiles** based on a keyword and location via Google search and stores them in an Excel file for download and in a NocoDB database.\nIt tries to avoid using costly services and should be n8n **beginner friendly**.\nIt uses the SerpAPI.com to avoid being blocked by Google Search and to process the data in an easier way.\n",
+        "height": 260,
+        "width": 540,
+        "color": 4
+      },
+      "id": "4b75025d-3e55-44a6-a7cc-e8db04414d79",
+      "name": "Sticky Note12",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -620,
+        -340
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### NO adaption required\nThis node discards irrelevant OpenAI metadata",
+        "height": 520,
+        "width": 180
+      },
+      "id": "4059d112-8764-4439-92a4-392d6e30ab64",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1640,
+        -340
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n## Setting the parameters for Google search via SerpAPI\n\nSearching **LinkedIn profiles** by setting the following **parameters** for the Google query in the next node\n\n- Keyword on what to look for \n- Location or region to look into\n- Number of search results\n- Host language\n- Geolocation\n- Search engine\n\n\nMore on search parameters: https://serpapi.com/blog/google-search-parameters/ or in the [n8n docs](https://docs.n8n.io/integrations/builtin/cluster-nodes/sub-nodes/n8n-nodes-langchain.toolserpapi/)",
+        "height": 760
+      },
+      "id": "09173259-444e-47b3-a782-6a90bb8fedcd",
+      "name": "Sticky Note10",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        180,
+        -20
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## What does it do?\n\n- Based on criteria input, it searches LinkedIn profiles\n- It discards unnecessary data and turns the follower count into a real number\n- The output is provided as an Excel table for download and in a NocoDB database",
+        "height": 200,
+        "width": 540,
+        "color": 4
+      },
+      "id": "2d12552a-7242-4cde-a766-d4455e7296e0",
+      "name": "Sticky Note13",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -620,
+        -40
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Step-by-step instruction\n\n\n1. Import the Workflow:\nCopy the workflow JSON from the \"Template Code\" section below.\nImport it into n8n via \"Import from File\" or \"Import from URL\".\n\n2. Set up a free account at serpapi.com and get API credentials to enable good Google search results\n\n3. Set up an API account at openai.com and get API key\n\n4. Set up a nocodb.com account (or self-host) and get the API credentials\n\n4. Create the credentials for serpapi.com, opemnai.com and nocodb.com in n8n.\n\n5. Set up a table in NocoDB with the fields indicated in the note above the NocoDB node\n\n5. Follow the instructions as detailed in the notes above individual nodes \n\n6. When the workflow is finished, open the Excel node and click download if you need the Excel file\n\n",
+        "height": 500,
+        "width": 540,
+        "color": 4
+      },
+      "id": "d1b64ea7-4bb5-407d-bd82-b69148b7e7e1",
+      "name": "Sticky Note14",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -620,
+        500
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d4c0a5dc-c656-45e7-bcd1-2cee3fbc9aa5",
+              "name": "Keyword",
+              "type": "string",
+              "value": "nocode"
+            },
+            {
+              "id": "f5365eff-7e79-411c-8ebb-a7d244e9e1fa",
+              "name": "Location",
+              "type": "string",
+              "value": "Germany"
+            },
+            {
+              "id": "24b4046f-7083-416d-8ae9-bc72c5323b14",
+              "name": "Number of search results to be returned",
+              "type": "string",
+              "value": 20
+            },
+            {
+              "id": "25c114e6-7628-4eb9-9b3e-a6bb5fbae1dc",
+              "name": "Host langauge",
+              "type": "string",
+              "value": "en"
+            },
+            {
+              "id": "ac29cb67-89ec-41ae-870c-196a4bf524a6",
+              "name": "Geolocation",
+              "type": "string",
+              "value": "de"
+            },
+            {
+              "id": "d1e78115-f788-4ffd-9374-60b83e7e2b8a",
+              "name": "Search engine",
+              "type": "string",
+              "value": "google"
+            },
+            {
+              "id": "7af59bb4-548b-4061-8095-3261b2ce8227",
+              "name": "site",
+              "type": "string",
+              "value": "linkedin.com/in"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e406281b-06a2-42f8-8951-2bdafaee41e0",
+      "name": "Search parameter",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        240,
+        20
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "organic_results",
+        "options": {}
+      },
+      "id": "64fa068f-5c85-4d15-a40a-5da253af864e",
+      "name": "Turn search results into individual items",
+      "type": "n8n-nodes-base.splitOut",
+      "position": [
+        720,
+        20
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o",
+          "cachedResultName": "GPT-4O"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Transform  {{ $json.Followers }} into a number and extract where possible the name of the company in {{ $json.NameInLinkedinProfile }} or in {{ $json.Snippet }} Do not output things like location or name, only followers and company_name"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "id": "c78ead0a-9043-4415-b0d6-6f74a7513616",
+      "name": "Company name & followers",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "position": [
+        1220,
+        20
+      ],
+      "typeVersion": 1.8
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "id": "2e0ba2e6-48c3-42b0-9e33-4e688915fe8b",
+      "name": "Generate final data via merge",
+      "type": "n8n-nodes-base.merge",
+      "position": [
+        1900,
+        140
+      ],
+      "typeVersion": 3.1
+    },
+    {
+      "parameters": {
+        "content": "### NO adaption required\nThis node creates the final data output ",
+        "height": 520,
+        "width": 180
+      },
+      "id": "4c904900-497a-48c3-b52b-38e5e43395e1",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1860,
+        -200
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### NO adaption required\nThis node creates stores all the data in an Excel file which can be downloaded. \n- Open the node\n- Click on download button",
+        "height": 520,
+        "width": 220
+      },
+      "id": "f077d516-3263-4faf-a79e-231e6eac9139",
+      "name": "Sticky Note9",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2140,
+        -200
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n## Adaption required\n\n- This node creates stores all the data in an NocoDB database for further utilization.\n- In case the database is not needed, just delete this node.\n\n\n\n**Set up part 1**\n\n- Create an NocoDB account, either via nocodb.com or self-hosted\n- Create the credentials in n8n along the [n8n documentation](https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.nocodb/)\n- Set up a table with a name of your choice\n\n\n**Set up part 2**\n\nCreate the following fields in this table: \n- NameInLinkedinProfile (type: Single line text): name of the person\n- NameOfCompany: the name of the company as generated by OpenAI\n- linkedinUrl (type: url): the link to the LinkedIn profile\n- Followers: the number of followers as text and indicated by LinkedIn \n- followers_number (type: Number): the number of followers as a number\n- Keyword: the keyword used for searching LinkedIn profiles\n- Location: the location used for searching LinkedIn profiles \n- Rich snippet (type: Long text): \n- snippet_highlighted_words (type: Long text): \n\n\n**Adaptations in the node itself**\n- Make sure that the right table is selected\n- Select \"row\" in the \"Resources\" field\n- Select \"create\" in the field \"Operation\"\n- Select \"Auto map ....\" in the field \"Data to Send\"",
+        "height": 920,
+        "width": 780
+      },
+      "id": "01944fb9-098a-4d43-b3c2-ce4bffdba2d7",
+      "name": "Sticky Note11",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2140,
+        340
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "authentication": "nocoDbApiToken",
+        "operation": "create",
+        "projectId": "puqzjel7f0swv1t",
+        "table": "mttbkp3hxy9rnwx",
+        "dataToSend": "autoMapInputData"
+      },
+      "id": "e155d1c2-e55c-48f1-8fbf-aea08876e29e",
+      "name": "Store data in a NocoDB table",
+      "type": "n8n-nodes-base.nocoDb",
+      "position": [
+        2200,
+        380
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "content": "## How does it do it?\n\n- Based on criteria input, it uses serpAPI.com to conduct Google search of the respective LinkedI profiles\n- With OpenAI.com the name of the respective company is being added\n- With OpenAI.com the follower number e.g., 300+ is turned into a real number: 300\n- All unnecessary metadata is being discarded\n- As an output an Excel file is being created\n- The output is stored in a nocodb.com table",
+        "height": 280,
+        "width": 540,
+        "color": 4
+      },
+      "id": "e479291b-fa29-4383-8760-a5b413fc213f",
+      "name": "Sticky Note15",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -620,
+        180
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "connections": {
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Company name & followers",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Generate final data via merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Search parameter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search parameter": {
+      "main": [
+        [
+          {
+            "node": "Google search w/ SerpAPI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Discard meta data": {
+      "main": [
+        [
+          {
+            "node": "Generate final data via merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Company name & followers": {
+      "main": [
+        [
+          {
+            "node": "Discard meta data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google search w/ SerpAPI": {
+      "main": [
+        [
+          {
+            "node": "Turn search results into individual items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate final data via merge": {
+      "main": [
+        [
+          {
+            "node": "LinkedIn profiles in Excel for download",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Store data in a NocoDB table",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Turn search results into individual items": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {},
+  "versionId": "a77caf97-c15d-4e03-810e-1d1bd5cada1f",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-07-09T21:41:38.773Z",
+      "updatedAt": "2025-07-09T21:41:38.773Z",
+      "id": "G5Lcoe2jTgqCJuSy",
+      "name": "OpenAI"
+    },
+    {
+      "createdAt": "2025-07-09T21:41:38.763Z",
+      "updatedAt": "2025-07-09T21:41:38.763Z",
+      "id": "pz5LfYMpyppJnoPT",
+      "name": "WooCommerce"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:46.104Z",
+      "updatedAt": "2025-10-25T12:28:46.104Z",
+      "role": "workflow:owner",
+      "workflowId": "e7YOBL7bWtBgsz6B",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

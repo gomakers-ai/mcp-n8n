@@ -1,0 +1,376 @@
+{
+  "createdAt": "2025-07-14T19:08:30.336Z",
+  "updatedAt": "2025-07-14T19:08:30.336Z",
+  "id": "077bV810y5Q4jUZ5",
+  "name": "Automatic_Shopify_Order_Fulfillment_Process",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "81c9a462-9c75-4dbb-8ab2-9f34dd5432ab",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "position": [
+        -1300,
+        100
+      ],
+      "webhookId": "c9b390dc-3f6a-475c-b168-28f3accd20a7",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "databaseName": "test"
+      },
+      "id": "b0b946b1-7d05-4388-90a9-cf91c63f09b8",
+      "name": "MongoDB Chat Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryMongoDbChat",
+      "position": [
+        -980,
+        320
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash",
+        "options": {}
+      },
+      "id": "112b970a-0cb5-4ae8-bc14-d5b5075e0f10",
+      "name": "Google Gemini Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        -1120,
+        340
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolName": "PointofinterestKB",
+        "toolDescription": "The list of Points of Interest from the database.",
+        "mongoCollection": {
+          "__rl": true,
+          "mode": "list",
+          "value": "points_of_interest",
+          "cachedResultName": "points_of_interest"
+        },
+        "metadata_field": "description",
+        "vectorIndexName": "vector_index",
+        "topK": 10,
+        "options": {}
+      },
+      "id": "617b352b-50e5-4c74-849a-8c25a9f1c760",
+      "name": "MongoDB Atlas Vector Store",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreMongoDBAtlas",
+      "position": [
+        -820,
+        380
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "e487bce8-41d7-41c5-bc8d-90a1e5e5516c",
+      "name": "Embeddings OpenAI",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "position": [
+        -720,
+        600
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "content": "## AI Traveling Agent Powered by MongoDB Atlas for Memory and vector search.\n\n**Atlas MongoDB Memory Node**\n\n- The memory node allows the agent to persist and retrieve conversation based on threads in the database. It uses MongoDB felxible store capabilities to allow different type of threads and messages (Image, audio, video etc.) to be stored easily and effectivley \n\n\n**Atlas MongoDB Vector Store Node**\n\n- Atlas Vector Store tool allows the agent to get up to date points of interest from our vector store database populated and embedded with OpenAI Embeddings.\n\n\n### You will need to:\n1. Setup your Google API Credentials for the Gemini LLM\n2. Setup your OpenAI Credentials for the OpenAI embedding nodes.\n3. [MongoDB Atlas project and Cluster](https://www.mongodb.com/docs/atlas/tutorial/create-new-cluster/). Get a hold of the connection string and make sure to have your IP Access list enabled (for ease of testing try `0.0.0.0/0` access.\n4. Setup you MongoDB Credentials account with the correct connection string and database name.\n5. **Vector Search Tool** - uses Atlas Vector Search index you will create on your database for the `points_of_interest` collection:\n\n```\n// index name : \"vector_index\"\n// If you change an embedding provider make sure the numDimensions correspond to the model.\n{\n  \"fields\": [\n    {\n      \"type\": \"vector\",\n      \"path\": \"embedding\",\n      \"numDimensions\": 1536,\n      \"similarity\": \"cosine\"\n    }\n  ]\n}\n```\n\nOnce all of that is configured you will need to send the loading webhook with some data points (see example).\n\nThis should create vectorised data in  `points_of_interest` collection.\n\nOnce you have data points there try to ask the Agent questions about the data points and test the response. Eg. \"Where should I go for a romantic getaway?\"\n\n**Additional Resources**\n- [MongoDB Atlas Vector Search](https://www.mongodb.com/docs/atlas/atlas-vector-search/tutorials/vector-search-quick-start/?utm=n8n.io)\n- [n8n Atlas Vector Search docs](https://docs.n8n.io/integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.vectorstoremongodbatlas?utm=n8n.io)",
+        "height": 960,
+        "width": 900
+      },
+      "id": "c6c7b462-09a1-451a-86e1-ca8fac97a308",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -520,
+        -320
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are a helpful assistant for a trip planner. You have a vector search capability to locate points of interest, Use it and don't invent much.",
+          "maxIterations": 10
+        }
+      },
+      "id": "dad2f4c3-8fd9-461c-8c15-ab82b10fc13b",
+      "name": "AI Traveling Planner Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        -1080,
+        100
+      ],
+      "typeVersion": 1.8
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "ingestData",
+        "options": {
+          "rawBody": true
+        }
+      },
+      "id": "d9684dec-278f-4d0f-b8b9-45b449a4900c",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "position": [
+        -880,
+        860
+      ],
+      "webhookId": "a48d5121-b453-4b5e-aa30-88ba3e16b931",
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "jsonMode": "expressionData",
+        "jsonData": "={{ $json.body.raw_body.point_of_interest.title }} - {{ $json.body.raw_body.point_of_interest.description }}",
+        "options": {}
+      },
+      "id": "90b6797f-f563-4ee7-915f-ba29f0219e26",
+      "name": "Default Data Loader",
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "position": [
+        -780,
+        1300
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "b9083ca5-b4ec-4233-99d7-82b4a7f84751",
+      "name": "Recursive Character Text Splitter",
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "position": [
+        -240,
+        1500
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "mongoCollection": {
+          "__rl": true,
+          "mode": "list",
+          "value": "points_of_interest",
+          "cachedResultName": "points_of_interest"
+        },
+        "metadata_field": "description",
+        "vectorIndexName": "vector_index",
+        "embeddingBatchSize": 1,
+        "options": {}
+      },
+      "id": "e56c268b-c6b2-4a2f-bdb0-357f0bfe3bab",
+      "name": "MongoDB Atlas Vector Store1",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreMongoDBAtlas",
+      "position": [
+        -560,
+        980
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "2e4724f6-1e65-4daf-adf6-19b2f7f8f8cc",
+      "name": "Embeddings OpenAI1",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "position": [
+        -500,
+        1200
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "content": "## CURL Command to Ingest Data.\n\nHere is an example of how you can load data into your webhook once its active and ready to get requests.\n\n```\ncurl -X POST \"https://<account>.app.n8n.cloud/webhook-test/ingestData\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\n    \"raw_body\": {\n      \"point_of_interest\": {\n        \"title\": \"Eiffel Tower\",\n        \"description\": \"Iconic iron lattice tower located on the Champ de Mars in Paris, France.\"\n      }\n    }\n  }'\n```",
+        "height": 360,
+        "width": 720
+      },
+      "id": "b1548e59-cab8-47c6-9844-b47b86fc11e6",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1740,
+        1040
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Vector Search data ingestion\n\nUsing webhook to ingest data to the MongoDB `points_of_interest` \ncollection. \n\nThis can be done in other ways like loading from wbesites/git/files or other supported data sources.",
+        "height": 360,
+        "width": 720
+      },
+      "id": "c9b9c727-1c54-44af-b69c-b98241ecfeee",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -260,
+        720
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "MongoDB Atlas Vector Store1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "MongoDB Atlas Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "MongoDB Atlas Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "MongoDB Atlas Vector Store1",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Traveling Planner Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Traveling Planner Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB Atlas Vector Store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Traveling Planner Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Traveling Planner Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recursive Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {},
+  "versionId": "096c80da-b38a-4d30-946e-5fafd0d114e0",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-07-09T21:41:38.773Z",
+      "updatedAt": "2025-07-09T21:41:38.773Z",
+      "id": "G5Lcoe2jTgqCJuSy",
+      "name": "OpenAI"
+    },
+    {
+      "createdAt": "2025-07-09T21:41:38.763Z",
+      "updatedAt": "2025-07-09T21:41:38.763Z",
+      "id": "pz5LfYMpyppJnoPT",
+      "name": "WooCommerce"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:46.101Z",
+      "updatedAt": "2025-10-25T12:28:46.101Z",
+      "role": "workflow:owner",
+      "workflowId": "077bV810y5Q4jUZ5",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

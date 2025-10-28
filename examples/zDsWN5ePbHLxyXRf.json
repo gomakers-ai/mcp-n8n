@@ -1,0 +1,1105 @@
+{
+  "createdAt": "2025-07-14T19:40:47.263Z",
+  "updatedAt": "2025-07-14T19:40:47.263Z",
+  "id": "zDsWN5ePbHLxyXRf",
+  "name": "AI-Powered WooCommerce Support Agent",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Find WooCommerce User-ID\nUser-ID is required to query past orders",
+        "height": 572.2734520891689,
+        "width": 1000.427054367056,
+        "color": 7
+      },
+      "id": "1793a559-6424-4302-8053-4171fb85f380",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -440,
+        1080
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9a06428b-4115-4eee-97f4-8e828c5a7e5a",
+              "name": "response",
+              "type": "string",
+              "value": "No email address got provided."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "0412e7f9-93df-49da-b0f6-9591fffcfaea",
+      "name": "No email provided",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -120,
+        1460
+      ],
+      "typeVersion": 3.3
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "13f7bd32-5760-4ac3-8292-c8beb131a4a5",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.email }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "bfb4846b-d4bd-4a8d-95e2-aa37b9b8cffe",
+      "name": "If email provided",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        -380,
+        1280
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "0e434771-6a63-420b-89fe-cf4d5b1d8127",
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              },
+              "leftValue": "={{ Object.keys($json).length }}",
+              "rightValue": 0
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8beb824c-d9a0-405d-85e2-49bdc4a21bd3",
+      "name": "If user found",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        120,
+        1260
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "content": "# Agent",
+        "height": 506.94921487705585,
+        "width": 1060.5591882039919,
+        "color": 6
+      },
+      "id": "c6ed6385-bd44-409f-88ee-ec7ce41e2f79",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1000,
+        480
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Add DHL tracking information\nQueries the status of shipped orders from DHL.\n\nCan be skipped if order tracking should not be available or replaced with other services like UPS.",
+        "height": 559.608748371423,
+        "width": 2404.755367647059
+      },
+      "id": "77c6e36e-941e-42e9-b263-b807788f62da",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1540,
+        1100
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9a06428b-4115-4eee-97f4-8e828c5a7e5a",
+              "name": "response",
+              "type": "string",
+              "value": "No customer with that email address could be found."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8e4bc7b9-4d6c-46e9-8366-d65b8284520c",
+      "name": "No customer found",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        380,
+        1460
+      ],
+      "typeVersion": 3.3
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "674eff87-834b-4436-8666-66ccd11016d6",
+              "operator": {
+                "type": "array",
+                "operation": "notEmpty",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.tracking }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "0df038e6-855c-40a4-8ccb-9411cf5c26ec",
+      "name": "If contains DHL data",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        1900,
+        1220
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c378e8d4-3fdf-49f5-a766-6cfc1d7e898f",
+              "name": "tracking",
+              "type": "array",
+              "value": "={{ $json.meta_data.filter(data => data.key === '_wc_shipment_tracking_items').flatMap(data => data.value) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "36f1e670-00d3-4e00-bc73-1af1e72bbd7a",
+      "name": "Extract Tracking Data",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1640,
+        1220
+      ],
+      "typeVersion": 3.3
+    },
+    {
+      "parameters": {},
+      "id": "e202b74e-9067-4296-94d9-7c09f68b319a",
+      "name": "Merge Orders",
+      "type": "n8n-nodes-base.merge",
+      "position": [
+        3480,
+        1320
+      ],
+      "typeVersion": 2.1
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combinationMode": "mergeByPosition",
+        "options": {}
+      },
+      "id": "e66b74bf-7f98-47f2-8526-7bf5bf5a2ef7",
+      "name": "Merge Order and Tracking Data",
+      "type": "n8n-nodes-base.merge",
+      "position": [
+        3800,
+        1460
+      ],
+      "typeVersion": 2.1
+    },
+    {
+      "parameters": {
+        "content": "# Setup\n## Generally\n- The environment variable `NODE_FUNCTION_ALLOW_BUILTIN` has to equal or include the value `crypto` (FYI: is default on n8n cloud) as it is required to run this workflow\n\n\n## To test the workflow\n1. Set a valid email address of a user that exists in WooCommerce in the Mock Node \"Mock Data\"\n2. Enable the node \"Mock Data\"\n3. Disable the node \"Decrypt email address\"\n4. Use the built-in chat by pressing the \"Chat\" button\n\n\n## For production use:\n1. Update the \"System Message\" in the node \"AI Agent\" for specific use case. At least the name of the shop should be changed\n2. Integrate the chat into the website. An example can be found in the box \"Example Website Implementation\"\n3. Disable or delete the node \"Mock Data\"\n4. Enable the node \"Decrypt email address\"\n5. Enable Workflow",
+        "height": 558.6043670960834,
+        "width": 478.2162464985994,
+        "color": 3
+      },
+      "id": "05c5a37c-5f0c-4fb3-bdc6-18a233db2fff",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1000,
+        -460
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Get Orders",
+        "height": 568.9672169306307,
+        "width": 277.6742597550393
+      },
+      "id": "b3936a1a-c901-454d-ac92-f9396c7d54cd",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        640,
+        1080
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# WooCommerce Order Tool",
+        "height": 572.2734520891689,
+        "width": 527.8197815634092,
+        "color": 2
+      },
+      "id": "d3de48d8-757d-46c8-afb4-dc378b5efdca",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1020,
+        1080
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "tracking",
+        "options": {}
+      },
+      "id": "e593ae99-953a-4608-9938-a43f89e99732",
+      "name": "Split Out",
+      "type": "n8n-nodes-base.splitOut",
+      "position": [
+        2180,
+        1200
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "aggregate": "aggregateAllItemData",
+        "destinationFieldName": "tracking",
+        "options": {}
+      },
+      "id": "ec59572f-f9cc-40f7-adc2-fe172997045f",
+      "name": "Aggregate",
+      "type": "n8n-nodes-base.aggregate",
+      "position": [
+        3100,
+        1200
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {},
+      "id": "a935cdd4-e06f-4a3f-bcc1-f078413654ee",
+      "name": "Merge Tracking Data",
+      "type": "n8n-nodes-base.merge",
+      "position": [
+        2860,
+        1200
+      ],
+      "typeVersion": 2.1
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Mock Data').item.json.sessionId }}",
+        "contextWindowLength": 10
+      },
+      "id": "e66e0cd7-76e6-4b15-88d6-8d45b3d95d37",
+      "name": "Window Buffer Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "position": [
+        -260,
+        820
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {},
+      "id": "53cbc1a5-301f-437c-b797-81a99b82ce8e",
+      "name": "Execute Workflow Trigger",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        -860,
+        1280
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Check orders found",
+        "height": 564.8840203332783,
+        "width": 492.0420811160542,
+        "color": 7
+      },
+      "id": "e62f30ba-fb94-4bb6-86e2-f0179aa0640c",
+      "name": "Sticky Note6",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        980,
+        1080
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "resource": "customer",
+        "operation": "getAll",
+        "limit": 1,
+        "filters": {
+          "email": "={{ $json.email }}"
+        }
+      },
+      "id": "907b689b-fa39-409b-8df9-423a8eb35e88",
+      "name": "WooCommerce - Get User",
+      "type": "n8n-nodes-base.wooCommerce",
+      "position": [
+        -120,
+        1260
+      ],
+      "typeVersion": 1,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "0e434771-6a63-420b-89fe-cf4d5b1d8127",
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              },
+              "leftValue": "={{ Object.keys($json).length }}",
+              "rightValue": 0
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a6bb60b1-e03b-4a19-bf81-24f2a404b508",
+      "name": "If order found",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        1020,
+        1240
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "url": "https://woo-pleasantly-swag-werewolf3.wpcomstaging.com/wp-json/wc/v3/orders",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "wooCommerceApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "customer",
+              "value": "={{ $json.id }}"
+            },
+            {
+              "name": "include",
+              "value": "={{ $('If email provided').item.json.query.split(',').filter(data => !data.includes('@')).join(',') }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5b5dfeb7-d5af-49a1-a257-42f45ca5e14d",
+      "name": "WooCommerce Get Orders",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        720,
+        1240
+      ],
+      "typeVersion": 4.1,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9a06428b-4115-4eee-97f4-8e828c5a7e5a",
+              "name": "response",
+              "type": "string",
+              "value": "No order could be found."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f097a1a6-df5f-444e-92a1-4c87cea08742",
+      "name": "No order found",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1300,
+        1440
+      ],
+      "typeVersion": 3.3
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5fdb3524-6263-4e0b-a052-742cec8ceac1",
+              "name": "Error",
+              "type": "string",
+              "value": "=No data about the parcel with the tracking ID \"{{ $('Split Out').item.json.tracking_id }}\" could be found."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "23675891-38df-417f-9992-4726651fa997",
+      "name": "Add Error Information",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        2620,
+        1300
+      ],
+      "typeVersion": 3.3
+    },
+    {
+      "parameters": {
+        "trackingNumber": "={{ $json.tracking_number }}",
+        "options": {}
+      },
+      "id": "3b202e3c-42b6-41e6-86ce-b5d28451f1ff",
+      "name": "DHL",
+      "type": "n8n-nodes-base.dhl",
+      "position": [
+        2380,
+        1200
+      ],
+      "typeVersion": 1,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a2bb4a8a-40b0-4233-99a8-3b494fb84230",
+              "name": "response",
+              "type": "array",
+              "value": "={{ $input.all().map(item => item.json) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "63dfcad2-4154-4883-87f5-381f53daf338",
+      "name": "Send Response",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        4100,
+        1460
+      ],
+      "typeVersion": 3.3
+    },
+    {
+      "parameters": {
+        "content": "## How to supply user email\nAs we want to ensure that customers can only query information about their own orders, the email address gets encrypted in the backend, and then decrypt again in this workflow. If the email was allowed to be set unencrypted, anyone could query information from other customers.\n\n### The email address get supplied in the chat script at the following location:\n```\ncreateChat({\n\twebhookUrl: '...',\n\tmetadata: {\n          email: 'ENCRYPTED_EMAIL_ADDRESS'\n    },\n});\n```\n\n\n## Example Scripts:\n\n### Encrypt email on the backend\nRun the following code in the backend of your website, send the data to the frontend, and then set it dynamically at the above defined location as email.\n\n\n\n\n\n\n\n\n\n\n\n\n\n### Decrypt email in workflow\nThis script is already used in this workflow and is only provided here again as an example.\n",
+        "height": 886.4179654829891,
+        "width": 676.2425958534976,
+        "color": 4
+      },
+      "id": "34ed1f97-ff06-4938-a0fc-6aa0a68c6b86",
+      "name": "Sticky Note8",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        140,
+        -460
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "model": "gpt-4",
+        "options": {}
+      },
+      "id": "956ea589-d0a8-4d8c-9064-be923deb5540",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        -460,
+        820
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "name": "WooCommerce_Tool",
+        "description": "Call this tool to retrieve the orders in JSON format (compatible with the WooCommerce API). The input should be a list of comma-separated order IDs or nothing at all for all orders. Supply nothing else than the order IDs!",
+        "workflowId": "={{ $workflow.id }}",
+        "fields": {
+          "values": [
+            {
+              "name": "email",
+              "stringValue": "={{ $json.metadata.email }}"
+            }
+          ]
+        }
+      },
+      "id": "d42aea15-2744-427f-b52f-8c2a68b2e087",
+      "name": "WooCommerce_Tool",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "position": [
+        -80,
+        820
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "public": true,
+        "options": {}
+      },
+      "id": "bfa0780a-c32a-45ca-96d0-383575800eae",
+      "name": "Chat Trigger",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "position": [
+        -960,
+        600
+      ],
+      "webhookId": "3b63a62a-bfb7-4fb4-a6ec-4c40dcb4d9f6",
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Example Website Implementation\nExample Code for a website can be found in node \"Respond to Webhook\".\n\nMore information about the embeddable chat can be found [here](https://github.com/n8n-io/n8n/tree/master/packages/%40n8n/chat#installation).\n\nRequired changes:\n- Change \"webhookUrl\" to the displayed in \"Chat Trigger\" node\n- Set the encrypted email address dynamically. The value has to be calculated in the backend to make it truly secure\n- Use a unique password for email en-/decryption and use it in the backend and this workflow (can be set in node \"Decrypt email address\")\n\n\nThe example page can be opened by calling the production Webhook-URL of the node \"Webhook Example Page\". It only works if the \"For production use\" steps on the left have been followed.",
+        "height": 555.1564335638465,
+        "width": 517.004057164405,
+        "color": 4
+      },
+      "id": "719b3221-3a58-49cc-838f-c003a486cf1d",
+      "name": "Sticky Note7",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -460,
+        -460
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "<doctype html>\n\t<html lang=\"en\">\n\t\t<head>\n\t\t\t<meta charset=\"utf-8\" />\n\t\t\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />\n\t\t\t<title>Chat</title>\n\t\t\t<link\n\t\t\t\thref=\"https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css\"\n\t\t\t\trel=\"stylesheet\"\n\t\t\t/>\n\t\t\t<link href=\"https://cdn.jsdelivr.net/npm/@n8n/chat/style.css\" rel=\"stylesheet\" />\n\t\t</head>\n\t\t<body>\n\t\t\t<script type=\"module\">\n\t\t\t\timport { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat@latest/chat.bundle.es.js';\n\n\t\t\t\t(async function () {\n\t\t\t\t\tcreateChat({\n\t\t\t\t\t\tmode: 'window',\n\t\t\t\t\t\twebhookUrl: 'https://xxx.n8n.cloud/webhook/ea429912-869c-490b-9e04-4401ac9943b6/chat',\n\t\t\t\t\t\tloadPreviousSession: false,\n\t\t\t\t\t\tmetadata: {\n\t\t\t\t\t\t\temail: '352b16c74f73265441c55c37c9c22b04:4a8e614143c9cd31cc7e2389380943f3', // james@brown.com encrypted\n\t\t\t\t\t\t},\n\t\t\t\t\t\twebhookConfig: {\n\t\t\t\t\t\t\theaders: {\n\t\t\t\t\t\t\t\t'Content-Type': 'application/json',\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t},\n\t\t\t\t\t});\n\t\t\t\t})();\n\t\t\t</script>\n\n\t\t\t<h1>WooCommerce Agent Example page</h1>\n\t\t\tClick on the bubble in the lower right corner to open the chat.\n\n\t\t</body>\n\t</html>\n</doctype>",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "content-type",
+                "value": "text/html; charset=utf-8"
+              }
+            ]
+          }
+        }
+      },
+      "id": "4eff77ca-d5f8-44e9-be39-e85318c0e79a",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "position": [
+        -160,
+        -100
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "path": "website-chat-example",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "1ce2014c-44c4-46c9-b2a6-9c79fabc50d6",
+      "name": "Webhook Example Page",
+      "type": "n8n-nodes-base.webhook",
+      "position": [
+        -380,
+        -100
+      ],
+      "webhookId": "18474f2d-9472-4a8d-8e63-8128fd2cbefc",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\nconst crypto = require('crypto');\n\nconst password = 'a random password';\n\nconst encryptedData = $input.first().json.email;\n\n\nfunction decrypt(encrypted, password) {\n  // Extract the IV and the encrypted text\n  const parts = encrypted.split(':');\n  const iv = Buffer.from(parts.shift(), 'hex');\n\n  // Create a key from the password\n  const key = crypto.scryptSync(password, 'salt', 32);\n\n  // Create a decipher\n  const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);\n\n  // Decrypt the text\n  let decrypted = decipher.update(parts.join(':'), 'hex', 'utf8');\n  decrypted += decipher.final('utf8');\n\n  // Return the decrypted text\n  return decrypted;\n}\n\nreturn [\n  {\n    json: {\n      email: decrypt(encryptedData, password),\n    }\n  }\n];"
+      },
+      "id": "a28f107c-e113-4e39-9550-c8b0c72d2682",
+      "name": "Decrypt email",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        360,
+        240
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "jsCode": "const crypto = require('crypto');\n\nconst password = 'a random password';\nconst email = 'james@brown.com';\n\n\nfunction encrypt(text, password) {\n  // Generate a secure random initialization vector\n  const iv = crypto.randomBytes(16);\n\n  // Create a key from the password\n  const key = crypto.scryptSync(password, 'salt', 32);\n\n  // Create a cipher\n  const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);\n\n  // Encrypt the text\n  let encrypted = cipher.update(text, 'utf8', 'hex');\n  encrypted += cipher.final('hex');\n\n  // Return the IV and the encrypted text\n  return `${iv.toString('hex')}:${encrypted}`;\n}\n\nreturn [\n  {\n    json: {\n      email: encrypt(email, password),\n    }\n  }\n];"
+      },
+      "id": "deb723e0-cf79-4969-a466-73473fb5e464",
+      "name": "Encrypt email",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        180,
+        -20
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fa8d71d3-8e60-44b0-8ef0-e0bfc6feaf0e",
+              "name": "email",
+              "type": "string",
+              "value": "352b16c74f73265441c55c37c9c22b04:4a8e614143c9cd31cc7e2389380943f3"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a20c26bd-4484-47ff-b819-975cd834c524",
+      "name": "Example encrypted email",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        180,
+        240
+      ],
+      "typeVersion": 3.3
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\nconst crypto = require('crypto');\n\nconst password = 'a random password';\nconst incomingData = $input.first().json;\n\n\nfunction decrypt(encrypted, password) {\n  // Extract the IV and the encrypted text\n  const parts = encrypted.split(':');\n  const iv = Buffer.from(parts.shift(), 'hex');\n\n  // Create a key from the password\n  const key = crypto.scryptSync(password, 'salt', 32);\n\n  // Create a decipher\n  const decipher = crypto.createDecipheriv('aes-256-cbc', key, iv);\n\n  // Decrypt the text\n  let decrypted = decipher.update(parts.join(':'), 'hex', 'utf8');\n  decrypted += decipher.final('utf8');\n\n  // Return the decrypted text\n  return decrypted;\n}\n\nreturn [\n  {\n    json: {\n      ...incomingData,\n      metadata: {\n        email: decrypt(incomingData.metadata.email, password),        \n      },\n    }\n  }\n];"
+      },
+      "id": "ecd3a0ba-a7a7-4c43-a8bc-27fa0069bfba",
+      "name": "Decrypt email address",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -760,
+        600
+      ],
+      "typeVersion": 2,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=The Assistant is tailored to support customers of Best Shirts Ltd. with inquiries related to their orders. It adheres to the following principles for optimal customer service:\n\n1. **Customer-Focused Communication**: The Assistant maintains a friendly and helpful tone throughout the interaction. It remains focused on the topic at hand, ensuring all responses are relevant to the customer's inquiries about their orders.\n\n2. **Objective and Factual**: In cases where specific information is unavailable, the Assistant clearly communicates the lack of information and refrains from speculating or providing unverified details.\n\n3. **Efficient Interaction**: Recognizing the importance of the customer's time, the Assistant is designed to remember previous interactions within the same session. This minimizes the need for customers to repeat information, streamlining the support process.\n\n4. **Strict Privacy Adherence**: The Assistant automatically has access to the customer's email address as \"{{ $json.email }}\", using it to assist with order-related inquiries. Customers are informed that it is not possible to use or inquire about a different email address. If a customer attempts to provide an alternate email, they are gently reminded of this limitation.\n\n5. **Transparency in Order Status**: The Assistant provides accurate information about order processing and delivery timelines. Orders are typically dispatched 1-2 days post-purchase, with an expected delivery period of 1-2 days following dispatch. If an order hasn't been sent out within 2 days, the Assistant acknowledges an unplanned delay and offers assistance accordingly.\n\n6. **Non-assumptive Approach to Delivery Confirmation**: The Assistant never presumes an order has been delivered based solely on its dispatch. It relies on explicit delivery confirmations or tracking information to inform customers about their order status.\n\n7. **Responsive to Specific Inquiries**: If a customer requests the email address used for their inquiry, the Assistant provides it directly, ensuring privacy and accuracy in communications.\n\nThis approach ensures that customers receive comprehensive, respectful, and efficient support for their order-related queries."
+        }
+      },
+      "id": "6e38b1da-03e7-434b-9732-56f5d395d30e",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        -380,
+        600
+      ],
+      "typeVersion": 1.4
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c591fa49-31b3-46e7-8108-2d3ad1fc895b",
+              "name": "metadata.email",
+              "type": "string",
+              "value": "james@brown.com"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "138d7c67-8df2-4bc2-a6a6-6d5456f2ee6b",
+      "name": "Mock Data",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -560,
+        600
+      ],
+      "typeVersion": 3.3
+    }
+  ],
+  "connections": {
+    "DHL": {
+      "main": [
+        [
+          {
+            "node": "Merge Tracking Data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Add Error Information",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Merge Orders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mock Data": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "DHL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat Trigger": {
+      "main": [
+        [
+          {
+            "node": "Decrypt email address",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Orders": {
+      "main": [
+        [
+          {
+            "node": "Merge Order and Tracking Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If user found": {
+      "main": [
+        [
+          {
+            "node": "WooCommerce Get Orders",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No customer found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If order found": {
+      "main": [
+        [
+          {
+            "node": "Extract Tracking Data",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge Order and Tracking Data",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "No order found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WooCommerce_Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If email provided": {
+      "main": [
+        [
+          {
+            "node": "WooCommerce - Get User",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No email provided",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Tracking Data": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If contains DHL data": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Merge Orders",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Webhook Example Page": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Window Buffer Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Error Information": {
+      "main": [
+        [
+          {
+            "node": "Merge Tracking Data",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Decrypt email address": {
+      "main": [
+        [
+          {
+            "node": "Mock Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Tracking Data": {
+      "main": [
+        [
+          {
+            "node": "If contains DHL data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WooCommerce - Get User": {
+      "main": [
+        [
+          {
+            "node": "If user found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WooCommerce Get Orders": {
+      "main": [
+        [
+          {
+            "node": "If order found",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Example encrypted email": {
+      "main": [
+        [
+          {
+            "node": "Decrypt email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute Workflow Trigger": {
+      "main": [
+        [
+          {
+            "node": "If email provided",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Order and Tracking Data": {
+      "main": [
+        [
+          {
+            "node": "Send Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "17ccefba-e7c9-44a0-8bd6-56d545d7f782",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-07-09T21:41:38.773Z",
+      "updatedAt": "2025-07-09T21:41:38.773Z",
+      "id": "G5Lcoe2jTgqCJuSy",
+      "name": "OpenAI"
+    },
+    {
+      "createdAt": "2025-07-09T21:41:38.763Z",
+      "updatedAt": "2025-07-09T21:41:38.763Z",
+      "id": "pz5LfYMpyppJnoPT",
+      "name": "WooCommerce"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:46.017Z",
+      "updatedAt": "2025-10-25T12:28:46.017Z",
+      "role": "workflow:owner",
+      "workflowId": "zDsWN5ePbHLxyXRf",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

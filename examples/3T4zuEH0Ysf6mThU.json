@@ -1,0 +1,191 @@
+{
+  "createdAt": "2025-07-14T19:09:33.342Z",
+  "updatedAt": "2025-07-14T19:09:33.342Z",
+  "id": "3T4zuEH0Ysf6mThU",
+  "name": "Control_your_discord_server_with_natural_language_via_GPT4o_and_MCP_Client",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "a8a6ab0f-6662-4ad6-b264-7b29c85f8d6e",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        -360,
+        80
+      ],
+      "typeVersion": 1.9
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "8cae30c7-92fa-4bc7-a879-85cc3bb935c1",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "position": [
+        -620,
+        80
+      ],
+      "webhookId": "79281a20-6afe-4188-ae87-cc80be737ad7",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o",
+          "cachedResultName": "gpt-4o"
+        },
+        "options": {}
+      },
+      "id": "3a35e9e8-8d0b-44dc-8cc1-5b613f2560e4",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        -440,
+        280
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "sseEndpoint": "http://localhost:5678/mcp/404f083e-f3f4-4358-83ef-9804099ee253/sse"
+      },
+      "id": "84a84a52-dc21-41af-8565-e0c096e509e7",
+      "name": "Discord MCP Client",
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "position": [
+        -120,
+        280
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Natural Language Input\nYou can call from another workflow, hit the chat endpoint, or even hit from another Discord bot if you wanted to! Any natural language command should work fine - let me know if you manage to break something and I will look at updating the template!",
+        "height": 360,
+        "width": 280
+      },
+      "id": "f280333e-5531-4082-8c75-d7385eb52942",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -800,
+        -180
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Tool enabled agent\nIf you are going to swap the model out, just make sure that it's one that can handle tools. No special system prompt should be needed for the large cloud models, if you go with a quantized model via Ollama then you might need to coax it a bit.",
+        "height": 540,
+        "width": 220
+      },
+      "id": "c62c14c9-ee9a-4cee-8770-75b0bd268886",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -440,
+        -180
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Discord MCP Client/Server\nThis is totally customizable (you can connect it to any MCP server by changing the URL), but if you need a starting point, you can check out my \"Manage your discord server with natural language from anywhere\" template as a starting point.",
+        "height": 540
+      },
+      "id": "bb41bf7a-a697-40ff-9c18-1a24a07c8cea",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -120,
+        -180
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Discord MCP Client": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {},
+  "versionId": "bc9eda33-0a94-4ae8-bd3f-4159f8690a7e",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-07-09T21:41:38.773Z",
+      "updatedAt": "2025-07-09T21:41:38.773Z",
+      "id": "G5Lcoe2jTgqCJuSy",
+      "name": "OpenAI"
+    },
+    {
+      "createdAt": "2025-07-09T21:41:38.763Z",
+      "updatedAt": "2025-07-09T21:41:38.763Z",
+      "id": "pz5LfYMpyppJnoPT",
+      "name": "WooCommerce"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:46.154Z",
+      "updatedAt": "2025-10-25T12:28:46.154Z",
+      "role": "workflow:owner",
+      "workflowId": "3T4zuEH0Ysf6mThU",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,382 @@
+{
+  "createdAt": "2025-07-14T19:07:48.096Z",
+  "updatedAt": "2025-07-14T19:07:48.096Z",
+  "id": "ytKgfEaDImS0HBTU",
+  "name": "Twitter_Virtual_AI_Influencer",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Scheduled posting \nWrite a tweet every 6 hours and randomize the minutes that it's posted at to make it seem natural.\n",
+        "height": 265,
+        "width": 389
+      },
+      "id": "51c8fe26-0db4-4583-9c26-b1dc48ad6a5a",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -920,
+        -200
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.message.content.tweet }}",
+        "additionalFields": {}
+      },
+      "id": "75e26d99-47cb-4f94-b4af-afb63876bbe7",
+      "name": "Post tweet",
+      "type": "n8n-nodes-base.twitter",
+      "position": [
+        1100,
+        -80
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 6,
+              "triggerAtMinute": "={{ Math.floor(Math.random() * 60) }}"
+            }
+          ]
+        }
+      },
+      "id": "6f913848-fb33-4e4b-8502-01df8f80188e",
+      "name": "Schedule posting every 6 hours",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        -700,
+        -100
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {},
+      "id": "678d45c7-5a0e-48a2-be43-fcdbbac8d7ee",
+      "name": "Trigger posting manually",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        -700,
+        220
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Configure influencer profile \nSet your target niche, writing style, and inspiration.\n",
+        "height": 265,
+        "width": 389
+      },
+      "id": "e606b875-204c-47fb-9e2d-9293e4d08048",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -480,
+        -200
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Generate tweet\nGenerate a potentially viral tweet based on your configuration.",
+        "height": 265,
+        "width": 389
+      },
+      "id": "64e307b2-cf40-4be4-846c-a5907a6c379f",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -40,
+        -200
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Validate tweet\nIf the generated tweet does not meet length constraints, regenerate it.",
+        "height": 265,
+        "width": 389
+      },
+      "id": "9c25e94d-4ac6-4645-8777-ec6923bec29c",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        400,
+        -200
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Post the tweet\nPost the tweet to your X account.",
+        "height": 265,
+        "width": 389
+      },
+      "id": "559c95e6-9987-4c14-96ac-bf52548fc690",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        840,
+        -200
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "0a6ebbb6-4b14-4c7e-9390-215e32921663",
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              },
+              "leftValue": "={{ $json.message.content.tweet.length }}",
+              "rightValue": 280
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d83f488d-73a1-4138-b2be-0baf03df9401",
+      "name": "Verify tweet constraints",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        640,
+        -100
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "content": "## On-demand posting \nWrite a tweet on demand, when you manually run your workflow.\n",
+        "height": 265,
+        "width": 389
+      },
+      "id": "e370dcb3-23b4-4d19-8688-41ea9919bfc0",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -920,
+        120
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4-turbo-preview",
+          "cachedResultName": "GPT-4-TURBO-PREVIEW"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a successful modern Twitter influencer. Your tweets always go viral. ",
+              "role": "system"
+            },
+            {
+              "content": "=You have a specific writing style: {{ $json.style }}",
+              "role": "system"
+            },
+            {
+              "content": "=You follow the principles described in your inspiration sources closely and you write your tweets based on that: {{ $json.inspiration }}",
+              "role": "system"
+            },
+            {
+              "content": "=You have a very specific niche: {{ $json.niche }}",
+              "role": "system"
+            },
+            {
+              "content": "=Answer with the viral tweet and nothing else as a response. Keep the tweet within 280 characters. Current date and time are {{DateTime.now()}}. Add hashtags and emojis where relevant.",
+              "role": "system"
+            },
+            {
+              "content": "Write a tweet that is certain to go viral. Take your time in writing it. Think. Use the vast knowledge you have."
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "id": "9f5bed64-e8bd-485a-b947-a937c0ef1bf2",
+      "name": "Generate tweet content",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "position": [
+        60,
+        -100
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "45268b04-68a1-420f-9ad2-950844d16af1",
+              "name": "niche",
+              "type": "string",
+              "value": "Modern Stoicism. You tweet about the greatest stoics, their ideas, their quotes, and how their wisdom applies in today's modern life. You love sharing personal stories and experiences."
+            },
+            {
+              "id": "d95f4a1c-ab1c-4eca-8732-3d7a087f82d8",
+              "name": "style",
+              "type": "string",
+              "value": "All of your tweets are very personal. "
+            },
+            {
+              "id": "1ee088f7-7021-48c0-bcb7-d1011eb0db3d",
+              "name": "inspiration",
+              "type": "string",
+              "value": "Your inspiration comes from tens of books on stoicism, psychology, and how to influence people. Books such as \"Contagious\" by Jonah Bergen, \"How To Be Internet Famous\" by Brendan Cox, \"How to Win Friends and Influence People\" by Dale Carnegie, and \"Influencers and Creators\" by  Robert V Kozinets, Ulrike Gretzel, Rossella Gambetti strongly influence the way you write your tweets. "
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "bac3dab8-21a3-434d-92d8-475c67b027d7",
+      "name": "Configure your influencer profile",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -260,
+        -100
+      ],
+      "typeVersion": 3.3
+    },
+    {
+      "parameters": {
+        "content": "## Twitter Virtual AI Influencer Workflow Template\nThis n8n workflow template empowers creators to launch a virtual AI influencer that tweets regularly, engaging audiences with a unique niche, writing style, and inspiration. By automating content creation and posting, it ensures a consistent and natural online presence, tailored to your specific influencer profile.\n\n## Features\nScheduled Posting: Automates tweet posting every 6 hours, with randomized posting minutes to mimic natural activity.\nOn-Demand Posting: Offers flexibility with manual trigger options for immediate content sharing.\nInfluencer Profile Configuration: Customize your virtual influencer by defining a target niche, personal writing style, and sources of inspiration.\nContent Generation: Leverages advanced AI to craft tweets that resonate with your audience, aiming for viral engagement.\nTweet Validation: Ensures all generated content adheres to Twitter's character limit, maintaining quality and relevance.\n\n## Workflow Steps\n-Schedule Posting: Configured to post every 6 hours, this step introduces randomness in posting time to simulate human behavior.\n-Trigger Posting Manually: Provides an option to manually initiate a tweet, offering control over the timing of your content.\n-Configure Influencer Profile: Set up your influencer's niche, style, and inspiration to guide the AI in generating targeted content.\n-Generate Tweet Content: Utilizes a sophisticated AI model to produce engaging tweets based on the configured profile.\n-Validate Tweet: Checks if the generated tweet meets Twitter's length constraints, ensuring all content is ready for posting.\n-Post Tweet: Finalizes the process by sharing the AI-generated tweet to your designated Twitter account.\n\n## Configuration Notes\nNiche: Define a specific area of interest, such as \"Modern Stoicism,\" to focus your influencer's content.\nWriting Style: Customize the tone and style of the tweets to reflect a personal touch, enhancing relatability.\nInspiration: Input sources of inspiration, including books and philosophies, to steer the content generation process.\n\n## Getting Started\nTo deploy this template:\n\n-Import the workflow into your n8n workspace.\n-Customize the influencer profile settings to match your desired niche, style, and inspiration.\n-Connect your Twitter account through the provided OAuth2 credentials setup.\n-Activate the workflow to start building your virtual influencer's presence on Twitter.\n\nEmbrace the power of AI to create a distinctive and engaging virtual influencer, captivating your audience with minimal effort.",
+        "height": 1145,
+        "width": 689
+      },
+      "id": "86aef260-b0b4-495d-bae5-008d3b0288df",
+      "name": "Sticky Note6",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1640,
+        -620
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "connections": {
+    "Generate tweet content": {
+      "main": [
+        [
+          {
+            "node": "Verify tweet constraints",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trigger posting manually": {
+      "main": [
+        [
+          {
+            "node": "Configure your influencer profile",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify tweet constraints": {
+      "main": [
+        [
+          {
+            "node": "Configure your influencer profile",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Post tweet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule posting every 6 hours": {
+      "main": [
+        [
+          {
+            "node": "Configure your influencer profile",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Configure your influencer profile": {
+      "main": [
+        [
+          {
+            "node": "Generate tweet content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {},
+  "versionId": "8bd46af9-41ea-483d-a676-5e16f4b412d2",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-07-09T21:41:38.773Z",
+      "updatedAt": "2025-07-09T21:41:38.773Z",
+      "id": "G5Lcoe2jTgqCJuSy",
+      "name": "OpenAI"
+    },
+    {
+      "createdAt": "2025-07-09T21:41:38.763Z",
+      "updatedAt": "2025-07-09T21:41:38.763Z",
+      "id": "pz5LfYMpyppJnoPT",
+      "name": "WooCommerce"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:46.063Z",
+      "updatedAt": "2025-10-25T12:28:46.063Z",
+      "role": "workflow:owner",
+      "workflowId": "ytKgfEaDImS0HBTU",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

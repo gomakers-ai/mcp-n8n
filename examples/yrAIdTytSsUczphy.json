@@ -1,0 +1,868 @@
+{
+  "createdAt": "2025-07-14T19:37:25.430Z",
+  "updatedAt": "2025-07-14T19:37:25.430Z",
+  "id": "yrAIdTytSsUczphy",
+  "name": "WooCommerce AI Chatbot Workflow for Post Sales Support",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "mode": "webhook",
+        "options": {
+          "responseMode": "responseNode"
+        }
+      },
+      "id": "f90e2f67-44a7-4374-a1f8-1a14dcc77037",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "position": [
+        -860,
+        1000
+      ],
+      "webhookId": "bb9b597a-25ed-43de-9ebb-14f166af789b",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {},
+      "id": "a918a9c6-26c6-4e48-a54c-ad701e1bef80",
+      "name": "Simple Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "position": [
+        -520,
+        1300
+      ],
+      "typeVersion": 1.3
+    },
+    {
+      "parameters": {
+        "resource": "order",
+        "operation": "get",
+        "orderId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Order_ID', `Order Details Retrieval Process:\n1. Request Order Number\n   - Explicitly ask customer for the complete order number\n\n2. Identity Verification\n   - Ask for the email address associated with the order\n   - Strictly verify that the provided email matches the order record\n   - If email does NOT match the order:\n     * Immediately halt the process\n     * Inform customer that the email is incorrect\n     * Do NOT provide the correct email\n     * Prevent access to order details\n\n3. Verification Criteria\n   - Exact match of email to order record is mandatory\n   - No exceptions or workarounds\n   - Customer must provide the precise, correct email`, 'string') }}"
+      },
+      "id": "d7846486-dac7-4836-80da-e5efc0ce7336",
+      "name": "get_order",
+      "type": "n8n-nodes-base.wooCommerceTool",
+      "position": [
+        100,
+        1180
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "resource": "order",
+        "operation": "getAll",
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "options": {
+          "search": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Search', ``, 'string') }}"
+        }
+      },
+      "id": "e482032b-178d-4f9e-8eb7-77f35f8edad0",
+      "name": "get_orders",
+      "type": "n8n-nodes-base.wooCommerceTool",
+      "position": [
+        200,
+        1180
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "resource": "customer",
+        "operation": "getAll",
+        "returnAll": true,
+        "filters": {
+          "email": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Email', ``, 'string') }}"
+        }
+      },
+      "id": "21a387a7-95e1-41a7-b98c-b8a998ac79ba",
+      "name": "get_user",
+      "type": "n8n-nodes-base.wooCommerceTool",
+      "position": [
+        300,
+        1180
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {},
+      "id": "20dede35-3f48-4b10-9d76-9c98d05bea95",
+      "name": "Calculator",
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "position": [
+        -400,
+        1300
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {},
+      "id": "83b43457-d8e2-40dc-8b26-7757f333c6cb",
+      "name": "When clicking ‘Test workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        -980,
+        80
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://QDRANTURL/collections/COLLECTION",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"filter\": {}\n}",
+        "options": {}
+      },
+      "id": "8d2f8a82-97d9-4ed5-8ad0-c8b593db1b20",
+      "name": "Create collection",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -680,
+        -60
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://QDRANTURL/collections/COLLECTION/points/delete",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"filter\": {}\n}",
+        "options": {}
+      },
+      "id": "97966ee2-84cd-4643-8984-6d0b25c48943",
+      "name": "Refresh collection",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -680,
+        200
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "filter": {
+          "driveId": {
+            "__rl": true,
+            "mode": "list",
+            "value": "My Drive",
+            "cachedResultUrl": "https://drive.google.com/drive/my-drive",
+            "cachedResultName": "My Drive"
+          },
+          "folderId": {
+            "__rl": true,
+            "mode": "id",
+            "value": "=test-whatsapp"
+          }
+        },
+        "options": {}
+      },
+      "id": "1f5f5bdd-0e96-4dac-8368-dc904e801e38",
+      "name": "Get folder",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        -460,
+        200
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $json.id }}"
+        },
+        "options": {
+          "googleFileConversion": {
+            "conversion": {
+              "docsToFormat": "text/plain"
+            }
+          }
+        }
+      },
+      "id": "4694324d-75df-470a-be97-f4c1a4ec2304",
+      "name": "Download Files",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        -240,
+        200
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "options": {}
+      },
+      "id": "0bc83a97-8be3-42cf-ac61-89b3d05d2baa",
+      "name": "Default Data Loader",
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "position": [
+        180,
+        400
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "chunkSize": 300,
+        "chunkOverlap": 30
+      },
+      "id": "260d7875-b6a8-4e4b-bec1-9a313a7b3d41",
+      "name": "Token Splitter",
+      "type": "@n8n/n8n-nodes-langchain.textSplitterTokenSplitter",
+      "position": [
+        160,
+        580
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# STEP 1\n\n## Create Qdrant Collection\nChange:\n- QDRANTURL\n- COLLECTION",
+        "height": 220,
+        "width": 880,
+        "color": 6
+      },
+      "id": "e9701e27-7952-43f2-883c-794467ddf843",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -480,
+        -120
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "qdrantCollection": {
+          "__rl": true,
+          "mode": "id",
+          "value": "=COLLECTION"
+        },
+        "options": {}
+      },
+      "id": "a48f7343-5eba-4a5e-af63-127216decad0",
+      "name": "Qdrant Vector Store1",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+      "position": [
+        20,
+        200
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "22d1aee0-7607-4ea9-9c2d-d02c5c72e74f",
+      "name": "Embeddings OpenAI1",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "position": [
+        20,
+        420
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "content": "# STEP 2\n\n\n\n\n\n\n\n\n\n\n\n\n## Documents vectorization with Qdrant and Google Drive\nChange:\n- QDRANTURL\n- COLLECTION",
+        "height": 400,
+        "width": 620,
+        "color": 4
+      },
+      "id": "386cbbab-839b-43b0-b338-5e3f8fe5b2a6",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -700,
+        140
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "qdrantCollection": {
+          "__rl": true,
+          "mode": "id",
+          "value": "=COLLECTION"
+        },
+        "options": {}
+      },
+      "id": "797d370f-852b-49e5-8155-be515422174a",
+      "name": "Qdrant Vector Store",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+      "position": [
+        -140,
+        1540
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "1a4e5831-c004-4f39-85e0-947f6b53f3ef",
+      "name": "Embeddings OpenAI",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "position": [
+        -160,
+        1720
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "efd106ad-be27-463b-a071-eb585756cecb",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        180,
+        1540
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "name": "company",
+        "description": "Rispondi alle domande relative ai termini e condizioni e spedizioni"
+      },
+      "id": "30e988c4-db7b-4cf1-a589-67fc2daf4afd",
+      "name": "ToS",
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "position": [
+        -40,
+        1360
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "name": "get_tracking",
+        "description": "Get tracking number for a specific order by providing the order number. The tool retrieves the unique tracking code that allows customers to monitor their shipment's current status and location.",
+        "workflowId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "AcPE4PXeFOiOW48H",
+          "cachedResultName": "WooCommerce Get Tracking Number"
+        },
+        "workflowInputs": {
+          "value": {
+            "order_number": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('order_number', ``, 'string') }}"
+          },
+          "schema": [
+            {
+              "id": "order_number",
+              "type": "string",
+              "display": true,
+              "removed": false,
+              "required": false,
+              "displayName": "order_number",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            }
+          ],
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "order_number"
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "id": "6bfceb73-51e4-4721-880f-2d361fc80d92",
+      "name": "get_tracking",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "position": [
+        -240,
+        1180
+      ],
+      "typeVersion": 2.1
+    },
+    {
+      "parameters": {
+        "inputSource": "jsonExample",
+        "jsonExample": "{\n  \"order_number\": \"order number\"\n}"
+      },
+      "id": "5e2a47ce-0131-42f0-a2bd-f5890caaeafc",
+      "name": "When Executed by Another Workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        580,
+        1060
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=## Role and Primary Objective\nYou are a customer support AI agent for an online clothing store, specializing in post-sales assistance. Your primary goals are to:\n- Help customers track their orders\n- Provide information about past and current orders\n- Offer clear and concise support\n\n## Communication Guidelines\n1. Always be professional, helpful, and precise\n2. Use available tools to retrieve accurate information\n3. Verify customer identity before sharing order details\n4. Protect customer privacy and data confidentiality\n\n## Tool Usage Instructions\n\n### Order Information Retrieval\n- Use `get_order` to fetch details for a single order\n  - REQUIRED: Complete user information including request, email, and order number\n- Use `get_orders` to retrieve multiple orders for a single customer\n- Use `get_user` to obtain customer profile information\n\n### Tracking and Support\n- Use `get_tracking` to obtain tracking information for an order using the order number\n- If a customer cannot find what they need, use `human*assistance`\n  - Synthesize the request clearly\n  - Include associated user email\n  - Provide concise, relevant details\n\n### General Information\n- Use `ToS` tool to answer questions about:\n  - Terms and Conditions\n  - Shipping information\n  - General store policies\n\n## Critical Verification Rules\n- ALWAYS verify that the email provided matches the order number\n- If the email does not match the order:\n  - DO NOT provide the correct email\n  - Inform the customer that the email address is incorrect\n  - Request the correct email associated with the order\n\n## Prohibited Actions\n- Never disclose sensitive customer information\n- Do not share full order details without proper verification\n- Avoid providing speculative or unconfirmed information\n\n## Communication Style\n- Be direct and helpful\n- Use clear, professional language\n- Focus on solving the customer's specific query\n- Provide step-by-step guidance when necessary\n\n## Escalation Protocol\n- If unable to resolve the customer's issue using available tools\n- Use `human_assistance` to escalate complex or unresolvable queries\n- Ensure clear, concise problem description\n\nToday is {{$now}}"
+        }
+      },
+      "id": "4543bd30-a0d6-4797-8c41-45a5d24c13eb",
+      "name": "Post-Sales Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        -540,
+        1000
+      ],
+      "typeVersion": 1.8
+    },
+    {
+      "parameters": {
+        "chatId": "CHAT_ID",
+        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Text', ``, 'string') }}",
+        "additionalFields": {}
+      },
+      "id": "dc5d73b7-5b4f-431f-b92d-08ac7ce97a2b",
+      "name": "human_assistence",
+      "type": "n8n-nodes-base.telegramTool",
+      "position": [
+        -80,
+        1180
+      ],
+      "webhookId": "1f9cad22-45e3-4c6b-bec8-f421060d14d9",
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "content": "# STEP 3\n\n- Add your Telegram CHAT_ID in the \"human_assistance\" tool",
+        "height": 140,
+        "width": 1220
+      },
+      "id": "9d6b0b09-b7e2-471b-b998-10288ce70161",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -880,
+        820
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# STEP 4\n\nThe tracking code request is made through the most popular WooCommerce tracking plugin: \"YITH WooCommerce Order & Shipment Tracking\". The free version can be [downloaded here](https://wordpress.org/plugins/yith-woocommerce-order-tracking/)\n- Create a new workflow and change URL in the node \"Http Request\" with your WooCommerce shop url",
+        "height": 200,
+        "width": 580,
+        "color": 5
+      },
+      "id": "bde5be65-9ac4-4544-829c-cba5a8a7438c",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        560,
+        820
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "url": "=https://URL/wp-json/wc/v3/orders/{{ $json.order_number }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "options": {}
+      },
+      "id": "8b702532-fb44-4cc2-b8cf-6f4daa07937c",
+      "name": "Get tracking",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        800,
+        1060
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "19b33abc-5191-4449-b682-4466f1975ff2",
+              "name": "tracking_code",
+              "type": "string",
+              "value": "={{ $json[\"meta_data\"].find(item => item.key === \"ywot_tracking_code\").value }}"
+            },
+            {
+              "id": "2e18b337-e3e8-4669-a902-ecc2ba027a1a",
+              "name": "carrier_url",
+              "type": "string",
+              "value": "={{ $json[\"meta_data\"].find(item => item.key === \"ywot_carrier_url\").value }}"
+            },
+            {
+              "id": "ae834f65-67b2-4e95-9a49-5172e36fc5b9",
+              "name": "pick_up",
+              "type": "string",
+              "value": "={{ $json[\"meta_data\"].find(item => item.key === \"ywot_pick_up_date\").value }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1a335f9c-f2a3-4c45-a3cf-5222526a743c",
+      "name": "Set tracking code",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1040,
+        1060
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "id": "7ebfb985-2804-463d-b540-1019121f252e",
+      "name": "GPT 4o-mini",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        -700,
+        1300
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "content": "# WooCommerce AI Chatbot Workflow for Post-Sales Support\n\nThis WooCommerce-integrated chatbot is designed to transform post-sales customer support by combining automation and artificial intelligence to deliver fast, secure, and personalized assistance. By connecting directly to the WooCommerce database, the chatbot retrieves real-time order information—including shipping details and tracking numbers—after verifying the customer's identity through a strict email-based authentication system. This ensures maximum data security, preventing leaks of sensitive information.  \n\nBeyond order management, the chatbot answers frequently asked questions about return policies, delivery times, and terms of service using a vector database that provides accurate, context-aware responses. If a request is too complex, the system seamlessly escalates it to a human operator via Telegram, guaranteeing no customer query goes unresolved. \n",
+        "height": 240,
+        "width": 1400,
+        "color": 3
+      },
+      "id": "186d4e0d-af6f-4e99-ac09-756ca20d4777",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1000,
+        -460
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "connections": {
+    "ToS": {
+      "ai_tool": [
+        [
+          {
+            "node": "Post-Sales Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_user": {
+      "ai_tool": [
+        [
+          {
+            "node": "Post-Sales Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_order": {
+      "ai_tool": [
+        [
+          {
+            "node": "Post-Sales Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculator": {
+      "ai_tool": [
+        [
+          {
+            "node": "Post-Sales Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get folder": {
+      "main": [
+        [
+          {
+            "node": "Download Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_orders": {
+      "ai_tool": [
+        [
+          {
+            "node": "Post-Sales Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT 4o-mini": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Post-Sales Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get tracking": {
+      "main": [
+        [
+          {
+            "node": "Set tracking code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get_tracking": {
+      "ai_tool": [
+        [
+          {
+            "node": "Post-Sales Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Post-Sales Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Files": {
+      "main": [
+        [
+          {
+            "node": "Qdrant Vector Store1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Token Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "human_assistence": {
+      "ai_tool": [
+        [
+          {
+            "node": "Post-Sales Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Qdrant Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "ToS",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Qdrant Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Refresh collection": {
+      "main": [
+        [
+          {
+            "node": "Get folder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Qdrant Vector Store1",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qdrant Vector Store": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "ToS",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Post-Sales Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get tracking",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Create collection",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Refresh collection",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "b73d5fca-5eb2-4eae-80d8-ae6e2f50e1bb",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-07-09T21:41:38.773Z",
+      "updatedAt": "2025-07-09T21:41:38.773Z",
+      "id": "G5Lcoe2jTgqCJuSy",
+      "name": "OpenAI"
+    },
+    {
+      "createdAt": "2025-07-09T21:41:38.763Z",
+      "updatedAt": "2025-07-09T21:41:38.763Z",
+      "id": "pz5LfYMpyppJnoPT",
+      "name": "WooCommerce"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:46.014Z",
+      "updatedAt": "2025-10-25T12:28:46.014Z",
+      "role": "workflow:owner",
+      "workflowId": "yrAIdTytSsUczphy",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,472 @@
+{
+  "createdAt": "2025-07-14T19:07:08.321Z",
+  "updatedAt": "2025-07-14T19:07:08.321Z",
+  "id": "rgR2jrzNgxoSOkI7",
+  "name": "AI_Powered_WooCommerce_Support_Agent",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "fdbb37dc-a2c9-4e87-bdff-5717d6aba477",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        440,
+        740
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {},
+      "id": "b670ceba-35a8-4c7b-a61b-1bebbe6cdc0c",
+      "name": "No Operation, do nothing",
+      "type": "n8n-nodes-base.noOp",
+      "position": [
+        -560,
+        780
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "push",
+        "list": "=chat-buffer:{{ $json.From }}",
+        "messageData": "={{ $json.Body }}",
+        "tail": true
+      },
+      "id": "fdddb516-2ebc-466a-a793-55442863ed3d",
+      "name": "Add to Messages Stack",
+      "type": "n8n-nodes-base.redis",
+      "position": [
+        -880,
+        460
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "ec39573f-f92a-4fe4-a832-0a137de8e7d0",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $('Get Latest Message Stack').item.json.messages.last() }}",
+              "rightValue": "={{ $('Twilio Trigger').item.json.Body }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c857468f-8e77-4916-bce4-0f18ec2e4136",
+      "name": "Should Continue?",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        -560,
+        620
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "=chat-debouncer:{{ $('Twilio Trigger').item.json.From }}"
+      },
+      "id": "37c4bf6d-07c6-4b9b-8fb4-5997df9e450b",
+      "name": "Window Buffer Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "position": [
+        560,
+        740
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "updates": [
+          "com.twilio.messaging.inbound-message.received"
+        ]
+      },
+      "id": "627c1abf-35af-4e96-983e-aef5b1a53d71",
+      "name": "Twilio Trigger",
+      "type": "n8n-nodes-base.twilioTrigger",
+      "position": [
+        -1280,
+        620
+      ],
+      "webhookId": "0ca3da0e-e4e1-4e94-8380-06207bf9b429",
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "propertyName": "messages",
+        "key": "=chat-buffer:{{ $json.From }}",
+        "keyType": "list",
+        "options": {}
+      },
+      "id": "106e6385-b7ac-4750-a79b-0a042f8f39e2",
+      "name": "Get Latest Message Stack",
+      "type": "n8n-nodes-base.redis",
+      "position": [
+        -720,
+        620
+      ],
+      "typeVersion": 1,
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "content": "## Step 2. Buffer Incoming Messages\n[Learn more about using Redis](https://docs.n8n.io/integrations/builtin/app-nodes/n8n-nodes-base.redis)\n\n* New messages are captured into a list.\n* After X seconds, we get a fresh copy of this list\n* If the last message on the list is the same as the incoming message, then we know no new follow-on messages were sent within the last 5 seconds. Hence the user should be waiting and it is safe to reply.\n* But if the reverse is true, then we will abort the execution here.",
+        "height": 766.7069233634998,
+        "width": 632.8309394802918,
+        "color": 7
+      },
+      "id": "276f36c6-9414-43b9-9b3d-711a068a7424",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1000,
+        200
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "from": "={{ $('Twilio Trigger').item.json.To }}",
+        "to": "={{ $('Twilio Trigger').item.json.From }}",
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "id": "2e7213a6-e029-49b6-9ffd-d74fc6724451",
+      "name": "Send Reply",
+      "type": "n8n-nodes-base.twilio",
+      "position": [
+        780,
+        580
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {},
+      "id": "009f7a37-bddc-452d-abd1-2cc0c8d62743",
+      "name": "Wait 5 seconds",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        -880,
+        620
+      ],
+      "webhookId": "d486979c-8074-4ecb-958e-fcb24455086b",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "options": {
+          "groupMessages": true
+        }
+      },
+      "id": "1efa8d8e-83c4-4c54-9cc6-1dcbde33395f",
+      "name": "Get Chat History",
+      "type": "@n8n/n8n-nodes-langchain.memoryManager",
+      "position": [
+        -220,
+        540
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "=chat-debouncer:{{ $('Twilio Trigger').item.json.From }}"
+      },
+      "id": "91e8631f-62e3-4930-b542-41e4777b1a48",
+      "name": "Window Buffer Memory1",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "position": [
+        -220,
+        680
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "content": "## Step 1. Listen for Twilio Messages\n[Read more about Twilio Trigger](https://docs.n8n.io/integrations/builtin/trigger-nodes/n8n-nodes-base.twiliotrigger)\n\nIn this example, we'll use the sender's phone number as the session ID. This will be important in retrieving chat history.",
+        "height": 357.49804533541777,
+        "width": 431.1629802181097,
+        "color": 7
+      },
+      "id": "0b245c5d-ca13-479c-8bd4-522ba798ec43",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1440,
+        460
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Step 3. Get Messages Since Last Reply\n[Read more about using Chat Memory](https://docs.n8n.io/integrations/builtin/cluster-nodes/sub-nodes/n8n-nodes-langchain.memorymanager)\n\nOnce conditions are met and we allow the agent to reply, we'll need to find the bot's last reply and work out the buffer of user messages since then. We can do this by looking using chat memory and comparing this to the latest message in our redis messages stack.",
+        "height": 501.77420646931444,
+        "width": 618.970917763344,
+        "color": 7
+      },
+      "id": "73bf12f1-86b4-42da-be2e-47ba5cceb95f",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -320,
+        340
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "01434acb-c224-46d2-99b0-7a81a2bb50c5",
+              "name": "messages",
+              "type": "string",
+              "value": "={{\n$('Get Latest Message Stack').item.json.messages\n  .slice(\n    $('Get Latest Message Stack').item.json.messages.lastIndexOf(\n      $('Get Chat History').item.json.messages.last().human\n      || $('Twilio Trigger').item.json.chatInput\n    ),\n    $('Get Latest Message Stack').item.json.messages.length\n  )\n  .join('\\n')\n}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f4ef7549-03e8-4f61-9817-4c64101b8740",
+      "name": "Get Messages Buffer",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        100,
+        540
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "content": "## Step 4. Send Single Agent Reply For Many Messages\n[Learn more about using AI Agents](https://docs.n8n.io/integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.agent)\n\nFinally, our buffered messages are sent to the AI Agent that can formulate a single response for all. This could potentially improve the conversation experience if the chat interaction is naturally more rapid and spontaneous. A drawback however is that responses could be feel much slower - tweak the wait threshold to suit your needs!",
+        "height": 522.5993538768389,
+        "width": 670.2274698011594,
+        "color": 7
+      },
+      "id": "d2be9a7e-fa15-4366-9524-2a0e43fd8734",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        340,
+        380
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Try It Out!\n### This workflow demonstrates a simple approach to stagger an AI Agent's reply if users often send in a sequence of partial messages and in short bursts.\n\n* Twilio webhook receives user's messages which are recorded in a message stack powered by Redis.\n* The execution is immediately paused for 5 seconds and then another check is done against the message stack for the latest message.\n* The purpose of this check lets use know if the user is sending more messages or if they are waiting for a reply.\n* The execution is aborted if the latest message on the stack differs from the incoming message and continues if they are the same.\n* For the latter, the agent receives buffered messages and is able to respond to all in a single reply.",
+        "height": 486.69228315530853,
+        "width": 375.55385425077225
+      },
+      "id": "e2e4e4ce-7286-4da9-9bb7-ac247d197a44",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1840,
+        340
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "agent": "conversationalAgent",
+        "promptType": "define",
+        "text": "={{ $json.messages }}",
+        "options": {}
+      },
+      "id": "4cc39a33-e968-4983-82ff-c9ee463a36c6",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        440,
+        580
+      ],
+      "typeVersion": 1.6
+    }
+  ],
+  "connections": {
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Twilio Trigger": {
+      "main": [
+        [
+          {
+            "node": "Add to Messages Stack",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Wait 5 seconds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 5 seconds": {
+      "main": [
+        [
+          {
+            "node": "Get Latest Message Stack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Chat History": {
+      "main": [
+        [
+          {
+            "node": "Get Messages Buffer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Should Continue?": {
+      "main": [
+        [
+          {
+            "node": "Get Chat History",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Messages Buffer": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Window Buffer Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Window Buffer Memory1": {
+      "ai_memory": [
+        [
+          {
+            "node": "Get Chat History",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Latest Message Stack": {
+      "main": [
+        [
+          {
+            "node": "Should Continue?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {},
+  "versionId": "05588745-fac8-47d4-abe1-7e2121fa2d98",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-07-09T21:41:38.773Z",
+      "updatedAt": "2025-07-09T21:41:38.773Z",
+      "id": "G5Lcoe2jTgqCJuSy",
+      "name": "OpenAI"
+    },
+    {
+      "createdAt": "2025-07-09T21:41:38.763Z",
+      "updatedAt": "2025-07-09T21:41:38.763Z",
+      "id": "pz5LfYMpyppJnoPT",
+      "name": "WooCommerce"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:46.021Z",
+      "updatedAt": "2025-10-25T12:28:46.021Z",
+      "role": "workflow:owner",
+      "workflowId": "rgR2jrzNgxoSOkI7",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

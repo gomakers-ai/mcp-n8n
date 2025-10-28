@@ -1,0 +1,738 @@
+{
+  "createdAt": "2025-07-14T19:05:52.293Z",
+  "updatedAt": "2025-07-14T19:05:52.293Z",
+  "id": "Ufd0oZjrQuUixrU2",
+  "name": "ai-researcher-for-sales",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "36a849c8-8385-40be-9d86-b0fcb4154ae0",
+      "name": "When clicking \"Test workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        320,
+        60
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fcc97354-b9f6-4459-a004-46e87902c77c",
+              "name": "company_input",
+              "type": "string",
+              "value": "={{ $json.input }}"
+            },
+            {
+              "id": "e5415c49-5204-45b1-a0e9-814157127b12",
+              "name": "row_number",
+              "type": "number",
+              "value": "={{ $json.row_number }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "86139e86-5946-4716-a90e-9c63bda9db3f",
+      "name": "Input",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        740,
+        60
+      ],
+      "typeVersion": 3.3
+    },
+    {
+      "parameters": {
+        "model": "gpt-4o",
+        "options": {
+          "temperature": 0.3
+        }
+      },
+      "id": "f615da66-58ce-4132-bbea-4537b4512597",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        1420,
+        380
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "name": "get_website_content",
+        "description": "This tool will return the text from the given URL. ",
+        "source": "parameter",
+        "workflowJson": "{\n  \"meta\": {\n    \"templateCredsSetupCompleted\": true,\n    \"instanceId\": \"2b1cc1a8b0a2fb9caab11ab2d5eb3712f9973066051b2e898cf4041a1f2a7757\"\n  },\n  \"nodes\": [\n    {\n      \"parameters\": {},\n      \"id\": \"475eaf3c-7e11-457e-8b72-4d3e683e2f80\",\n      \"name\": \"Execute Workflow Trigger\",\n      \"type\": \"n8n-nodes-base.executeWorkflowTrigger\",\n      \"typeVersion\": 1,\n      \"position\": [\n        260,\n        340\n      ]\n    },\n    {\n      \"parameters\": {\n        \"url\": \"={{ $json.query.url }}\",\n        \"options\": {}\n      },\n      \"id\": \"321fbc74-d749-4f9b-954e-7cad37601ddf\",\n      \"name\": \"Visit Website\",\n      \"type\": \"n8n-nodes-base.httpRequest\",\n      \"typeVersion\": 4.2,\n      \"position\": [\n        440,\n        340\n      ]\n    },\n    {\n      \"parameters\": {\n        \"operation\": \"extractHtmlContent\",\n        \"extractionValues\": {\n          \"values\": [\n            {\n              \"key\": \"body\",\n              \"cssSelector\": \"html\",\n              \"skipSelectors\": \"head\"\n            }\n          ]\n        },\n        \"options\": {\n          \"cleanUpText\": true\n        }\n      },\n      \"id\": \"6e51732a-4999-4805-838b-f692e9965197\",\n      \"name\": \"HTML\",\n      \"type\": \"n8n-nodes-base.html\",\n      \"typeVersion\": 1.2,\n      \"position\": [\n        620,\n        340\n      ]\n    }\n  ],\n  \"connections\": {\n    \"Execute Workflow Trigger\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Visit Website\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Visit Website\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"HTML\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    }\n  },\n  \"pinData\": {\n    \"Execute Workflow Trigger\": [\n      {\n        \"query\": {\n          \"url\": \"https://www.lemlist.com\"\n        }\n      }\n    ]\n  }\n}",
+        "responsePropertyName": "body",
+        "specifyInputSchema": true,
+        "jsonSchemaExample": "{\n\t\"url\": \"https://www.lemlist.com\"\n}"
+      },
+      "id": "42fbaaa3-894a-464b-a885-104799430354",
+      "name": "Get website content",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "position": [
+        1980,
+        400
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "dca6ef49-1838-4bd7-bdc2-a137dc4e48a0",
+      "name": "SerpAPI - Search Google",
+      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
+      "position": [
+        1700,
+        380
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n\t\"type\": \"object\",\n\t\"properties\": {\n\t\t\"case_study_link\": {\n\t\t\t\"type\":[\"string\", \"null\"]\n\t\t},\n      \t\t\"domain\": {\n\t\t\t\"type\": [\"string\", \"null\"]\n\t\t},\n           \"linkedinUrl\": {\n\t\t\t\"type\": [\"string\", \"null\"]\n\t\t},\n     \t\"market\": {\n\t\t\t\"type\": [\"string\", \"null\"]\n\t\t},\n\t\t\"cheapest_plan\": {\n\t\t\t\"type\": [\"number\", \"null\"]\n\t\t},\n\t\"has_enterprise_plan\": {\n\t\t\t\"type\": [\"boolean\", \"null\"]\n\t\t},\n\t\"has_API\": {\n\t\t\t\"type\": [\"boolean\", \"null\"]\n\t\t},\n\t\"has_free_trial\": {\n\t\t\t\"type\": [\"boolean\", \"null\"]\n\t\t},\n\t\"integrations\": {\n\t\t\t\"type\": [\"array\",\"null\"],\n      \"items\": {\n\t\t\t\t\"type\": \"string\"\n\t\t\t}\n\t\t}\n\t}\n}"
+      },
+      "id": "ad32a81a-4a22-4a46-8008-71f76c9dda23",
+      "name": "Structured Output Parser",
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "position": [
+        2280,
+        380
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "332e0657-b1f5-405d-b188-7613af5e9c53",
+      "name": "Loop Over Items",
+      "type": "n8n-nodes-base.splitInBatches",
+      "position": [
+        1000,
+        60
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4109ca11-1bb8-4f5c-8bec-a962f44b0746",
+              "name": "domain",
+              "type": "string",
+              "value": "={{ $json.output.domain }}"
+            },
+            {
+              "id": "7f492768-375e-48fa-866b-644b2b5cbd68",
+              "name": "linkedinUrl",
+              "type": "string",
+              "value": "={{ $json.output.linkedinUrl }}"
+            },
+            {
+              "id": "e30b0d07-68db-45a1-9593-fd6ce24a1d50",
+              "name": "market",
+              "type": "string",
+              "value": "={{ $json.output.market }}"
+            },
+            {
+              "id": "0c03a51e-2c07-4583-85c6-d3d2ee81c5d1",
+              "name": "cheapest_plan",
+              "type": "number",
+              "value": "={{ $json.output.cheapest_plan }}"
+            },
+            {
+              "id": "0c9622d0-8446-4663-9a94-964b5df851f1",
+              "name": "has_enterprise_plan",
+              "type": "boolean",
+              "value": "={{ $json.output.has_enterprise_plan }}"
+            },
+            {
+              "id": "564cf6ea-457f-4762-bc19-6900b7d5743c",
+              "name": "has_API",
+              "type": "boolean",
+              "value": "={{ $json.output.has_API }}"
+            },
+            {
+              "id": "7fd39897-65c3-45d6-9563-8254f55ecef0",
+              "name": "has_free_trial",
+              "type": "boolean",
+              "value": "={{ $json.output.has_free_trial }}"
+            },
+            {
+              "id": "26477939-d407-4cae-92b2-9a9dc0f53a64",
+              "name": "integrations",
+              "type": "array",
+              "value": "={{ $json.output.integrations }}"
+            },
+            {
+              "id": "f0cc61d1-6b6b-4142-8627-4a4c721b19a1",
+              "name": "case_study_link",
+              "type": "string",
+              "value": "={{ $json.output.case_study_link }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1769077e-35c8-44c2-a1e0-239abaa64f6a",
+      "name": "AI Researcher Output Data",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        2360,
+        60
+      ],
+      "typeVersion": 3.3
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "19U7gAgkUEz6mbFcnygf1zKDdGvY6OAdUqq3bZQWgjxE",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/19U7gAgkUEz6mbFcnygf1zKDdGvY6OAdUqq3bZQWgjxE/edit?usp=drivesdk",
+          "cachedResultName": "Enrich companies using AI agents"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/19U7gAgkUEz6mbFcnygf1zKDdGvY6OAdUqq3bZQWgjxE/edit#gid=0",
+          "cachedResultName": "Sheet1"
+        },
+        "columns": {
+          "value": {
+            "domain": "={{ $json.domain }}",
+            "market": "={{ $json.market }}",
+            "row_number": "={{ $json.row_number }}",
+            "linkedinUrl": "={{ $json.linkedinUrl }}",
+            "integrations": "={{ $json.integrations }}",
+            "cheapest_plan": "={{ $json.cheapest_plan }}",
+            "has_free_trial": "={{ $json.has_free_trial }}",
+            "enrichment_status": "done",
+            "has_entreprise_plan": "={{ $json.has_enterprise_plan }}",
+            "last_case_study_link": "={{ $json.case_study_link }}"
+          },
+          "schema": [
+            {
+              "id": "input",
+              "type": "string",
+              "display": true,
+              "removed": true,
+              "required": false,
+              "displayName": "input",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "domain",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "domain",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "linkedinUrl",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "linkedinUrl",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "has_free_trial",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "has_free_trial",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "cheapest_plan",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "cheapest_plan",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "has_entreprise_plan",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "has_entreprise_plan",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "last_case_study_link",
+              "type": "string",
+              "display": true,
+              "removed": false,
+              "required": false,
+              "displayName": "last_case_study_link",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "market",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "market",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "integrations",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "integrations",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "enrichment_status",
+              "type": "string",
+              "display": true,
+              "required": false,
+              "displayName": "enrichment_status",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "type": "string",
+              "display": true,
+              "removed": false,
+              "readOnly": true,
+              "required": false,
+              "displayName": "row_number",
+              "defaultMatch": false,
+              "canBeUsedToMatch": true
+            }
+          ],
+          "mappingMode": "defineBelow",
+          "matchingColumns": [
+            "row_number"
+          ]
+        },
+        "options": {}
+      },
+      "id": "5ebef84c-2c66-477a-9317-23d08864293f",
+      "name": "Google Sheets - Update Row with data",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        3000,
+        420
+      ],
+      "typeVersion": 4.3
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combinationMode": "mergeByPosition",
+        "options": {}
+      },
+      "id": "bcaf4f50-bfde-4aa0-8d43-af6c6873e562",
+      "name": "Merge data",
+      "type": "n8n-nodes-base.merge",
+      "position": [
+        2640,
+        -100
+      ],
+      "typeVersion": 2.1
+    },
+    {
+      "parameters": {
+        "content": "## Read Me\n\nThis workflow allows you to do account research with the web using AI.\n\nThe advanced AI module has 2 capabilities: \n- Research Google using SerpAPI\n- Visit and get website content using a sub-workflow\n\n\nFrom an unstructured input like a domain or a company name. \n\nIt will return the following properties: \n- domain\n- company Linkedin Url\n- cheapest plan\n- has free trial\n- has entreprise plan\n- has API\n- market (B2B or B2C)\n\n\nThe strength of n8n here is that you can adapt this workflow to research whatever information you need.\n\nYou just have to precise it in the prompt and to precise the output format in the \"Strutured Output Parser\" module.\n\n\n",
+        "height": 658.0614601225933,
+        "width": 409.0131656322444
+      },
+      "id": "81231d58-2c50-4b98-8dee-6ebb30d6d5b1",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -220,
+        -40
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "19U7gAgkUEz6mbFcnygf1zKDdGvY6OAdUqq3bZQWgjxE",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/19U7gAgkUEz6mbFcnygf1zKDdGvY6OAdUqq3bZQWgjxE/edit?usp=drivesdk",
+          "cachedResultName": "Enrich companies using AI agents"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gid=0",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/19U7gAgkUEz6mbFcnygf1zKDdGvY6OAdUqq3bZQWgjxE/edit#gid=0",
+          "cachedResultName": "Sheet1"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "enrichment_status"
+            }
+          ]
+        },
+        "options": {
+          "returnAllMatches": "returnAllMatches"
+        }
+      },
+      "id": "985490f7-56fe-42ef-b3f9-b67b5b678f87",
+      "name": "Get rows to enrich",
+      "type": "n8n-nodes-base.googleSheets",
+      "position": [
+        540,
+        60
+      ],
+      "typeVersion": 4.3
+    },
+    {
+      "parameters": {
+        "content": "### Process rows 1 by 1\nThis module will allow us to process rows 1 by 1",
+        "height": 333.8263184006576,
+        "width": 300.49399096535876
+      },
+      "id": "3f446f23-aecd-40ea-ad9d-26cc5ae9e12d",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        940,
+        -60
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "Precise here the format in which you need the data to be ",
+        "height": 236.01118609685022,
+        "width": 300.49399096535876
+      },
+      "id": "fcbd4e50-dab8-4866-907c-f7b057be5eda",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2140,
+        280
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### Ask AI what are the information you are looking for about the company",
+        "height": 279.8787004666023,
+        "width": 300.49399096535876
+      },
+      "id": "03af2f41-c9ad-4fa5-9aef-613136aaa1ed",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1580,
+        -80
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "Get your free API key here https://serpapi.com/",
+        "height": 248.91749449109562
+      },
+      "id": "d65c685a-a687-4900-bc76-4ab8f5253798",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1620,
+        300
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 2
+            }
+          ]
+        }
+      },
+      "id": "281f4073-d039-4942-971b-4be2300073a8",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        320,
+        300
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "content": "Run the workflow manually or activate it to run it every 2 hours",
+        "height": 627.5654650079845,
+        "width": 266.12865147126786
+      },
+      "id": "c5653ac8-a11e-4cbe-9ed1-9e3df1e46bc2",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        220,
+        -40
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=This is the company I want you to research info about:\n{{ $json.company_input }}\n\nReturn me:\n- the linkedin URL of the company\n- the domain of the company. in this format ([domain].[tld])\n- market: if they are B2B or B2C. Only reply by \"B2B\" or \"B2B\"\n- the lowest paid plan the company is offering. If you are not sure, reply null.\n- the latest case study URL published on the website (find case study hub using google, and return the first case study link)\n- tell me if the company offer an API\n- tell me if the company has an enterprise plan\n- tell me if the company has a free trial mentionned in their homepage. reply false if you don't find strong evidence.\n- return an array with up to 5 tools the company is integrated with",
+        "hasOutputParser": true,
+        "options": {
+          "maxIterations": 10
+        }
+      },
+      "id": "6d8ac6d0-f581-4d44-b0c4-b58cc243143b",
+      "name": "AI company researcher",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        1600,
+        60
+      ],
+      "typeVersion": 1.6
+    },
+    {
+      "parameters": {
+        "name": "search_google",
+        "description": "Call this tool to get results from a google search.",
+        "source": "parameter",
+        "workflowJson": "{\n  \"meta\": {\n    \"templateCredsSetupCompleted\": true,\n    \"instanceId\": \"2b1cc1a8b0a2fb9caab11ab2d5eb3712f9973066051b2e898cf4041a1f2a7757\"\n  },\n  \"nodes\": [\n    {\n      \"parameters\": {},\n      \"id\": \"fbb17d8d-e2dc-46ae-aba4-8c27cc9d8766\",\n      \"name\": \"Execute Workflow Trigger\",\n      \"type\": \"n8n-nodes-base.executeWorkflowTrigger\",\n      \"typeVersion\": 1,\n      \"position\": [\n        20,\n        460\n      ]\n    },\n    {\n      \"parameters\": {\n        \"url\": \"https://app.scrapingbee.com/api/v1/store/google\",\n        \"authentication\": \"genericCredentialType\",\n        \"genericAuthType\": \"httpQueryAuth\",\n        \"sendQuery\": true,\n        \"queryParameters\": {\n          \"parameters\": [\n            {\n              \"name\": \"search\",\n              \"value\": \"={{ $json.query.google_search_query }}\"\n            },\n            {\n              \"name\": \"language\",\n              \"value\": \"en\"\n            },\n            {\n              \"name\": \"nb_results\",\n              \"value\": \"5\"\n            }\n          ]\n        },\n        \"options\": {}\n      },\n      \"id\": \"b938a2bd-030e-46d7-adee-4e3c85cfc1b3\",\n      \"name\": \"Search Google\",\n      \"type\": \"n8n-nodes-base.httpRequest\",\n      \"typeVersion\": 4.2,\n      \"position\": [\n        300,\n        460\n      ],\n      \"credentials\": {\n        \"httpQueryAuth\": {\n          \"id\": \"Pb2CIMT0tN838QPy\",\n          \"name\": \"ScrapingBee\"\n        }\n      }\n    },\n    {\n      \"parameters\": {\n        \"assignments\": {\n          \"assignments\": [\n            {\n              \"id\": \"096fee70-444e-4948-816c-752b20786062\",\n              \"name\": \"response\",\n              \"value\": \"={{ $json.organic_results }}\",\n              \"type\": \"array\"\n            }\n          ]\n        },\n        \"options\": {}\n      },\n      \"id\": \"c5db1fb6-d875-47d2-97db-287777583f22\",\n      \"name\": \"Response\",\n      \"type\": \"n8n-nodes-base.set\",\n      \"typeVersion\": 3.3,\n      \"position\": [\n        520,\n        460\n      ]\n    }\n  ],\n  \"connections\": {\n    \"Execute Workflow Trigger\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Search Google\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    },\n    \"Search Google\": {\n      \"main\": [\n        [\n          {\n            \"node\": \"Response\",\n            \"type\": \"main\",\n            \"index\": 0\n          }\n        ]\n      ]\n    }\n  },\n  \"pinData\": {\n    \"Execute Workflow Trigger\": [\n      {\n        \"query\": {\n          \"google_search_query\": \"site:lemlist.com pricing\"\n        }\n      }\n    ]\n  }\n}",
+        "specifyInputSchema": true,
+        "jsonSchemaExample": "{\n\t\"google_search_query\": \"site:lemlist.com pricing\"\n}"
+      },
+      "id": "da9cdcfc-b5db-4ed9-9105-196b35d9a50a",
+      "name": "Search Google with ScrapingBee",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "position": [
+        1700,
+        860
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "content": "Instead of SERP API module, you can also use this custom module for ScrapingBee. It is more cost-efficient.\n\nGet your free API key here https://www.scrapingbee.com/",
+        "height": 340.14969579315925
+      },
+      "id": "b23c681a-8868-459c-9291-b0c52ed8e343",
+      "name": "Sticky Note6",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1620,
+        660
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "connections": {
+    "Input": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge data": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets - Update Row with data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "AI company researcher",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get rows to enrich",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI company researcher",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get rows to enrich": {
+      "main": [
+        [
+          {
+            "node": "Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get website content": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI company researcher",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI company researcher": {
+      "main": [
+        [
+          {
+            "node": "AI Researcher Output Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SerpAPI - Search Google": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI company researcher",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI company researcher",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Researcher Output Data": {
+      "main": [
+        [
+          {
+            "node": "Merge data",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "When clicking \"Test workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Get rows to enrich",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets - Update Row with data": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {},
+  "versionId": "e02944cc-daa6-4378-953f-93652aa266f0",
+  "triggerCount": 0,
+  "tags": [],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:45.968Z",
+      "updatedAt": "2025-10-25T12:28:45.968Z",
+      "role": "workflow:owner",
+      "workflowId": "Ufd0oZjrQuUixrU2",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

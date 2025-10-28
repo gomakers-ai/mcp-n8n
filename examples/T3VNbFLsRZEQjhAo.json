@@ -1,0 +1,364 @@
+{
+  "createdAt": "2025-07-14T19:08:19.609Z",
+  "updatedAt": "2025-07-14T19:08:19.609Z",
+  "id": "T3VNbFLsRZEQjhAo",
+  "name": "Integrating_AI_with_Open_Meteo_API_for_Enhanced_Weather_Forecasting",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Type like this: Weather Forecast for the Next 7 Days in São Paulo",
+        "options": {
+          "allowFileUploads": false,
+          "loadPreviousSession": "memory",
+          "subtitle": "Weather Assistant: Example of Tools Using ChatGPT",
+          "title": "N8N 👋"
+        }
+      },
+      "id": "ba1ac09e-e621-42d5-91aa-3282927db97f",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "position": [
+        -360,
+        240
+      ],
+      "webhookId": "4a44e974-db62-4727-9913-12a22bc88e01",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "f3b4c0be-dfba-41b3-850d-d2fec1ee5497",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        -40,
+        480
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Integrating AI with Open-Meteo API for Enhanced Weather Forecasting\n\n## Use case\n\n### Workshop\n\nWe are using this workflow in our workshops to teach how to use Tools a.k.a functions with artificial intelligence. In this specific case, we will use a generic \"AI Agent\" node to illustrate that it could use other models from different data providers.\n\n### Enhanced Weather Forecasting\n\nIn this small example, it's easy to demonstrate how to obtain weather forecast results from the Open-Meteo site to accurately display the upcoming days.\n\nThis can be used to plan travel decisions, for example.\n\n## What this workflow does\n\n1. We will make an HTTP request to find out the geographic coordinates of a city.\n2. Then, we will make other HTTP requests to discover the weather for the upcoming days.\n\nIn this workshop, we demonstrate that the AI will be able to determine which tool to call first—it will first call the geolocation tool and then the weather forecast tool. All of this within a single client conversation call.\n\n\n## Setup\n\nInsert an OpenAI Key and activate the workflow.\n\nby Davi Saranszky Mesquita\nhttps://www.linkedin.com/in/mesquitadavi/",
+        "height": 720,
+        "width": 500,
+        "color": 5
+      },
+      "id": "30262bb3-0f2b-4caa-bd02-3ed52853764a",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1000,
+        -100
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Create an Hosted Web Chat\n\n### And setup the trigger!\n\nExample: https://website/webhook/4a4..../chat",
+        "height": 220,
+        "width": 340
+      },
+      "id": "361e8682-490c-4dc7-89c9-04f32cade99f",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -400,
+        100
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "d1ba268d-9b22-4f79-8d74-ff6e8e92ad6d",
+      "name": "Generic AI Tool Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        -20,
+        240
+      ],
+      "typeVersion": 1.7
+    },
+    {
+      "parameters": {},
+      "id": "9b6f7bbb-3f4c-449e-aead-9c7c03a3ba27",
+      "name": "Chat Memory Buffer",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "position": [
+        -260,
+        480
+      ],
+      "typeVersion": 1.3
+    },
+    {
+      "parameters": {
+        "content": "-\n\n\n## Setup OpenAI Key",
+        "width": 260
+      },
+      "id": "7b25fa67-acbd-4577-b6ad-42cbf6b8e9aa",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -140,
+        540
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### Open Meteo SPEC - City Geolocation\n\nThis tool will go to the URL https://geocoding-api.open-meteo.com/v1/search to fetch the geolocation data of the city, and I only need to get the name of the city.\n\nSo, I will ask the user to input the name of the city and pass some pre-existing information, such as returning only the first city and returning in JSON format.\n\n- name (By Model) - And placeholder - The parameter that the AI will need to fill in as required.\n\n- count - 1 by default because I want only the first city.\n\n- format - Putting JSON for no specific reason, but OpenAI could figure out how to process that information.",
+        "height": 360,
+        "width": 280,
+        "color": 4
+      },
+      "id": "b12bf69e-5d86-4353-8ef0-84e5e9f07c4d",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        340,
+        600
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "toolDescription": "To get forecast of next [forecast_days] input the geolocation of an City",
+        "url": "https://api.open-meteo.com/v1/forecast",
+        "sendQuery": true,
+        "parametersQuery": {
+          "values": [
+            {
+              "name": "latitude"
+            },
+            {
+              "name": "longitude"
+            },
+            {
+              "name": "daily",
+              "valueProvider": "fieldValue",
+              "value": "temperature_2m_max,precipitation_sum"
+            },
+            {
+              "name": "timezone",
+              "valueProvider": "fieldValue",
+              "value": "GMT"
+            },
+            {
+              "name": "forecast_days"
+            }
+          ]
+        },
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "longitude",
+              "description": "longitude",
+              "type": "number"
+            },
+            {
+              "name": "latitude",
+              "description": "latitude",
+              "type": "number"
+            },
+            {
+              "name": "forecast_days",
+              "description": "forecast_days number of days ahead",
+              "type": "number"
+            }
+          ]
+        }
+      },
+      "id": "eaea7c99-1e0e-4566-a4ba-9577716b8a7a",
+      "name": "A tool to get the weather forecast based on geolocation",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "position": [
+        660,
+        380
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "content": "### Open Meteo SPEC - Weather Forecast\n\nThis tool will go to the Open Meteo site with the geolocation information at https://api.open-meteo.com/v1/forecast\n\nIt will pass the information on latitude, longitude, and the number of days for which it will bring data.\n\nThere are many default pieces of information within, but the focus is not to explain the Open Meteo API.\n\nVariables like latitude, longitude, and forecast_days are self-explanatory for OpenAI, making it the easiest tool to configure.\n\n- latitude (By Model) and Placeholder\n- longitude (By Model) and Placeholder\n- forecast_days (By Model) and Placeholder\n",
+        "height": 320,
+        "width": 280,
+        "color": 4
+      },
+      "id": "40c77328-c8d9-48eb-a19d-c15cc7ae44d5",
+      "name": "Sticky Note6",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        800,
+        320
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "toolDescription": "Input the City and get geolocation, geocode or coordinates from Requested City",
+        "url": "=https://geocoding-api.open-meteo.com/v1/search",
+        "sendQuery": true,
+        "parametersQuery": {
+          "values": [
+            {
+              "name": "name"
+            },
+            {
+              "name": "count",
+              "valueProvider": "fieldValue",
+              "value": "1"
+            },
+            {
+              "name": "format",
+              "valueProvider": "fieldValue",
+              "value": "json"
+            }
+          ]
+        },
+        "placeholderDefinitions": {
+          "values": [
+            {
+              "name": "name",
+              "description": "Requested City",
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "id": "39c2e0b2-b37a-4ae3-846d-393bbf203c9f",
+      "name": "A tool for inputting the city and obtaining geolocation",
+      "type": "@n8n/n8n-nodes-langchain.toolHttpRequest",
+      "position": [
+        380,
+        440
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "content": "## Within N8N, there will be a chat button to test, or you can use the external chat link from the trigger.",
+        "height": 80,
+        "width": 840,
+        "color": 3
+      },
+      "id": "e0670e05-ab3a-4096-bba1-89d48f67e353",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -560,
+        880
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Generic AI Tool Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat Memory Buffer": {
+      "ai_memory": [
+        [
+          {
+            "node": "When chat message received",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "Generic AI Tool Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Generic AI Tool Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "A tool for inputting the city and obtaining geolocation": {
+      "ai_tool": [
+        [
+          {
+            "node": "Generic AI Tool Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "A tool to get the weather forecast based on geolocation": {
+      "ai_tool": [
+        [
+          {
+            "node": "Generic AI Tool Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {},
+  "versionId": "f6c4817a-5a34-4e78-b7b0-4cde0aa598f7",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-07-09T21:41:38.773Z",
+      "updatedAt": "2025-07-09T21:41:38.773Z",
+      "id": "G5Lcoe2jTgqCJuSy",
+      "name": "OpenAI"
+    },
+    {
+      "createdAt": "2025-07-09T21:41:38.763Z",
+      "updatedAt": "2025-07-09T21:41:38.763Z",
+      "id": "pz5LfYMpyppJnoPT",
+      "name": "WooCommerce"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:46.091Z",
+      "updatedAt": "2025-10-25T12:28:46.091Z",
+      "role": "workflow:owner",
+      "workflowId": "T3VNbFLsRZEQjhAo",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

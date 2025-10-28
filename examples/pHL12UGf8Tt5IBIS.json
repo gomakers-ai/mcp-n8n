@@ -1,0 +1,409 @@
+{
+  "createdAt": "2025-07-14T19:09:40.657Z",
+  "updatedAt": "2025-07-14T19:09:40.657Z",
+  "id": "pHL12UGf8Tt5IBIS",
+  "name": "Build_a_Document_QA_System_with_RAG_using_Milvus__Cohere__and_OpenAI_for_Google_Drive",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "55054414-90bc-4682-a80e-284288055707",
+      "name": "Default Data Loader",
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "position": [
+        620,
+        -180
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "modelName": "embed-multilingual-v3.0"
+      },
+      "id": "5b052fba-f1d1-4eeb-ab08-42e6f7a0fd88",
+      "name": "Embeddings Cohere",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsCohere",
+      "position": [
+        480,
+        -180
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "edbb2b0e-848b-4e7b-8cee-14d1f3358893",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "position": [
+        -180,
+        20
+      ],
+      "webhookId": "a4257301-3fb9-4b9d-a965-1fa66f314696",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "mode": "list",
+          "value": "15gjDQZiHZuBeVscnK8Ic_kIWt3mOaVfs",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/15gjDQZiHZuBeVscnK8Ic_kIWt3mOaVfs",
+          "cachedResultName": "RAG template"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "id": "f83624b0-347d-4137-a739-18df0adbaad6",
+      "name": "Watch New Files",
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "position": [
+        -180,
+        -400
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $json.id }}"
+        },
+        "options": {}
+      },
+      "id": "239e7d05-8e7e-48ce-ad0f-1d0277f689cf",
+      "name": "Download New",
+      "type": "n8n-nodes-base.googleDrive",
+      "position": [
+        40,
+        -400
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "milvusCollection": {
+          "__rl": true,
+          "mode": "list",
+          "value": "collectionName",
+          "cachedResultName": "collectionName"
+        },
+        "options": {
+          "clearCollection": false
+        }
+      },
+      "id": "ae17baa2-8dc6-4b54-a3a9-5c8bf3ce8d1d",
+      "name": "Insert into Milvus",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreMilvus",
+      "position": [
+        500,
+        -400
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "e1aee1dd-38fc-4e8a-a101-459915c946c8",
+      "name": "RAG Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        80,
+        20
+      ],
+      "typeVersion": 1.8
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolName": "vector_store",
+        "toolDescription": "You are an AI agent that responds based on information received from a vector database.",
+        "milvusCollection": {
+          "__rl": true,
+          "mode": "list",
+          "value": "collectionName",
+          "cachedResultName": "collectionName"
+        },
+        "topK": 10
+      },
+      "id": "11f7b9b7-1346-4863-bc75-6d155b6e4419",
+      "name": "Retrieve from Milvus",
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreMilvus",
+      "position": [
+        280,
+        240
+      ],
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o",
+          "cachedResultName": "gpt-4o"
+        },
+        "options": {}
+      },
+      "id": "f2e0f1af-9990-4aa2-b98f-7455cd9404dc",
+      "name": "OpenAI 4o",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        40,
+        240
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {},
+      "id": "f1b15332-564c-4c7c-b815-2fd0cb5da89f",
+      "name": "Memory",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "position": [
+        160,
+        240
+      ],
+      "typeVersion": 1.3
+    },
+    {
+      "parameters": {
+        "modelName": "embed-multilingual-v3.0"
+      },
+      "id": "ad11d81d-06fe-45b4-9e62-2103929c7964",
+      "name": "Cohere embeddings",
+      "type": "@n8n/n8n-nodes-langchain.embeddingsCohere",
+      "position": [
+        400,
+        400
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "chunkSize": 700,
+        "chunkOverlap": 60,
+        "options": {}
+      },
+      "id": "72159472-09a4-4d70-b297-33b0e5a70f28",
+      "name": "Set Chunks",
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "position": [
+        700,
+        -20
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "id": "31562313-0f78-47b9-9aee-7c2cf47e3e1e",
+      "name": "Extract from File",
+      "type": "n8n-nodes-base.extractFromFile",
+      "position": [
+        260,
+        -400
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Why Milvus\nBased on comparisons and user feedback, **Milvus is often considered a more performant and scalable vector database solution compared to Supabase**, particularly for demanding use cases involving large datasets, high-volume vector search operations, and multilingual support.\n\n\n### Requirements\n- Create an account on [Zilliz](https://zilliz.com/) to generate the Milvus cluster. \n- There is no need to create docker containers or your own instance, Zilliz provides the cloud infraestructure to build it easily\n- Get your credentials ready from Drive, Milvus (Zilliz), and [Cohere](https://cohere.com)\n\n### Usage\nEvery time a new pdf is added into the Drive folder, it will be inserted into the Milvus Vector Store, allowing for the interaction with the RAG agent in seconds.\n\n## Calculate your company's RAG costs\n\nWant to run Milvus on your own server on n8n? Zilliz provides a great [cost calculator](https://zilliz.com/rag-cost-calculator/)\n",
+        "height": 600,
+        "width": 540,
+        "color": 2
+      },
+      "id": "e5f09ae4-7dd8-4492-b732-aa9fcc95d4d5",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -820,
+        -380
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "connections": {
+    "Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "RAG Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI 4o": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "RAG Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Chunks": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download New": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Watch New Files": {
+      "main": [
+        [
+          {
+            "node": "Download New",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cohere embeddings": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Retrieve from Milvus",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Cohere": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Insert into Milvus",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Insert into Milvus",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Insert into Milvus",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieve from Milvus": {
+      "ai_tool": [
+        [
+          {
+            "node": "RAG Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "RAG Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {},
+  "versionId": "e8b25ce4-aebf-4459-afec-c3834de9b6cb",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-07-09T21:41:38.773Z",
+      "updatedAt": "2025-07-09T21:41:38.773Z",
+      "id": "G5Lcoe2jTgqCJuSy",
+      "name": "OpenAI"
+    },
+    {
+      "createdAt": "2025-07-09T21:41:38.763Z",
+      "updatedAt": "2025-07-09T21:41:38.763Z",
+      "id": "pz5LfYMpyppJnoPT",
+      "name": "WooCommerce"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:46.160Z",
+      "updatedAt": "2025-10-25T12:28:46.160Z",
+      "role": "workflow:owner",
+      "workflowId": "pHL12UGf8Tt5IBIS",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

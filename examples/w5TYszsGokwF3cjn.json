@@ -1,0 +1,1911 @@
+{
+  "createdAt": "2025-07-14T19:07:44.445Z",
+  "updatedAt": "2025-07-14T19:07:44.445Z",
+  "id": "w5TYszsGokwF3cjn",
+  "name": "Create_Animated_Stories_using_GPT_4o_mini__Midjourney__Kling_and_Creatomate_API",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0107a930-1d7a-459c-a3ab-ceb28b43b8b8",
+              "name": "video1",
+              "type": "string",
+              "value": "={{ $json.data.output.video_url }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a0a54d66-d95a-4c74-ab09-87c852500c7b",
+      "name": "output1",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        2980,
+        220
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0107a930-1d7a-459c-a3ab-ceb28b43b8b8",
+              "name": "video2",
+              "type": "string",
+              "value": "={{ $json.data.output.video_url }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c9a7daf0-1930-4b28-b96e-0eed535529c4",
+      "name": "output2",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        3680,
+        200
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "jsCode": "const content = $input.first().json.choices[0].message.content;\n\nconst prompts = JSON.parse(content);\n\nreturn { prompts };"
+      },
+      "id": "83018fae-0641-4cb3-bec5-82e83e92d4eb",
+      "name": "Get Prompt",
+      "type": "n8n-nodes-base.code",
+      "position": [
+        -420,
+        -120
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"x-api-key\":\"\",\n  \"style\": \"a children’s book cover, ages 6-10. --s 500 --sref 4028286908  --niji 6\",\n  \"character\": \"A gentle girl and a fluffy rabbit explore a sunlit forest together, playing by a sparkling stream\",\n  \"situational_keywords\": \"Butterflies flutter around them as golden sunlight filters through green leaves. Warm and peaceful atmosphere\"\n}\n",
+        "options": {}
+      },
+      "id": "6b33a048-9886-4206-83a7-2c41e40b6a12",
+      "name": "Basic Params",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -800,
+        -120
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d52d19d1-3a37-47bb-ad23-e809323c0c54",
+              "name": "image1",
+              "type": "string",
+              "value": "={{ $('Midjourney Generator of the First Image').item.json.data.task_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "796beb05-e169-4324-a319-42e064c697bd",
+      "name": "Get Task ID of the First Image",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -640,
+        100
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.piapi.ai/api/v1/task",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "={{ $('Basic Params').item.json['x-api-key'] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"midjourney\",\n  \"task_type\": \"imagine\",\n  \"input\": {\n    \"prompt\": \"{{ $('Basic Params').item.json.character }},{{ $json.prompts.prompt1 }},{{ $('Basic Params').item.json.style }}\",\n    \"aspect_ratio\": \"2:3\",\n    \"process_mode\": \"turbo\",\n    \"skip_prompt_check\": false\n  }\n}",
+        "options": {}
+      },
+      "id": "e85fd819-65b8-4f79-a76d-beab8604d689",
+      "name": "Midjourney Generator of the First Image",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -860,
+        100
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {},
+      "id": "579d179d-9ec5-4fe2-a16e-e2b6087eb738",
+      "name": "Wait for the First Image Generation",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        -800,
+        360
+      ],
+      "webhookId": "af79053d-1291-4dd2-889e-4593dbbb2512",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "or",
+          "conditions": [
+            {
+              "id": "e97a02cc-8d1d-4500-bce5-0a296c792b76",
+              "operator": {
+                "name": "filter.operator.equals",
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $json.data.status }}",
+              "rightValue": "completed"
+            },
+            {
+              "id": "50b63a7a-52b5-4766-a859-96ac1ff949ec",
+              "operator": {
+                "name": "filter.operator.equals",
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $json.data.status }}",
+              "rightValue": "failed"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "11658d7c-245f-4ad5-9cb7-03801fa7f60f",
+      "name": "Verify the first image generation status",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        -420,
+        360
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d52d19d1-3a37-47bb-ad23-e809323c0c54",
+              "name": "image_urls1",
+              "type": "array",
+              "value": "={{ $json.data.output.temporary_image_urls }}"
+            },
+            {
+              "id": "f519111b-5cb4-4562-bb8c-944a500e2df3",
+              "name": "",
+              "type": "string",
+              "value": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "e25192df-d733-48c6-82ec-54072fc56e9a",
+      "name": "Get the First Image URL",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -20,
+        160
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.piapi.ai/api/v1/task",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "={{ $('Basic Params').item.json['x-api-key'] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"midjourney\",\n  \"task_type\": \"imagine\",\n  \"input\": {\n    \"prompt\": \"{{ $('Basic Params').item.json.character }},{{ $('Get Prompt').item.json.prompts.prompt2 }},{{ $('Basic Params').item.json.style }}\",\n    \"aspect_ratio\": \"2:3\",\n    \"process_mode\": \"turbo\",\n    \"skip_prompt_check\": false\n  }\n}",
+        "options": {}
+      },
+      "id": "52ebb147-daff-4112-b19a-ec556006cc94",
+      "name": "Midjourney Generator of the Second Image",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        220,
+        160
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.piapi.ai/api/v1/task",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "={{ $('Basic Params').item.json['x-api-key'] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"midjourney\",\n  \"task_type\": \"imagine\",\n  \"input\": {\n    \"prompt\": \"{{ $('Basic Params').item.json.character }},{{ $('Get Prompt').item.json.prompts.prompt3 }},{{ $('Basic Params').item.json.style }}\",\n    \"aspect_ratio\": \"2:3\",\n    \"process_mode\": \"turbo\",\n    \"skip_prompt_check\": false\n  }\n}",
+        "options": {}
+      },
+      "id": "49aed1d7-1bab-4141-a0bf-1c24c5db72ba",
+      "name": "Midjourney Generator of the Third Image",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        920,
+        180
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "5f61ee56-4ebe-411f-95e6-b47d9741e7a2",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.data.status }}",
+                    "rightValue": "completed"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "1f3bc673-3f6c-4567-8d5c-1456909ff341",
+      "name": "Get the First Image Generation Status",
+      "type": "n8n-nodes-base.switch",
+      "position": [
+        -220,
+        160
+      ],
+      "typeVersion": 3.2
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "5f61ee56-4ebe-411f-95e6-b47d9741e7a2",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.data.status }}",
+                    "rightValue": "completed"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "046f350f-7ac1-4614-a8ab-081d420445f4",
+      "name": "Get the Second Image Generation Status",
+      "type": "n8n-nodes-base.switch",
+      "position": [
+        480,
+        180
+      ],
+      "typeVersion": 3.2
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "5f61ee56-4ebe-411f-95e6-b47d9741e7a2",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.data.status }}",
+                    "rightValue": "completed"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "24b6a3e8-25d7-41cf-aa76-3f3ce13ad14a",
+      "name": "Get the Third Image Generation Status",
+      "type": "n8n-nodes-base.switch",
+      "position": [
+        1380,
+        180
+      ],
+      "typeVersion": 3.2
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d52d19d1-3a37-47bb-ad23-e809323c0c54",
+              "name": "image_urls1",
+              "type": "array",
+              "value": "={{ $json.data.output.temporary_image_urls }}"
+            },
+            {
+              "id": "f519111b-5cb4-4562-bb8c-944a500e2df3",
+              "name": "",
+              "type": "string",
+              "value": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3c0632b4-d077-421d-8286-73a3f476eb44",
+      "name": "Get the Second Image URL",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        720,
+        180
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d52d19d1-3a37-47bb-ad23-e809323c0c54",
+              "name": "image_urls1",
+              "type": "array",
+              "value": "={{ $json.data.output.temporary_image_urls }}"
+            },
+            {
+              "id": "f519111b-5cb4-4562-bb8c-944a500e2df3",
+              "name": "",
+              "type": "string",
+              "value": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "354a2bbe-65c3-4fbf-b2ed-973150c4a848",
+      "name": "Get the Third Image URL",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1560,
+        180
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {},
+      "id": "31230da6-c8fe-4709-977e-aac7bd78be4f",
+      "name": "Wait for the Second Image Generation",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        -120,
+        400
+      ],
+      "webhookId": "af79053d-1291-4dd2-889e-4593dbbb2512",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "url": "=https://api.piapi.ai/api/v1/task/{{ $('Get Task ID of the First Image').item.json.image1 }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "={{ $('Basic Params').item.json['x-api-key'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "32f4d5fe-1a53-4198-980b-45477ea68879",
+      "name": "Get Task of the First Image",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -600,
+        360
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "url": "=https://api.piapi.ai/api/v1/task/{{ $json.data.task_id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "={{ $('Basic Params').item.json['x-api-key'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "eca7588c-0beb-4ed3-a4bf-44da986a0c16",
+      "name": "Get Task of the Second Image",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        100,
+        400
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "or",
+          "conditions": [
+            {
+              "id": "e97a02cc-8d1d-4500-bce5-0a296c792b76",
+              "operator": {
+                "name": "filter.operator.equals",
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $json.data.status }}",
+              "rightValue": "completed"
+            },
+            {
+              "id": "50b63a7a-52b5-4766-a859-96ac1ff949ec",
+              "operator": {
+                "name": "filter.operator.equals",
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $json.data.status }}",
+              "rightValue": "failed"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "932c52fa-c626-4cdc-a322-d1fbc52b9255",
+      "name": "Verify the second image generation status",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        300,
+        400
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "or",
+          "conditions": [
+            {
+              "id": "e97a02cc-8d1d-4500-bce5-0a296c792b76",
+              "operator": {
+                "name": "filter.operator.equals",
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $json.data.status }}",
+              "rightValue": "completed"
+            },
+            {
+              "id": "50b63a7a-52b5-4766-a859-96ac1ff949ec",
+              "operator": {
+                "name": "filter.operator.equals",
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $json.data.status }}",
+              "rightValue": "failed"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "d8310002-4337-4543-b016-582fdfcedf4b",
+      "name": "Verify the third image generation status",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        1100,
+        420
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "url": "=https://api.piapi.ai/api/v1/task/{{ $json.data.task_id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "={{ $('Basic Params').item.json['x-api-key'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "cb1eda9b-aebd-402a-b459-13dc8b4e972d",
+      "name": "Get Task of the Third Image",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        880,
+        420
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {},
+      "id": "168a40fe-3ea1-450a-ae06-519f2143b2cb",
+      "name": "Wait for the Third Image Generation",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        680,
+        420
+      ],
+      "webhookId": "af79053d-1291-4dd2-889e-4593dbbb2512",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d52d19d1-3a37-47bb-ad23-e809323c0c54",
+              "name": "image_output1",
+              "type": "string",
+              "value": "={{ $('Get the First Image URL').item.json.image_urls1[0] }}"
+            },
+            {
+              "id": "333c0676-342a-40ea-bcc7-c13e9145818f",
+              "name": "image_output2",
+              "type": "string",
+              "value": "={{ $('Get the Second Image URL').item.json.image_urls1[1] }}"
+            },
+            {
+              "id": "cc21180a-d88a-40ed-b5d1-0abcfd86bf86",
+              "name": "image_output3",
+              "type": "string",
+              "value": "={{ $json.image_urls1[2] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "aed3551a-0954-4c8a-bb19-4f278be0151e",
+      "name": "Get three Image URLs",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1740,
+        180
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.piapi.ai/api/v1/task",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "={{ $('Basic Params').first().json['x-api-key'] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"model\": \"kling\",\n    \"task_type\": \"video_generation\",\n    \"input\": {\n        \"version\": \"1.6\",\n        \"mode\": \"pro\",\n        \"image_url\": \"{{ $json.image_output1 }}\",\n        \"prompt\": \"Natural swing\"\n    }\n} ",
+        "options": {}
+      },
+      "id": "130e1343-bc3a-4446-b632-e257e262c461",
+      "name": "Generate the First Video",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        1960,
+        0
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.piapi.ai/api/v1/task",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "={{ $('Basic Params').first().json['x-api-key'] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"model\": \"kling\",\n    \"task_type\": \"video_generation\",\n    \"input\": {\n        \"version\": \"1.6\",\n        \"mode\": \"pro\",\n        \"image_url\": \"{{ $('Get three Image URLs').item.json.image_output2 }}\",\n        \"prompt\": \"Natural swing\"\n    }\n} ",
+        "options": {}
+      },
+      "id": "1b9bf510-e675-4c37-87d2-d467190712bc",
+      "name": "Generate the Second Video",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        2160,
+        0
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.piapi.ai/api/v1/task",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "={{ $('Basic Params').first().json['x-api-key'] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"model\": \"kling\",\n    \"task_type\": \"video_generation\",\n    \"input\": {\n        \"version\": \"1.6\",\n        \"mode\": \"pro\",\n        \"image_url\": \"{{ $('Get three Image URLs').item.json.image_output3 }}\",\n        \"prompt\": \"Natural swing\"\n    }\n} ",
+        "options": {}
+      },
+      "id": "4db3b419-80c2-48c0-8eaa-fbb931582bb1",
+      "name": "Generate the Third Video",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        2360,
+        0
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.creatomate.com/v1/renders",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer "
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"template_id\": \"c10c62b6-d515-4f36-a730-f4646d1b7ee2\",\n\"modifications\": {\n    \"Video-1.source\": \"{{ $('output1').item.json.video1 }}\",\n    \"Video-2.source\": \"{{ $('output2').item.json.video2 }}\",\n    \"Video-3.source\": \"{{ $('Get the Third Video URL').item.json.video3 }}\",\n    \"Text-1.text\": \"{{ $('Get Prompt').item.json.prompts.title }}\"\n  }\n}",
+        "options": {}
+      },
+      "id": "9514b3be-3cdc-4a6b-8e40-c37793e7b861",
+      "name": "Final Video Combination",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        4700,
+        180
+      ],
+      "executeOnce": true,
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0107a930-1d7a-459c-a3ab-ceb28b43b8b8",
+              "name": "video3",
+              "type": "string",
+              "value": "={{ $json.data.output.video_url }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c30eed39-f5f9-489e-bd82-37c2910d4d23",
+      "name": "Get the Third Video URL",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        4480,
+        180
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d20160df-8be0-4bd0-8960-f49ebb596a64",
+              "name": "video_task1",
+              "type": "string",
+              "value": "={{ $('Generate the First Video').first().json.data.task_id }}"
+            },
+            {
+              "id": "1be26a8b-1ba3-4de3-a458-778a33f99730",
+              "name": "video_task2",
+              "type": "string",
+              "value": "={{ $('Generate the Second Video').first().json.data.task_id }}"
+            },
+            {
+              "id": "9718a718-8e19-4001-a0c9-2d35710d904e",
+              "name": "video_task3",
+              "type": "string",
+              "value": "={{ $json.data.task_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5c9bd18d-c892-452e-b1e6-796f467181bd",
+      "name": "Get Video Task IDs",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        2560,
+        0
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "url": "=https://api.piapi.ai/api/v1/task/{{ $('Get Video Task IDs').item.json.video_task1 }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "={{ $('Basic Params').first().json['x-api-key'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "341a9233-fd10-4405-a1af-aa7c1c9ad25f",
+      "name": "Get the First Video Task",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        2380,
+        380
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "or",
+          "conditions": [
+            {
+              "id": "e97a02cc-8d1d-4500-bce5-0a296c792b76",
+              "operator": {
+                "name": "filter.operator.equals",
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $json.data.status }}",
+              "rightValue": "completed"
+            },
+            {
+              "id": "50b63a7a-52b5-4766-a859-96ac1ff949ec",
+              "operator": {
+                "name": "filter.operator.equals",
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $json.data.status }}",
+              "rightValue": "failed"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c6c43f00-7294-4cef-a10d-75759c5d4818",
+      "name": "Verify the First Video Generation",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        2580,
+        380
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "or",
+          "conditions": [
+            {
+              "id": "e97a02cc-8d1d-4500-bce5-0a296c792b76",
+              "operator": {
+                "name": "filter.operator.equals",
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $json.data.status }}",
+              "rightValue": "completed"
+            },
+            {
+              "id": "50b63a7a-52b5-4766-a859-96ac1ff949ec",
+              "operator": {
+                "name": "filter.operator.equals",
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $json.data.status }}",
+              "rightValue": "failed"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "0a7ca3fd-ca3a-4347-9bc3-a3eb369a1157",
+      "name": "Verify the Second Video Generation",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        3320,
+        380
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "or",
+          "conditions": [
+            {
+              "id": "e97a02cc-8d1d-4500-bce5-0a296c792b76",
+              "operator": {
+                "name": "filter.operator.equals",
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $json.data.status }}",
+              "rightValue": "completed"
+            },
+            {
+              "id": "50b63a7a-52b5-4766-a859-96ac1ff949ec",
+              "operator": {
+                "name": "filter.operator.equals",
+                "type": "string",
+                "operation": "equals"
+              },
+              "leftValue": "={{ $json.data.status }}",
+              "rightValue": "failed"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ace309a9-bf85-407c-a4b1-1b49db9e5bdc",
+      "name": "Verify the Third Video Generation",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        4040,
+        380
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "amount": 4,
+        "unit": "minutes"
+      },
+      "id": "231dbee0-7667-44d0-b000-b07f33ae1056",
+      "name": "Wait for Video Generation for at Least 4 min",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        2780,
+        0
+      ],
+      "webhookId": "d7fc1084-fd2e-4aac-98aa-60c719d73c4c",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {},
+      "id": "2d5c08a2-4221-4d55-afce-a295b76a7c72",
+      "name": "Wait for the First Video Generation",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        2800,
+        400
+      ],
+      "webhookId": "db4734c5-f793-4b3b-a660-ae87c516dfc1",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {},
+      "id": "f6ca43cf-76de-4924-885c-addcdea00c95",
+      "name": "Wait for the Second Video Generation",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        3480,
+        420
+      ],
+      "webhookId": "d9cde4b3-5755-4fde-b58e-9b5849a21c2b",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {},
+      "id": "6830c22a-4a80-4795-b5e1-7814d241a90d",
+      "name": "Wait for the Third Video Generation",
+      "type": "n8n-nodes-base.wait",
+      "position": [
+        4260,
+        420
+      ],
+      "webhookId": "d077385d-bd8f-4d14-b332-22a974f98ea7",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "5f61ee56-4ebe-411f-95e6-b47d9741e7a2",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.data.status }}",
+                    "rightValue": "completed"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a0055c7e-7e00-4c8e-8e43-5d756c28c7d8",
+      "name": "Get the First Video Generation",
+      "type": "n8n-nodes-base.switch",
+      "position": [
+        2800,
+        220
+      ],
+      "typeVersion": 3.2
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "5f61ee56-4ebe-411f-95e6-b47d9741e7a2",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.data.status }}",
+                    "rightValue": "completed"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "21df7512-9635-486c-a3f2-c8025e42594e",
+      "name": "Get the Second Video Generation",
+      "type": "n8n-nodes-base.switch",
+      "position": [
+        3520,
+        200
+      ],
+      "typeVersion": 3.2
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "5f61ee56-4ebe-411f-95e6-b47d9741e7a2",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "leftValue": "={{ $json.data.status }}",
+                    "rightValue": "completed"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "2265be3e-3bef-4139-a9b0-6927e746b075",
+      "name": "Get the Third Video Generation",
+      "type": "n8n-nodes-base.switch",
+      "position": [
+        4280,
+        180
+      ],
+      "typeVersion": 3.2
+    },
+    {
+      "parameters": {
+        "url": "=https://api.piapi.ai/api/v1/task/{{ $('Get Video Task IDs').item.json.video_task2 }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "={{ $('Basic Params').first().json['x-api-key'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "95def7d9-8618-4992-98ef-b9adc8b6494a",
+      "name": "Get the Second Video Task",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        3160,
+        380
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "url": "=https://api.piapi.ai/api/v1/task/{{ $('Get Video Task IDs').item.json.video_task3 }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-api-key",
+              "value": "={{ $('Basic Params').first().json['x-api-key'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7a8ea8db-80e0-48a3-828e-911ea8138ef9",
+      "name": "Get the Third Video Task",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        3840,
+        380
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "content": "## Basic Setting Instruction\nFill in **Basic Params** based on user's need. \nThe node concludes three section: style, character and situation_keyword.\nGPT-4o-mini will generate image description based on basic params mentioned above.",
+        "width": 360
+      },
+      "id": "47d58b73-6cd1-4cb2-87a7-87fbd8d24f6e",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1000,
+        -320
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {},
+      "id": "65591979-44fc-4f41-84f6-d41940dba010",
+      "name": "When clicking Test workflow",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        -1000,
+        -120
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.piapi.ai/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $('Basic Params').first().json['x-api-key'] }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"model\": \"gpt-4o-mini\",\n    \"messages\": [\n       {\n          \"role\": \"system\",\n          \"content\": \"You are a helpful assistant.\"\n        },\n        {\n          \"role\": \"user\",\n          \"content\": \"Character is {{ $json.character }}, style is {{ $json.style }}, context keywords are {{ $json.situational_keywords }}, please generate a short story containing relevant elements and styles based on Character and context keywords. It should be concise and clear and divided into three sections. The return format is {'title':'','prompt1':'','prompt2':'','prompt3':''}, directly return json data format, not markdo2t include unusual characters such as hyphens,The key and value are enclosed in double quotes, but if you need to use quotes in the value string, please use single quotes.\"\n        }\n      ]\n  }",
+        "options": {}
+      },
+      "id": "8380ae91-399f-4138-aa5b-58491ee08c6c",
+      "name": "GPT-4o-mini Generate Image Scenario Prompt",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -600,
+        -120
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "content": "### Generate the first image\nThis workflow section is uesd to generate the first Midjourney image. ",
+        "height": 120
+      },
+      "id": "263b1a04-d344-41a4-9cde-5e1d80fadddf",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -840,
+        620
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### Generate the second image\nThis workflow section is uesd to generate the second Midjourney image. ",
+        "height": 120
+      },
+      "id": "03d86eea-43ee-4ab5-b71a-efb62b659a88",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -140,
+        620
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### Generate the third image\nThis workflow section is uesd to generate the third Midjourney image. ",
+        "height": 120
+      },
+      "id": "dc9c8239-789d-47c2-8533-6fa5a9f494d4",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        660,
+        640
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### Generate three Kling videos\nThis section is used to generate three Kliong videos.",
+        "height": 120
+      },
+      "id": "ef537f30-b784-4804-b7b8-73d2448d43fd",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1960,
+        -160
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### Combine Videos in Creatomate\nSet a video template in Creatomate, then set the node with instruction."
+      },
+      "id": "f61dc397-d29c-4a2b-b768-d74d099e3286",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        4640,
+        360
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## What does the workflow do?\nThis workflow is designed to generate high-quality short videos, primarily uses GPT-4o-mini (unofficial), Midjourney (unofficial) and Kling (unofficial) APIs from PiAPI and Creatomate API mainly for content creator, social media bloggers and short-form video creators. Through this short video workflow, users can quickly validate their creative ideas and focus more on enhancing the quality of their video concepts.\n\n## Who is the workflow for?\nSocial Media Influencers: produce content videos based on inspiration efficiently.\n\nVloggers: generate vlogs based on inspiration.\n\nEducational Creators: explain specific topics via animated short videos or demonstrate a specific imagined scenario to students for enhanced educational impact.\n\nAdvertising Agencies: generate short videos based on specific products.\n\nAI Tool Developers: automatically generate product demo videos.\n\n## Step-by-step Instructions\n-Fill in X-API-key of PiAPI account in Basic Params node.\n-Fill in the scenario of the image and video prompt.\n-Set a video template on Creatomate and make an API call in the final node with core and processing modules provided in Creatomate. Before full video generation, you can first use basic assets in Creatomate for a prototype demo, then integrate with n8n after verifying the expected results.\n-Fill in your Creatomate account settings following the image guildline.\n-Click Test Workflow and wait for a generation (within 10~20min).\n\nIn this workflow, we've established a basic structure for image-to-video generation with subtitle integration. You can further enhance it by adding music nodes using either PiAPI's audio models or your preferred music solution. All video elements will ultimately be composited through Creatomate. For best practice, please refer to PiAPI's official API documentation or Creatomate's API documentation to comprehend more use cases.\n\n## Use Case\nParams Settings\n\nstyle: a children’s book cover, ages 6-10. --s 500 --sref 4028286908 --niji 6\n\ncharacter: A gentle girl and a fluffy rabbit explore a sunlit forest together, playing by a sparkling stream\n\nsituational_keywords: Butterflies flutter around them as golden sunlight filters through green leaves. Warm and peaceful atmosphere\n\nOutput Video\n<video src=\"https://static.piapi.ai/n8n-instruction/short-video/example1.mp4\" controls />",
+        "height": 1200,
+        "width": 560
+      },
+      "id": "92e32249-a390-4641-9ebe-cbc586ecaf46",
+      "name": "Sticky Note6",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1640,
+        -300
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "connections": {
+    "output1": {
+      "main": [
+        [
+          {
+            "node": "Get the Second Video Task",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "output2": {
+      "main": [
+        [
+          {
+            "node": "Get the Third Video Task",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Prompt": {
+      "main": [
+        [
+          {
+            "node": "Midjourney Generator of the First Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic Params": {
+      "main": [
+        [
+          {
+            "node": "GPT-4o-mini Generate Image Scenario Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Video Task IDs": {
+      "main": [
+        [
+          {
+            "node": "Wait for Video Generation for at Least 4 min",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get three Image URLs": {
+      "main": [
+        [
+          {
+            "node": "Generate the First Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get the First Image URL": {
+      "main": [
+        [
+          {
+            "node": "Midjourney Generator of the Second Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get the Third Image URL": {
+      "main": [
+        [
+          {
+            "node": "Get three Image URLs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get the Third Video URL": {
+      "main": [
+        [
+          {
+            "node": "Final Video Combination",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate the First Video": {
+      "main": [
+        [
+          {
+            "node": "Generate the Second Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate the Third Video": {
+      "main": [
+        [
+          {
+            "node": "Get Video Task IDs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get the First Video Task": {
+      "main": [
+        [
+          {
+            "node": "Verify the First Video Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get the Second Image URL": {
+      "main": [
+        [
+          {
+            "node": "Midjourney Generator of the Third Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get the Third Video Task": {
+      "main": [
+        [
+          {
+            "node": "Verify the Third Video Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate the Second Video": {
+      "main": [
+        [
+          {
+            "node": "Generate the Third Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get the Second Video Task": {
+      "main": [
+        [
+          {
+            "node": "Verify the Second Video Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Task of the First Image": {
+      "main": [
+        [
+          {
+            "node": "Verify the first image generation status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Task of the Third Image": {
+      "main": [
+        [
+          {
+            "node": "Verify the third image generation status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking Test workflow": {
+      "main": [
+        [
+          {
+            "node": "Basic Params",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Task of the Second Image": {
+      "main": [
+        [
+          {
+            "node": "Verify the second image generation status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Task ID of the First Image": {
+      "main": [
+        [
+          {
+            "node": "Wait for the First Image Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get the First Video Generation": {
+      "main": [
+        [
+          {
+            "node": "output1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get the Third Video Generation": {
+      "main": [
+        [
+          {
+            "node": "Get the Third Video URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get the Second Video Generation": {
+      "main": [
+        [
+          {
+            "node": "output2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify the First Video Generation": {
+      "main": [
+        [
+          {
+            "node": "Get the First Video Generation",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait for the First Video Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify the Third Video Generation": {
+      "main": [
+        [
+          {
+            "node": "Get the Third Video Generation",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait for the Third Video Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify the Second Video Generation": {
+      "main": [
+        [
+          {
+            "node": "Get the Second Video Generation",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait for the Second Video Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for the First Image Generation": {
+      "main": [
+        [
+          {
+            "node": "Get Task of the First Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for the First Video Generation": {
+      "main": [
+        [
+          {
+            "node": "Get the First Video Task",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for the Third Image Generation": {
+      "main": [
+        [
+          {
+            "node": "Get Task of the Third Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for the Third Video Generation": {
+      "main": [
+        [
+          {
+            "node": "Get the Third Video Task",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for the Second Image Generation": {
+      "main": [
+        [
+          {
+            "node": "Get Task of the Second Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for the Second Video Generation": {
+      "main": [
+        [
+          {
+            "node": "Get the Second Video Task",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get the First Image Generation Status": {
+      "main": [
+        [
+          {
+            "node": "Get the First Image URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get the Third Image Generation Status": {
+      "main": [
+        [
+          {
+            "node": "Get the Third Image URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get the Second Image Generation Status": {
+      "main": [
+        [
+          {
+            "node": "Get the Second Image URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Midjourney Generator of the First Image": {
+      "main": [
+        [
+          {
+            "node": "Get Task ID of the First Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Midjourney Generator of the Third Image": {
+      "main": [
+        [
+          {
+            "node": "Wait for the Third Image Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Midjourney Generator of the Second Image": {
+      "main": [
+        [
+          {
+            "node": "Wait for the Second Image Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify the first image generation status": {
+      "main": [
+        [
+          {
+            "node": "Get the First Image Generation Status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait for the First Image Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify the third image generation status": {
+      "main": [
+        [
+          {
+            "node": "Get the Third Image Generation Status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait for the Third Image Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verify the second image generation status": {
+      "main": [
+        [
+          {
+            "node": "Get the Second Image Generation Status",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait for the Second Image Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT-4o-mini Generate Image Scenario Prompt": {
+      "main": [
+        [
+          {
+            "node": "Get Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for Video Generation for at Least 4 min": {
+      "main": [
+        [
+          {
+            "node": "Get the First Video Task",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {},
+  "versionId": "bd8cfbe5-3fe7-43ca-8796-7c5e0ebb800a",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-07-09T21:41:38.773Z",
+      "updatedAt": "2025-07-09T21:41:38.773Z",
+      "id": "G5Lcoe2jTgqCJuSy",
+      "name": "OpenAI"
+    },
+    {
+      "createdAt": "2025-07-09T21:41:38.763Z",
+      "updatedAt": "2025-07-09T21:41:38.763Z",
+      "id": "pz5LfYMpyppJnoPT",
+      "name": "WooCommerce"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:46.061Z",
+      "updatedAt": "2025-10-25T12:28:46.061Z",
+      "role": "workflow:owner",
+      "workflowId": "w5TYszsGokwF3cjn",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

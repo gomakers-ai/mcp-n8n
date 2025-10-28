@@ -1,0 +1,468 @@
+{
+  "createdAt": "2025-07-14T19:08:41.324Z",
+  "updatedAt": "2025-07-14T19:08:41.324Z",
+  "id": "tm0g3UZ3Tl0ZxMb0",
+  "name": "Automate_Blog_Content_Creation_with_GPT_4__Perplexity___WordPress",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Perplexity Section\n🌐 Calls Perplexity API to get fresh research based on a form input.\n\n\n",
+        "height": 300,
+        "width": 460,
+        "color": 4
+      },
+      "id": "70779bf7-4c76-40b4-8197-10294461d007",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        860,
+        740
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.perplexity.ai/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"sonar-pro\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"Act as a professional news researcher who is capable of finding detailed summaries about a news topic from highly reputable sources.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \" Research the following topic and return everything you can find about: '{{ $json['Topic or Question'] }}'.\"\n    }\n  ]\n}\n",
+        "options": {}
+      },
+      "id": "c77aec0b-0876-47e4-882b-e1b5dd956024",
+      "name": "Perplexity Research",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        940,
+        840
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "635ca538-cac6-40a6-936a-a571a75c3cf1",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "position": [
+        1420,
+        740
+      ],
+      "webhookId": "b132ff74-2807-4cbf-b5b7-a62a207161d3",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {},
+      "id": "75f81954-b9f1-4095-adf5-47a60232a6b1",
+      "name": "Slack-List",
+      "type": "n8n-nodes-mcp.mcpClientTool",
+      "position": [
+        2400,
+        1140
+      ],
+      "typeVersion": 1,
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert in SEO content writing.\n\nYour mission is to create, publish, and notify about a search engine optimized article for a blog focused on artificial intelligence. Follow the steps below: {{ $('Format Research Output').item.json.research }}\n\n1. **Write an SEO-optimized article with a maximum of 20 lines** based on the provided information:\n   - Structure the article with a catchy **H1 title**, one or two **H2 subtitles**, and a professional yet accessible tone.\n   - Extract and include relevant keywords from the data.\n   - Optimize for readability: short sentences, clear paragraphs, and a CTA if relevant.\n   - Do not exceed 20 lines of content.\n\n2. **Publish the article on WordPress**, including:\n   - The **title** as the article's headline\n   - The **SEO content** as the body\n\n3. **Send an email** to my address : {{ $json.emailAddress }} containing:\n   - The article's title\n   - The **URL** of the published article on WordPress\n\n4. **Retrieve the list of available Slack tools first** using “Slack Tools”.\n   - Then, send a notification on Slack that the article has been published, including:\n     - The article title\n     - The article link\n     - Slack channel ID: {{ $json.slackChannelId }}\n\n5. **Retrieve the list of available Notion tools first** using “Notion Tools”.\n   Then, **add a new entry to my Notion database** (ID: {{ $json.notionDatabaseId }}) with the following fields:\n   - The 'Name' column is of type 'title'  → {{ $('Start with Research Query Submission').item.json['Topic or Question'] }}\n   The 'Subject' column is of type 'rich_text' → [the article's headline]\n   - The 'Content'column is of type 'rich_text' → [The SEO content]\n   - The 'URL' column is of type 'URL': → [The article link]\n   - The 'Status' column is of type 'select' → Select: `publish`\n\nImportant: Ensure that each step is successfully completed **before proceeding to the next**.\n",
+        "options": {}
+      },
+      "id": "fe3877cd-f60e-4d91-ad81-0690c308daad",
+      "name": "Copywriting AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        1920,
+        840
+      ],
+      "typeVersion": 1.7
+    },
+    {
+      "parameters": {
+        "content": "## My Copywriting AI Agent\n✍️ Transforms live research into SEO-optimized blog articles using GPT-4, then automatically publishes to WordPress, sends notifications via Gmail & Slack, and logs everything to Notion. This is your full-stack content assistant — from prompt to post, hands-free.\n**mcp-notion-server** : [Guide](https://github.com/suekou/mcp-notion-server)\n**mcp-slack-server** : [Guide](https://github.com/modelcontextprotocol/servers/tree/main/src/slack)",
+        "height": 820,
+        "width": 1300
+      },
+      "id": "82585814-b955-4916-9971-dc642531f0b7",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1340,
+        540
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "23b8e8c4-9191-415a-9661-1b60d413528a",
+              "name": "research",
+              "type": "string",
+              "value": "={{ $json.choices[0].message.content.replaceAll(\"[1]\", \" - source: \" +$json.citations[0]).replaceAll(\"[2]\",\" - source:\" +$json.citations[1]).replaceAll(\"[3]\",\" - source: \" +$json.citations[2]).replaceAll(\"[4]\",\" - source: \"+$json.citations[3]).replaceAll(\"[5]\",\" - source: \"+$json.citations[4]).replaceAll(\"[6]\",\" - source: \"+$json.citations[5]).replaceAll(\"[7]\",\" - source: \"+$json.citations[6]).replaceAll(\"[8]\",\" - source: \"+$json.citations[7]).replaceAll(\"[9]\",\" - source: \"+$json.citations[8]).replaceAll(\"[10]\",\" - source: \"+$json.citations[9]) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "92b95061-6a4b-40cd-b082-407ed2925654",
+      "name": "Format Research Output",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1140,
+        840
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "title": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Title', ``, 'string') }}",
+        "additionalFields": {
+          "content": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Content', ``, 'string') }}",
+          "status": "publish"
+        }
+      },
+      "id": "4221aadb-39ce-49c0-9f15-126f97a42aa4",
+      "name": "Publish Article to WordPress",
+      "type": "n8n-nodes-base.wordpressTool",
+      "position": [
+        1740,
+        1140
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {}
+      },
+      "id": "0ccc5808-a36e-4a7c-9a3e-9d561735dfd4",
+      "name": "Send Email Notification",
+      "type": "n8n-nodes-base.gmailTool",
+      "position": [
+        2260,
+        1140
+      ],
+      "webhookId": "b68c6af8-46e6-4ed9-ae72-445e9cb7ab88",
+      "typeVersion": 2.1
+    },
+    {
+      "parameters": {},
+      "id": "3d97f847-b9bc-4964-ad0e-6cdbb7515c77",
+      "name": "Notify Slack Channel",
+      "type": "n8n-nodes-mcp.mcpClientTool",
+      "position": [
+        2540,
+        1140
+      ],
+      "typeVersion": 1,
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "id": "6852fdfb-74e5-4439-955b-6bc4a17d48af",
+      "name": "Generate SEO Blog Content (GPT-4o)",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        1460,
+        1140
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "formTitle": "AutoBlog Creator",
+        "formDescription": "From research to article — no writing required",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Topic or Question",
+              "fieldType": "textarea",
+              "placeholder": "=How is GPT-4 transforming content creation in 2025?",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "c6c2bbb0-c8c3-4699-acba-374d09eca8d8",
+      "name": "Start with Research Query Submission",
+      "type": "n8n-nodes-base.formTrigger",
+      "position": [
+        680,
+        840
+      ],
+      "webhookId": "a29cbcd3-9d11-4f7c-9aad-14681c356c53",
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "content": "## Intro Sticky \n🔁 **This workflow automates the full cycle of SEO blog content creation** — from live topic research using Perplexity to blog publishing on WordPress, Slack/Gmail notifications, and Notion logging.",
+        "height": 140,
+        "width": 460,
+        "color": 3
+      },
+      "id": "2bfd80ab-829f-4a05-83d6-2a315179d1e7",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        860,
+        540
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c06b2d24-1fd7-40f0-aee5-b5d6553e289e",
+              "name": "emailAddress",
+              "type": "string",
+              "value": ""
+            },
+            {
+              "id": "451aad67-5190-4eab-a982-56092734bb07",
+              "name": "slackChannelId",
+              "type": "string",
+              "value": ""
+            },
+            {
+              "id": "8a294900-f367-47a2-b260-344b133dc2ff",
+              "name": "notionDatabaseId",
+              "type": "string",
+              "value": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f0e41067-a87e-46c5-8b26-8a85c9b27c21",
+      "name": "Edit Workflow Variables",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        980,
+        1200
+      ],
+      "typeVersion": 3.4,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "content": "## Workflow Configuration Panel\n🛠️ **Set your variables here** (email, Slack, Notion, OpenAI model)",
+        "height": 300,
+        "width": 460,
+        "color": 6
+      },
+      "id": "b8835fac-0fc4-43ea-a062-fee23ead9f16",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        860,
+        1080
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {},
+      "id": "6d1e4654-9e71-491d-bd1a-fee07c1766b2",
+      "name": "Notion-List",
+      "type": "n8n-nodes-mcp.mcpClientTool",
+      "position": [
+        1900,
+        1140
+      ],
+      "typeVersion": 1,
+      "credentials": {}
+    },
+    {
+      "parameters": {},
+      "id": "e5b7f976-27fc-4cce-a468-46893a94a7ed",
+      "name": "Insert Article in Notion",
+      "type": "n8n-nodes-mcp.mcpClientTool",
+      "position": [
+        2080,
+        1140
+      ],
+      "typeVersion": 1,
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "content": "## External Setup Guide\n[Guide](https://dr-firas.vip/)",
+        "height": 80,
+        "width": 300
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        860,
+        440
+      ],
+      "id": "11824665-035e-45f9-b61a-b04040c82443",
+      "name": "Sticky Note4"
+    }
+  ],
+  "connections": {
+    "Perplexity Research": {
+      "main": [
+        [
+          {
+            "node": "Format Research Output",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Research Output": {
+      "main": [
+        [
+          {
+            "node": "Edit Workflow Variables",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Workflow Variables": {
+      "main": [
+        [
+          {
+            "node": "Copywriting AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email Notification": {
+      "ai_tool": [
+        [
+          {
+            "node": "Copywriting AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Copywriting AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Publish Article to WordPress": {
+      "ai_tool": [
+        [
+          {
+            "node": "Copywriting AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate SEO Blog Content (GPT-4o)": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Copywriting AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start with Research Query Submission": {
+      "main": [
+        [
+          {
+            "node": "Perplexity Research",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {},
+  "versionId": "af2ec08c-842b-479f-a33b-763880616930",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-07-09T21:41:38.773Z",
+      "updatedAt": "2025-07-09T21:41:38.773Z",
+      "id": "G5Lcoe2jTgqCJuSy",
+      "name": "OpenAI"
+    },
+    {
+      "createdAt": "2025-07-09T23:31:21.052Z",
+      "updatedAt": "2025-07-09T23:31:21.052Z",
+      "id": "JXtwH1KWn3HpvHrm",
+      "name": "templates"
+    },
+    {
+      "createdAt": "2025-07-09T23:31:21.059Z",
+      "updatedAt": "2025-07-09T23:31:21.059Z",
+      "id": "giPr8wYqaJHn1OWx",
+      "name": "creator"
+    },
+    {
+      "createdAt": "2025-07-09T21:41:38.763Z",
+      "updatedAt": "2025-07-09T21:41:38.763Z",
+      "id": "pz5LfYMpyppJnoPT",
+      "name": "WooCommerce"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:46.111Z",
+      "updatedAt": "2025-10-25T12:28:46.111Z",
+      "role": "workflow:owner",
+      "workflowId": "tm0g3UZ3Tl0ZxMb0",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

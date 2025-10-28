@@ -1,0 +1,51 @@
+# Source files (solo publicar dist/)
+src/
+tsconfig.json
+
+# Documentation de desarrollo
+PUBLISHING.md
+PROJECT_STRUCTURE.md
+TESTING.md
+NODE_REFERENCE.md
+
+# Examples (opcional: puedes publicarlos o no)
+# examples/
+
+# Testing scripts
+*.test.js
+*.spec.js
+test/
+tests/
+
+# IDE
+.vscode/
+.idea/
+.claude/
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# CI/CD
+.github/
+
+# Environment
+.env
+.env.*
+
+# Misc
+.DS_Store
+*.log
+cleanup-repo.sh
+cursor-config-example.json
+
+# Keep these
+!dist/
+!README.md
+!LICENSE
+!CHANGELOG.md
+!QUICKSTART.md
+!EXAMPLES.md
+!package.json
+!examples/

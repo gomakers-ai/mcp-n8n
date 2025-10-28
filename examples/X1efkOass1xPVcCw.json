@@ -1,0 +1,238 @@
+{
+  "createdAt": "2025-07-14T19:08:08.791Z",
+  "updatedAt": "2025-07-14T19:08:08.791Z",
+  "id": "X1efkOass1xPVcCw",
+  "name": "Transform_Gmail_Newsletters_into_Insightful_LinkedIn_Posts_Using_OpenAI",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "f61580a7-21ae-4741-8a4e-a38faa48b5ad",
+      "name": "When clicking ‘Test workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        -720,
+        200
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "limit": 1,
+        "simple": false,
+        "filters": {
+          "sender": "decodeai@ghost.io"
+        },
+        "options": {}
+      },
+      "id": "5c8c4777-156c-402f-b14a-3b14a581a62b",
+      "name": "Gmail",
+      "type": "n8n-nodes-base.gmail",
+      "position": [
+        -500,
+        200
+      ],
+      "webhookId": "326419f6-008b-4814-b55d-efaae118eab7",
+      "typeVersion": 2.1
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "message.content.news_items",
+        "options": {}
+      },
+      "id": "ca94847d-b56c-4363-8db5-5644f9246a4f",
+      "name": "Split Out",
+      "type": "n8n-nodes-base.splitOut",
+      "position": [
+        100,
+        200
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "o3-mini-2025-01-31",
+          "cachedResultName": "O3-MINI-2025-01-31"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Given the following newsletter content, identify and summarize the 5 main news items. Focus on factual updates like new AI tools, product launches, or strategic investments. For each item, extract a headline and provide a concise summary. Please ignore purely promotional sections (e.g., calls to book demos or product advertisements).\n\n<text>\n{{ $json.text }}\n</text>"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "id": "b416a16b-55f8-4d86-b361-14c4f5fbb8fb",
+      "name": "Extract News Items",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "position": [
+        -280,
+        200
+      ],
+      "typeVersion": 1.8
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "o3-mini-2025-01-31",
+          "cachedResultName": "O3-MINI-2025-01-31"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=Using the news item details below:\n\nHeadline: {{ $json.headline }}\nSummary: {{ $json.summary }}\n\nCraft a concise, non-promotional LinkedIn post in a smart, deadpan style with subtle humor. Focus on clearly conveying the main points and insights so readers gain practical value. \n- Break up the text into short paragraphs or bullet points for clarity.\n- Use line breaks where helpful.\n- End with an observation or question that encourages reflection—without being overly salesy or flashy.\n- Keep it under 80 words total.\n\n"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "bf2469c5-68ff-4d96-875b-82228d44b85c",
+      "name": "Create LinkedIn Posts",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "position": [
+        320,
+        200
+      ],
+      "typeVersion": 1.8
+    },
+    {
+      "parameters": {
+        "person": "EI5XKdiMv1",
+        "text": "={{ $json.message.content }}",
+        "additionalFields": {}
+      },
+      "id": "dcef2a16-4b1f-4802-821e-1e142558c139",
+      "name": "LinkedIn",
+      "type": "n8n-nodes-base.linkedIn",
+      "position": [
+        700,
+        200
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# Workflow Overview\n\n**Name:** Transform Gmail Newsletters into Insightful LinkedIn Posts Using OpenAI\n\n**Purpose:**  \n- **Filter Newsletters:** Use the Gmail node to process emails from a specific sender (e.g., `newsletter@example.com`).  \n- **Extract Key Items:** Leverage an OpenAI node to identify and summarize the top news items from each newsletter.  \n- **Generate Posts:** Automatically create concise, informative, and subtly humorous LinkedIn posts for each news item.  \n- **Publish:** Post the refined content to your LinkedIn account with the LinkedIn node.\n\n**Setup Steps:**  \n1. **Gmail Node:** Configure and rename to \"Filter Gmail Newsletter\" with the appropriate sender filter.  \n2. **OpenAI Nodes:** Ensure API credentials are set; customize prompt texts if desired.  \n3. **LinkedIn Node:** Rename to \"Post to LinkedIn\" and verify correct OAuth2 credentials.\n\n**Customization Tips:**  \n- Modify the OpenAI prompts to fine-tune the tone and structure of the LinkedIn posts.  \n- Add additional formatting (e.g., Function nodes) for post readability if needed.\n\n*This workflow turns your regular newsletters into engaging, ready-to-share LinkedIn insights in just a few simple steps!*\n",
+        "height": 520,
+        "width": 900
+      },
+      "id": "ecb0f118-92d2-4aa9-a3bd-ed4c0cbdaf07",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -740,
+        -420
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "connections": {
+    "Gmail": {
+      "main": [
+        [
+          {
+            "node": "Extract News Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Create LinkedIn Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract News Items": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create LinkedIn Posts": {
+      "main": [
+        [
+          {
+            "node": "LinkedIn",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {},
+  "versionId": "6b4a9348-4e09-4be9-97ad-dce8cb6c233f",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-07-09T21:41:38.773Z",
+      "updatedAt": "2025-07-09T21:41:38.773Z",
+      "id": "G5Lcoe2jTgqCJuSy",
+      "name": "OpenAI"
+    },
+    {
+      "createdAt": "2025-07-09T21:41:38.763Z",
+      "updatedAt": "2025-07-09T21:41:38.763Z",
+      "id": "pz5LfYMpyppJnoPT",
+      "name": "WooCommerce"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:46.081Z",
+      "updatedAt": "2025-10-25T12:28:46.081Z",
+      "role": "workflow:owner",
+      "workflowId": "X1efkOass1xPVcCw",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

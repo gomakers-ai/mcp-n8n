@@ -1,0 +1,268 @@
+{
+  "createdAt": "2025-07-14T19:09:36.982Z",
+  "updatedAt": "2025-07-14T19:09:36.982Z",
+  "id": "eyXPtwAYcbebUEkJ",
+  "name": "Google_Calendar_Reminder_System_with_GPT_4o_and_Telegram",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "e690b4e9-a715-4871-8eae-2bd2079777aa",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "position": [
+        -660,
+        160
+      ],
+      "typeVersion": 1.2,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "id": "72ed1cbd-e314-4804-8d32-2ec9b5e8224c",
+      "name": "OpenAI Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        80,
+        360
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "mode": "list",
+          "value": "davide.boizza@gmail.com",
+          "cachedResultName": "davide.boizza@gmail.com"
+        },
+        "limit": 5,
+        "timeMin": "={{ $now.plus({ hour: 1 }) }}",
+        "timeMax": "={{ $now.plus({ hour: 1, minute:1 }) }}",
+        "options": {}
+      },
+      "id": "407bd4dc-a9fc-4d04-a163-2f785c4076d4",
+      "name": "Get upcoming event",
+      "type": "n8n-nodes-base.googleCalendar",
+      "position": [
+        -380,
+        160
+      ],
+      "typeVersion": 1.3
+    },
+    {
+      "parameters": {
+        "operation": "removeItemsSeenInPreviousExecutions",
+        "dedupeValue": "={{ $json.id }}",
+        "options": {}
+      },
+      "id": "ad114fa4-2dd9-49a5-94e7-2f878126e7fe",
+      "name": "Already sent?",
+      "type": "n8n-nodes-base.removeDuplicates",
+      "position": [
+        -140,
+        160
+      ],
+      "typeVersion": 2
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=These are the details of the event/appointment:\n\nEvent Name: {{ $('Get upcoming event').item.json.summary }}\nDescription: {{ $('Get upcoming event').item.json.description }}\nLocation: {{ $('Get upcoming event').item.json.location }}\nStart: {{ $('Get upcoming event').item.json.start.dateTime }}\nEnd: {{ $('Get upcoming event').item.json.end.dateTime }}\nCreated by: {{ $('Get upcoming event').item.json.creator.email }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=## Core Identity\nYou are a professional and friendly virtual secretary, dedicated to reminder appointments with efficiency and a warm personal touch.\n\n## Communication Style\n- Communicate in a conversational, approachable manner\n- Maintain a balance between professional competence and friendly rapport\n- Use a tone that is informal yet precise\n- Inject occasional light humor and personality into interactions\n\n## Key Responsibilities\n1. Calendar Management\n   - Provide timely reminders and scheduling updates\n\n2. Communication Approach\n   - Respond promptly and clearly\n   - Maintain confidentiality and discretion\n\n## Interaction Guidelines\n- Use a friendly, conversational tone\n- Just describe the details of the event without asking questions\n\n## Tone and Language\n- Warm and approachable\n- Professional but not overly formal\n- Direct and clear in communication\n- Use simple, straightforward language\n- Show genuine care and attentiveness\n\nRemember: Your primary goal is to make the user's life easier, more organized, and less stressful through efficient and friendly administrative support."
+        }
+      },
+      "id": "7298352b-76f7-4998-b837-7de6f50dc622",
+      "name": "Secretary Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        100,
+        160
+      ],
+      "typeVersion": 1.8
+    },
+    {
+      "parameters": {
+        "chatId": "CHAT_ID",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "21a255ed-7674-49e5-96fa-2031d76b6dc1",
+      "name": "Send reminder",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        480,
+        160
+      ],
+      "webhookId": "dbb6a96e-db3b-4827-9455-a91007b89616",
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "content": "## Google Calendar Event Reminder\nThis smart **Google Calendar** workflow fixes that by sending you a clear, friendly reminder exactly **1 hour before your event starts**—delivered through **Telegram** as if a personal assistant were looking out for you. Powered by **AI**, it transforms cold calendar alerts into warm, conversational nudges you won't ignore.",
+        "width": 620,
+        "color": 3
+      },
+      "id": "9c82b502-3360-4ab3-b272-7a31461972a6",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -660,
+        -280
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## STEP 1\n- In the \"Get upcoming event\" node enter how much time before the event starts you want to be notified. It is currently set to 1 hour\n- In the Telegram node replace CHAT_ID with that of your personal Bot",
+        "height": 140,
+        "width": 620
+      },
+      "id": "0e1848b3-3366-4765-9802-02ed1167bc35",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -660,
+        -100
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "Prevent multiple reminders for the same event",
+        "height": 200,
+        "width": 220
+      },
+      "id": "0b0514f3-c8d3-4434-9fb8-5fc6c0ceea39",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -200,
+        100
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "connections": {
+    "Already sent?": {
+      "main": [
+        [
+          {
+            "node": "Secretary Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Secretary Agent": {
+      "main": [
+        [
+          {
+            "node": "Send reminder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get upcoming event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Secretary Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get upcoming event": {
+      "main": [
+        [
+          {
+            "node": "Already sent?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {},
+  "versionId": "81c03866-bf86-461e-864a-87a73ce11817",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-07-09T21:41:38.773Z",
+      "updatedAt": "2025-07-09T21:41:38.773Z",
+      "id": "G5Lcoe2jTgqCJuSy",
+      "name": "OpenAI"
+    },
+    {
+      "createdAt": "2025-07-09T21:41:38.763Z",
+      "updatedAt": "2025-07-09T21:41:38.763Z",
+      "id": "pz5LfYMpyppJnoPT",
+      "name": "WooCommerce"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:46.157Z",
+      "updatedAt": "2025-10-25T12:28:46.157Z",
+      "role": "workflow:owner",
+      "workflowId": "eyXPtwAYcbebUEkJ",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

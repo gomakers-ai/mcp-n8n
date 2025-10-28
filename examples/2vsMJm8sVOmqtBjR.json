@@ -1,0 +1,316 @@
+{
+  "createdAt": "2025-07-14T19:10:10.572Z",
+  "updatedAt": "2025-07-14T19:10:10.572Z",
+  "id": "2vsMJm8sVOmqtBjR",
+  "name": "Automate_Blog_Content_Creation_with_Notion_MCP__DeepSeek_AI__and_WordPress",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyHour"
+            }
+          ]
+        },
+        "event": "pagedUpdatedInDatabase",
+        "databaseId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1c33d655-0fd9-8057-ac1a-eabf12d12f6b",
+          "__regex": "^([0-9a-f]{8}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{12})"
+        }
+      },
+      "id": "a71e3e61-5d67-437c-912f-63b400d67428",
+      "name": "Watch Notion Updates",
+      "type": "n8n-nodes-base.notionTrigger",
+      "position": [
+        -640,
+        -340
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an expert in SEO content writing.\nYour mission is to create, publish, and notify about a search engine-optimized article for a blog.\nHere are the keywords related to my topic:  {{ $('Watch Notion Updates').item.json.Name }}\n\nFollow the steps below:\n\n1. **Write an SEO-optimized article with a maximum of 20 lines** based on the provided information:\n   - Structure the article with a catchy **H1 title**, one or two **H2 subtitles**, and a professional yet accessible tone.\n   - Extract and include relevant keywords from the data.\n   - Optimize for readability: short sentences, clear paragraphs, and a CTA if relevant.\n   - Do not exceed 20 lines of content.\n\n2. **Publish the article on WordPress**, including:\n   - The **title** as the article's headline\n   - The **SEO content** as the body\n\n3. **Send an email** to my address : {{ $json.emailAddress }} containing:\n   - The article's title\n   - The **URL** of the published article on WordPress\n\n4. **Retrieve the list of available Notion tools first** using “Notion Tools”.\n   Then, **add a update the entry to my Notion database** (ID database: {{ $json.notionDatabaseId }}) ID items : {{ $json.notionItemId }}\nwith the following fields:\n   - The 'Name' column is of type 'title'  → {{ $('Watch Notion Updates').item.json.Name }}\n   The 'Subject' column is of type 'rich_text' → [the article's headline]\n   - The 'Content'column is of type 'rich_text' → [The SEO content]\n   - The 'URL' column is of type 'URL': → [The article link]\n   - The 'Status' column is of type 'select' → Select: `publish`\n\nImportant: Ensure that each step is successfully completed **before proceeding to the next**.",
+        "options": {}
+      },
+      "id": "af7af7df-3a9f-4da5-9470-4b603c549e2f",
+      "name": "AI Task Planner",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        320,
+        -340
+      ],
+      "typeVersion": 1.7
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {}
+      },
+      "id": "9c759bcf-2004-4ee3-97d2-dbca3aa88a67",
+      "name": "Send Email",
+      "type": "n8n-nodes-base.gmailTool",
+      "position": [
+        380,
+        -80
+      ],
+      "webhookId": "f87279e8-34e4-4fd1-81d3-677707e215de",
+      "typeVersion": 2.1
+    },
+    {
+      "parameters": {
+        "title": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Title', ``, 'string') }}",
+        "additionalFields": {
+          "content": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Content', ``, 'string') }}",
+          "status": "draft"
+        }
+      },
+      "id": "2241bd9e-2c93-4f37-93c2-2e0b1ea39a6e",
+      "name": "Publish Blog Post",
+      "type": "n8n-nodes-base.wordpressTool",
+      "position": [
+        500,
+        -80
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {},
+      "id": "b1ce75e1-1e09-435e-9df7-eb40f42c9599",
+      "name": "Notion List Available Tools",
+      "type": "n8n-nodes-mcp.mcpClientTool",
+      "position": [
+        660,
+        -80
+      ],
+      "typeVersion": 1,
+      "credentials": {}
+    },
+    {
+      "parameters": {},
+      "id": "79a8e3b9-a08d-462a-abb6-96f4ab09cfca",
+      "name": "Notion Run a Tool",
+      "type": "n8n-nodes-mcp.mcpClientTool",
+      "position": [
+        820,
+        -80
+      ],
+      "typeVersion": 1,
+      "credentials": {}
+    },
+    {
+      "parameters": {
+        "content": "## Smart Content Automation Workflow\nAutomatically reacts to Notion updates, uses AI to process data, and triggers actions like sending emails or publishing blog posts.\n**Openrouter** : [API](https://openrouter.ai/settings/keys)",
+        "height": 580,
+        "width": 1100
+      },
+      "id": "ff53a581-07f5-4667-8304-9b99392ac433",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -80,
+        -460
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c06b2d24-1fd7-40f0-aee5-b5d6553e289e",
+              "name": "emailAddress",
+              "type": "string",
+              "value": ""
+            },
+            {
+              "id": "8a294900-f367-47a2-b260-344b133dc2ff",
+              "name": "notionDatabaseId",
+              "type": "string",
+              "value": ""
+            },
+            {
+              "id": "a34469ad-5229-4c4d-bc5d-71c88686bd37",
+              "name": "notionItemId",
+              "type": "string",
+              "value": "={{ $json.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "4a4a95e9-9491-4a43-ace3-662ee9314aea",
+      "name": "Edit Workflow Variables",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -320,
+        -340
+      ],
+      "typeVersion": 3.4,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "content": "## Workflow Configuration Panel\n🛠️ **Set your variables here** (email, Slack, Notion, OpenAI model)",
+        "height": 300,
+        "width": 360,
+        "color": 6
+      },
+      "id": "f09d51fd-52ae-4b7e-ad29-073f62f604c1",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -460,
+        -460
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "2c97dbcb-6ff3-46d6-af73-7e1d9d6e167f",
+      "name": "DeepSeek Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatDeepSeek",
+      "position": [
+        100,
+        -80
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## External Setup Guide\n[Guide](https://dr-firas.vip/)",
+        "height": 80,
+        "width": 300
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -460,
+        -560
+      ],
+      "id": "3f41d7db-08ca-4f82-ad8c-d518e48cde35",
+      "name": "Sticky Note4"
+    }
+  ],
+  "connections": {
+    "Send Email": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Task Planner",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Publish Blog Post": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Task Planner",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DeepSeek Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Task Planner",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Watch Notion Updates": {
+      "main": [
+        [
+          {
+            "node": "Edit Workflow Variables",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Workflow Variables": {
+      "main": [
+        [
+          {
+            "node": "AI Task Planner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {},
+  "versionId": "af2ec08c-842b-479f-a33b-763880616930",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-07-09T21:41:38.773Z",
+      "updatedAt": "2025-07-09T21:41:38.773Z",
+      "id": "G5Lcoe2jTgqCJuSy",
+      "name": "OpenAI"
+    },
+    {
+      "createdAt": "2025-07-09T23:31:21.052Z",
+      "updatedAt": "2025-07-09T23:31:21.052Z",
+      "id": "JXtwH1KWn3HpvHrm",
+      "name": "templates"
+    },
+    {
+      "createdAt": "2025-07-09T23:31:21.059Z",
+      "updatedAt": "2025-07-09T23:31:21.059Z",
+      "id": "giPr8wYqaJHn1OWx",
+      "name": "creator"
+    },
+    {
+      "createdAt": "2025-07-09T21:41:38.763Z",
+      "updatedAt": "2025-07-09T21:41:38.763Z",
+      "id": "pz5LfYMpyppJnoPT",
+      "name": "WooCommerce"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:46.184Z",
+      "updatedAt": "2025-10-25T12:28:46.184Z",
+      "role": "workflow:owner",
+      "workflowId": "2vsMJm8sVOmqtBjR",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

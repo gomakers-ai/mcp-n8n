@@ -1,0 +1,666 @@
+{
+  "createdAt": "2025-07-14T19:06:23.615Z",
+  "updatedAt": "2025-07-14T19:06:23.615Z",
+  "id": "MvNmMAAtuakYjEfQ",
+  "name": "personalize-marketing-emails-using-customer-data-and-ai",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "6a993af5-f345-4ab5-a334-c7c37d8b5977",
+      "name": "When clicking \"Execute Workflow\"",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        -920,
+        680
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Get and prepare Dummy Data",
+        "height": 315.32782904322477,
+        "width": 715.3278290432247
+      },
+      "id": "737663ce-a54b-48f2-b49d-b151e70e720f",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1000,
+        560
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Let GPT do the heavy work\n\nFor the prompt we follow the one-shot'ish principle. Also I've decided to **_NOT_** give the AI the personal data. Keeps it simpler regarding data privacy.\n\nThe AI-Chain will generate a **Headline** and the **Text** for the Email and even **decides** if we should send the user a **Coupon**.",
+        "height": 577.5426854600692,
+        "width": 520.9323109877616
+      },
+      "id": "68022181-ca0e-420a-b389-970c3fb62c16",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        40,
+        120
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## HTML Email-Template without Coupon",
+        "height": 324,
+        "width": 358
+      },
+      "id": "4215cd05-b59b-4919-89ba-8443bb2ad31b",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1940,
+        260
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Make sure we have what we need\nWe do not want to sent empty messages to our customers",
+        "height": 465,
+        "width": 447
+      },
+      "id": "6e74ba53-bd29-4e68-b1d3-c6efc657bb83",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        800,
+        520
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## HTML Email-Template with Coupon",
+        "height": 330.56011245057107,
+        "width": 369.917435648372
+      },
+      "id": "8e7002b0-4a1b-4fb6-87c6-c7a19ac7cb74",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1940,
+        780
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Mocked: Fake a Coupon Code\nFor a real life scenario add the automated coupon generation here",
+        "height": 330.6656654860422,
+        "width": 319.84249777513367
+      },
+      "id": "167680fa-4c6b-436a-8b1e-919cf74fce7c",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1580,
+        780
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# Documentation\n\nThis Workflow is for the n8n AI / Langchain Competition.\n\nIt solves the Problem: Personalizing marketing emails based on customer purchase history.\n\nI've found it a bit ambiguous and decided to go the \"Convert unhappy customers with a Coupon\"-Route.\n\nSo this workflow utilizes the new LangChain Node for generating personalized E-Mail campaigns and decide if the user might need a coupon to be satisfied. Classic Rebound stuff. \n\nThere is also a Node \"Some Options...\" which can be adjusted to quickly change the direction this Campaign should go.\n\nAdditionally we use n8n to generate the HTML Mails by two different Templates. One with simple text and another for that Coupon handling.\n\n",
+        "height": 427,
+        "width": 534
+      },
+      "id": "ba371a39-08a7-492e-bf43-e702362f009d",
+      "name": "Sticky Note6",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1000,
+        -60
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Send the Email to the Customer\n\nAlthough it's cool that n8n allows sending emails via SMPT I would recommend to stick to your newsletter tool for that to keep track of opt-outs and stuff.",
+        "height": 414.15459581943776,
+        "width": 326.9476248855971
+      },
+      "id": "36f1726b-86ef-4e53-b3c7-7100f8349e3f",
+      "name": "Sticky Note7",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2740,
+        400
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "operation": "xls",
+        "options": {}
+      },
+      "id": "82ec4ce6-1c73-439d-8ac1-bd1ee5293104",
+      "name": "Extract from File",
+      "type": "n8n-nodes-base.extractFromFile",
+      "position": [
+        -480,
+        680
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8ef766db-4ad1-43c7-b621-8ea3ed0a44b2",
+              "name": "Campaign Target",
+              "type": "string",
+              "value": "Engage the Customer"
+            },
+            {
+              "id": "9f9ce88a-a24a-4a27-8b25-25ee85e730d6",
+              "name": "Flavour",
+              "type": "string",
+              "value": "be friendly and witty but also cool and direct. Critique is valuable and embrace the feedback."
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "5ae4ddf7-d874-4c8d-8ea8-6e4221c7bdf7",
+      "name": "Some Options for the Campaign",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -180,
+        680
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "text": "=Item Purchased: {{ $json['Item Purchased'] }} \nFeedback: {{ $json.Feedback }}\nShould we send a coupon to make the customer happy? Yes/No",
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"required\": [\"Headline\",\"Body\",\"SendCoupon\"],\n  \"properties\": {\n    \"Headline\": {\n      \"type\": \"string\"\n    },\n    \"Body\": {\n      \"type\": \"string\"\n    },\n    \"SendCoupon\": {\n      \"type\": \"boolean\"\n    }\n  }\n}",
+        "options": {
+          "systemPromptTemplate": "=Determine the sentiment of the given product feedback. Then generate a Headline and Text without salutation or any greeting for a personalized Email Campagin after a User gave a product review. If the user seems not happy, tell them that you have a Coupon for them. The User finds the Coupon Code below this E-mail. \nThe target of the campagin: {{ $json['Campaign Target'] }}.\nRemember: {{ $json['Flavour'] }}. Avoid any greeting.\n"
+        }
+      },
+      "id": "196d2c58-8d6c-4032-83f9-23f6eae57711",
+      "name": "Information Extractor",
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "position": [
+        180,
+        340
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "id": "90a17991-fd34-450c-b83f-c0ccd0922f05",
+      "name": "OpenAI Chat Model1",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        180,
+        520
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "errorMessage": "Unexpected Langchain Output"
+      },
+      "id": "ac7f9229-6653-46b8-89e3-bfb6449c1d0d",
+      "name": "AI did fail us1",
+      "type": "n8n-nodes-base.stopAndError",
+      "position": [
+        1080,
+        820
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "73989d0e-667f-4227-ab41-4eb1e8c1c10e",
+              "name": "Coupon",
+              "type": "string",
+              "value": "F4k3ItT1llY0uM4k3It"
+            },
+            {
+              "id": "4d86d8c8-1be3-40b0-b4fd-09f9ffc24386",
+              "name": "Coupon Value",
+              "type": "string",
+              "value": "20% of any purchase"
+            },
+            {
+              "id": "f73b8a70-5bf6-45c2-8061-d10f95b199a8",
+              "name": "Coupon Terms",
+              "type": "string",
+              "value": "=Valid until {{ $today.plus({days: 14}).format(\"d. MMM. y\") }} | minimum purchase amount: 20$ "
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "id": "b1eaa65d-4279-4079-94a1-8191262c0271",
+      "name": "Fake coupon",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1680,
+        920
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "url": "https://let-the-work-flow.com/dummy/n8n-contest-merch.xlsx",
+        "options": {}
+      },
+      "id": "a542de63-05a8-459d-895c-fec21d3343d8",
+      "name": "Download dummy data",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -700,
+        680
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "id": "c4407a62-a972-4c20-b264-b2cb3208e549",
+      "name": "AI Output + Prev Data",
+      "type": "n8n-nodes-base.merge",
+      "position": [
+        640,
+        680
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "9b4ced26-dd86-4ae4-8f69-6177ec42c827",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              },
+              "leftValue": "Headline",
+              "rightValue": ""
+            },
+            {
+              "id": "7723102c-43d2-48df-82f6-5bb45ddf615c",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              },
+              "leftValue": "Body",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6bd424c2-b635-4faa-a62f-4cfd094df064",
+      "name": "Is the result valid?",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        860,
+        680
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "version": 2,
+            "leftValue": "",
+            "caseSensitive": true,
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "967f37a1-a600-46a2-82cf-f340dd3c7a96",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              },
+              "leftValue": "={{ $json.SendCoupon }}",
+              "rightValue": ""
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "42f805f2-2a2c-4e2d-ac9b-20d346f87353",
+      "name": "Coupon them or not to Coupon them",
+      "type": "n8n-nodes-base.if",
+      "position": [
+        1320,
+        680
+      ],
+      "typeVersion": 2.2
+    },
+    {
+      "parameters": {
+        "html": "<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"UTF-8\" />\n  <title>{{ $json['Headline'] }}</title>\n</head>\n<body>\n  <div class=\"container\">\n    <img class=\"logo\" src=\"https://img.logoipsum.com/264.svg\"/>\n    <h1>Hey {{ $json['Custome Name'] ? $json['Custome Name']+', ' : '!' }}</h1>\n    <p>{{ $json['Body'] }}</p>\n    \n  <div class=\"footer\">\n   <p>\n    Definitely not a real company Lmt.<br>\n    Also not a real street 123<br>\n    Unreal Town\n   </p>  \n</div> \n </div>\n \n  \n</body>\n</html>\n\n<style>\n.logo {\n  margin-top: 20px;\n }\n.container {\n  background-color: #ffffff;\n  font-family: sans-serif;\n  padding: 16px;\n  border-radius: 8px;\n}\n\nh1 {\n  color: #ff6d5a;\n  font-size: 24px;\n  font-weight: bold;\n  margin-top: 30px;\n}\n\np {\n  color: #606060;\n  line-height: 1.6;\n}\n\nh2 {\n  color: #909399;\n  font-size: 20px;\n  font-weight: bold;\n  padding: 8px;\n}\n\n.footer {\n  margin-top: 30px;\n}\n\n.footer > p {\n    font-size: 14px;\n  color: #ccc;\n }\n\n</style>"
+      },
+      "id": "6efebecf-c393-46c2-87bb-a8a459e9909d",
+      "name": "Html Template for our Email",
+      "type": "n8n-nodes-base.html",
+      "position": [
+        2060,
+        380
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "id": "ba81eaa0-ed19-496a-be70-86fc231681ff",
+      "name": "The composed E-Mail + Prev Data",
+      "type": "n8n-nodes-base.merge",
+      "position": [
+        2440,
+        500
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "html": "<!DOCTYPE html>\n<html>\n<head>\n  <meta charset=\"UTF-8\" />\n  <title>{{ $json.output['Headline'] }}</title>\n</head>\n<body>\n  <div class=\"container\">\n    <img class=\"logo\" src=\"https://img.logoipsum.com/264.svg\"/>\n    <h1>Hey {{ $json['Custome Name'] ? $json['Custome Name']+', ' : '!' }}</h1>\n    <p>{{ $json.output['Body'] }}</p>\n    \n    <div class=\"coupon\">\n        <h3>Here's a Coupon for you!<br>\n        {{ $json['Coupon Value'] }}</h3>\n        <h4 class=\"code\">{{ $json['Coupon'] }}</h4>\n        <p>{{ $json['Coupon Terms'] }}</p>\n    </div>\n  <div class=\"footer\">\n   <p>\n    Definitely not a real company Lmt.<br>\n    Also not a real street 123<br>\n    Unreal Town\n   </p>  \n</div> \n </div>\n \n  \n</body>\n</html>\n\n<style>\n.logo {\n  margin-top: 20px;\n }\n.container {\n  background-color: #ffffff;\n  font-family: sans-serif;\n  padding: 16px;\n  border-radius: 8px;\n}\n\nh1 {\n  color: #ff6d5a;\n  font-size: 24px;\n  font-weight: bold;\n  margin-top: 30px;\n}\n\np {\n  color: #606060;\n  line-height: 1.6;\n}\n\nh2 {\n  color: #909399;\n  font-size: 20px;\n  font-weight: bold;\n  padding: 8px;\n}\n\n.coupon {\n  background: #ff6d5a;\n  color: #fff;\n  padding: 20px;\n}\n.coupon p {\n  color: #fff;\n}\n  \n.coupon .code {\n  font-weight: bold;\n  font-size: 24px;\n  font-family: monospace;\n }\n\n.footer {\n  margin-top: 30px;\n}\n\n.footer > p {\n    font-size: 14px;\n  color: #ccc;\n }\n\n</style>"
+      },
+      "id": "7111668a-a04b-4071-9350-1867d860fb4b",
+      "name": "Html Template for our Email with a Coupon",
+      "type": "n8n-nodes-base.html",
+      "position": [
+        2060,
+        920
+      ],
+      "typeVersion": 1.2
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "id": "d7fb151f-931f-4148-b493-3da34ffbcd12",
+      "name": "The composed E-Mail with Coupon + Prev Data",
+      "type": "n8n-nodes-base.merge",
+      "position": [
+        2440,
+        680
+      ],
+      "typeVersion": 3
+    },
+    {
+      "parameters": {
+        "fromEmail": "n8n@myemail.com",
+        "toEmail": "={{ $json.Email }}",
+        "subject": "={{ $json.output.Headline }}",
+        "html": "={{ $json.html }}",
+        "options": {}
+      },
+      "id": "0ef90741-8515-41d0-949b-bad6a5946a68",
+      "name": "Send Email",
+      "type": "n8n-nodes-base.emailSend",
+      "position": [
+        2840,
+        600
+      ],
+      "webhookId": "a155d7b3-39b1-4a96-adc5-4f8e984506ec",
+      "typeVersion": 2.1
+    }
+  ],
+  "connections": {
+    "Fake coupon": {
+      "main": [
+        [
+          {
+            "node": "Html Template for our Email with a Coupon",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Some Options for the Campaign",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download dummy data": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is the result valid?": {
+      "main": [
+        [
+          {
+            "node": "Coupon them or not to Coupon them",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI did fail us1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Output + Prev Data": {
+      "main": [
+        [
+          {
+            "node": "Is the result valid?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor": {
+      "main": [
+        [
+          {
+            "node": "AI Output + Prev Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Html Template for our Email": {
+      "main": [
+        [
+          {
+            "node": "The composed E-Mail + Prev Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Some Options for the Campaign": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "AI Output + Prev Data",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "The composed E-Mail + Prev Data": {
+      "main": [
+        [
+          {
+            "node": "Send Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking \"Execute Workflow\"": {
+      "main": [
+        [
+          {
+            "node": "Download dummy data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Coupon them or not to Coupon them": {
+      "main": [
+        [
+          {
+            "node": "Html Template for our Email",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "The composed E-Mail + Prev Data",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "Fake coupon",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "The composed E-Mail with Coupon + Prev Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Html Template for our Email with a Coupon": {
+      "main": [
+        [
+          {
+            "node": "The composed E-Mail with Coupon + Prev Data",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "The composed E-Mail with Coupon + Prev Data": {
+      "main": [
+        [
+          {
+            "node": "Send Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {},
+  "versionId": "e02944cc-daa6-4378-953f-93652aa266f0",
+  "triggerCount": 0,
+  "tags": [],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:45.988Z",
+      "updatedAt": "2025-10-25T12:28:45.988Z",
+      "role": "workflow:owner",
+      "workflowId": "MvNmMAAtuakYjEfQ",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

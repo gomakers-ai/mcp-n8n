@@ -1,0 +1,292 @@
+{
+  "createdAt": "2025-07-14T19:07:26.187Z",
+  "updatedAt": "2025-07-14T19:07:26.187Z",
+  "id": "i36e0Jd36SjBAaUa",
+  "name": "Extract_Amazon_Best_Seller_Electronic_Info_with_Bright_Data_and_Google_Gemini",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "f5372710-fe76-40ab-9a52-250d0893a2d7",
+      "name": "When clicking ‘Test workflow’",
+      "type": "n8n-nodes-base.manualTrigger",
+      "position": [
+        -1000,
+        -180
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## LLM Usages\n\nGoogle Gemini Flash Exp model is being used.\n\nInformation Extraction for building the structured data",
+        "height": 140,
+        "width": 420
+      },
+      "id": "027889e8-da4e-442e-83a8-e42d8d44dc54",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -520,
+        -380
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-2.0-flash-exp",
+        "options": {}
+      },
+      "id": "3e8a833f-0079-4fde-85ff-58f6baf60ae5",
+      "name": "Google Gemini Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "position": [
+        -240,
+        40
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.brightdata.com/request",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "zone",
+              "value": "={{ $json.zone }}"
+            },
+            {
+              "name": "url",
+              "value": "={{ $json.url }}"
+            },
+            {
+              "name": "format",
+              "value": "raw"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "deeda502-984c-418a-bd1c-7a5fd6028086",
+      "name": "HTTP Request to fetch the Amazon Best Seller Products",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        -560,
+        -180
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.data }}",
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"$schema\": \"http://json-schema.org/draft-07/schema#\",\n  \"title\": \"Amazon Bestsellers - Smartphones & Basic Mobiles\",\n  \"type\": \"object\",\n  \"properties\": {\n    \"category\": {\n      \"type\": \"string\",\n      \"example\": \"Smartphones & Basic Mobiles\"\n    },\n    \"description\": {\n      \"type\": \"string\",\n      \"example\": \"Our most popular products based on sales. Updated frequently.\"\n    },\n    \"page\": {\n      \"type\": \"string\",\n      \"example\": \"Page 1 of 2\"\n    },\n    \"bestsellers\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"rank\": {\n            \"type\": \"integer\",\n            \"example\": 1\n          },\n          \"title\": {\n            \"type\": \"string\",\n            \"example\": \"OnePlus Nord CE4 (Dark Chrome, 8GB RAM, 256GB Storage)\"\n          },\n          \"image\": {\n            \"type\": \"string\",\n            \"format\": \"uri\",\n            \"example\": \"https://images-eu.ssl-images-amazon.com/images/I/61g1pqSjAhL._AC_UL300_SR300,200_.jpg\"\n          },\n          \"rating\": {\n            \"type\": \"object\",\n            \"properties\": {\n              \"stars\": {\n                \"type\": \"number\",\n                \"example\": 4.2\n              },\n              \"total_ratings\": {\n                \"type\": \"integer\",\n                \"example\": 8051\n              }\n            },\n            \"required\": [\"stars\", \"total_ratings\"]\n          },\n          \"offer\": {\n            \"type\": \"string\",\n            \"example\": \"1 offer from ₹23,998.00\"\n          },\n          \"product_url\": {\n            \"type\": \"string\",\n            \"format\": \"uri\",\n            \"example\": \"https://www.amazon.in/Oneplus-Nord-Chrome-256GB-Storage/dp/B0CX5BZXLF/\"\n          }\n        },\n        \"required\": [\"rank\", \"title\", \"image\", \"rating\", \"offer\", \"product_url\"]\n      }\n    }\n  },\n  \"required\": [\"category\", \"description\", \"page\", \"bestsellers\"]\n}\n",
+        "options": {
+          "systemPromptTemplate": "You are an expert extraction algorithm.\nOnly extract relevant information from the text.\nIf you do not know the value of an attribute asked to extract, you may omit the attribute's value."
+        }
+      },
+      "id": "dfc4df73-c20c-4c68-a18e-b996fa48a16e",
+      "name": "Structured Data Extractor",
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "position": [
+        -340,
+        -180
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1c132dd6-31e4-453b-a8cf-cad9845fe55b",
+              "name": "url",
+              "type": "string",
+              "value": "https://www.amazon.in/gp/bestsellers/electronics/1389432031?product=unlocker&method=api"
+            },
+            {
+              "id": "0fa387df-2511-4228-b6aa-237cceb3e9c7",
+              "name": "zone",
+              "type": "string",
+              "value": "web_unlocker1"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "43d86260-ef35-46ec-ab4e-95c4cedb14bb",
+      "name": "Set Amazon URL with the Bright Data Zone",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        -780,
+        -180
+      ],
+      "notesInFlow": true,
+      "typeVersion": 3.4,
+      "notes": "Set the URL which you are interested to scrap the data"
+    },
+    {
+      "parameters": {
+        "content": "## Note\n\nDeals with the Amazon Best Seller Electronic data extraction using the Bright Data and LLM for Information Extraction.\n\n**Please make sure to update the \"Set Amazon URL with the Bright Data Zone\" and the Webhook Notification URL**",
+        "height": 220,
+        "width": 400
+      },
+      "id": "ab5dd4d5-3d6f-4a6a-ad92-fb83efe66c32",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1000,
+        -460
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "url": "https://webhook.site/bc804ce5-4a45-4177-a68a-99c80e5c86e6",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "summary",
+              "value": "={{ $json.output }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "7b739a69-fe53-40b2-8bb0-95262148f119",
+      "name": "Webhook Notifier for structured data extractor",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [
+        60,
+        -180
+      ],
+      "typeVersion": 4.2
+    },
+    {
+      "parameters": {
+        "content": "## Who this is for?\n\n\nExtract Amazon Best Seller Electronic Info is an automated workflow that extracts best seller data from Amazon's Electronics section using Bright Data Web Unlocker, transform it into structured JSON using Google Gemini's LLM, and forwards a fully structured JSON response to a specified webhook for downstream use.\n\nThis workflow is tailored for:\n\neCommerce Analysts\nWho need to monitor Amazon best-seller trends in the Electronics category and track changes in real-time or on a schedule.\n\nProduct Intelligence Teams\nWho want structured insights on competitor offerings, including rankings, prices, ratings, and promotions.\n\nAI-powered Chatbot Developers\nWho are building assistants capable of answering product-related queries with fresh, structured data from Amazon.\n\nGrowth Hackers & Marketers\nLooking to automate competitive research and surface trending product data to inform pricing strategies.\n\nData Aggregators and Price Trackers\nWho need reliable and smart scraping of Amazon data enriched with AI-driven parsing.\n\n## What problem is this workflow solving?\n\nKeeping up with Amazon's best sellers in Electronics is a time-consuming, error-prone task when done manually.This workflow automates the process, ensuring:​\n\nAutomating Data Extraction from Amazon Best Sellers using Bright Data, ensuring reliable access to real-time, structured data.\n\nEnhancing Raw Data with Google Gemini, turning product lists into structured JSON using the Google Gemini LLM.\n\nSending Results to a Webhook, enabling seamless integration into dashboards, databases, or chatbots.\n\n## What this workflow does\n\nThe workflow performs the following steps:​\n\nExtracts Amazon Best Seller Electronics page info using Bright Data's Web Unlocker API.\n\nProcesses the unstructured content using Google Gemini's Flash Exp model to extract structured product data.\n\nSends the structured information to a webhook endpoint.\n\n## Setup\n\nSign up at Bright Data.\nNavigate to Proxies & Scraping and create a new Web Unlocker zone by selecting Web Unlocker API under Scraping Solutions.\nIn n8n, configure the Header Auth account under Credentials (Generic Auth Type: Header Authentication).\nThe Value field should be set with the\nBearer XXXXXXXXXXXXXX. The XXXXXXXXXXXXXX should be replaced by the Web Unlocker Token.\nIn n8n, configure the Google Gemini(PaLM) Api account with the Google Gemini API key (or access through Vertex AI or proxy).\nUpdate the Amazon URL with the Bright Data zone by navigating to the Amazon URL with the Bright Data Zone node.\nUpdate the Webhook HTTP Request node with the Webhook endpoint of your choice.\n\n## How to customize this workflow to your needs\nThis workflow is built to be flexible - whether you're a market researcher, e-commerce entrepreneur, or data analyst. Here's how you can adapt it to fit your specific use case:\n\nChange the Amazon Category\nUpdate the Amazon URL with the topic of your interest such as Computers & Accessories, Home Audio, etc.\n\nCustomize the Gemini Prompt\nUpdate the Gemini prompt to get different styles of output — comparison tables, summaries, feature highlights, etc.\n\nSend Output to Other Destinations\nReplace the Webhook URL to forward output to:\n\nGoogle Sheets\nAirtable\nSlack or Discord\nCustom API endpoints",
+        "height": 2400,
+        "width": 400
+      },
+      "id": "30bf7a2e-66de-46d1-800a-b1d8cebbd7d0",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1480,
+        -460
+      ],
+      "typeVersion": 1
+    }
+  ],
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Structured Data Extractor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Data Extractor": {
+      "main": [
+        [
+          {
+            "node": "Webhook Notifier for structured data extractor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Set Amazon URL with the Bright Data Zone",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Amazon URL with the Bright Data Zone": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request to fetch the Amazon Best Seller Products",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request to fetch the Amazon Best Seller Products": {
+      "main": [
+        [
+          {
+            "node": "Structured Data Extractor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {},
+  "versionId": "5eb5d2bb-c7d6-4476-a15f-817ca8a16d17",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-07-09T21:41:38.773Z",
+      "updatedAt": "2025-07-09T21:41:38.773Z",
+      "id": "G5Lcoe2jTgqCJuSy",
+      "name": "OpenAI"
+    },
+    {
+      "createdAt": "2025-07-09T21:41:38.763Z",
+      "updatedAt": "2025-07-09T21:41:38.763Z",
+      "id": "pz5LfYMpyppJnoPT",
+      "name": "WooCommerce"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:46.042Z",
+      "updatedAt": "2025-10-25T12:28:46.042Z",
+      "role": "workflow:owner",
+      "workflowId": "i36e0Jd36SjBAaUa",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}

@@ -1,0 +1,357 @@
+{
+  "createdAt": "2025-07-14T19:10:43.852Z",
+  "updatedAt": "2025-07-14T19:10:43.852Z",
+  "id": "xqyQlvHel6vXea5R",
+  "name": "Private___Local_Ollama_Self_Hosted_AI_Assistant",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "de375931-065f-44f8-bae3-fd28c5becb64",
+      "name": "When chat message received",
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "position": [
+        -100,
+        300
+      ],
+      "webhookId": "4d06a912-2920-489c-a33c-0e3ea0b66745",
+      "typeVersion": 1.1
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Provide the users prompt and response as a JSON object with two fields:\n- Prompt\n- Response\n\nAvoid any preample or further explanation.\n\nThis is the question: {{ $json.chatInput }}"
+      },
+      "id": "8e7f4ec6-e720-4769-b5e5-d9631b2d8cdf",
+      "name": "Basic LLM Chain",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "position": [
+        260,
+        300
+      ],
+      "typeVersion": 1.5,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "model": "llama3.2:latest",
+        "options": {}
+      },
+      "id": "c647877d-3470-4018-b2ef-c6511e7e73f1",
+      "name": "Ollama Model",
+      "type": "@n8n/n8n-nodes-langchain.lmOllama",
+      "position": [
+        360,
+        580
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "# 🦙 Ollama Chat Workflow\n\nA simple N8N workflow that integrates Ollama LLM for chat message processing and returns a structured JSON object.\n\n## Overview\nThis workflow creates a chat interface that processes messages using the Llama 3.2 model through Ollama. When a chat message is received, it gets processed through a basic LLM chain and returns a response.\n\n## Components\n- **Trigger Node**\n- **Processing Node**\n- **Model Node**\n- **JSON to Object Node**\n- **Structured Response Node**\n- **Error Response Node**\n\n## Workflow Structure\n1. The chat trigger node receives incoming messages\n2. Messages are passed to the Basic LLM Chain\n3. The Ollama Model processes the input using Llama 3.2\n4. Responses are returned through the chain\n\n## Prerequisites\n- N8N installation\n- Ollama setup with Llama 3.2 model\n- Valid Ollama API credentials\n\n## Configuration\n1. Set up the Ollama API credentials in N8N\n2. Ensure the Llama 3.2 model is available in your Ollama installation\n\n",
+        "height": 860,
+        "width": 520,
+        "color": 4
+      },
+      "id": "d2b078fc-27f3-4572-8cb9-60a4294e5a12",
+      "name": "Sticky Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -760,
+        -140
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Model Node\n- Name: Ollama Model\n- Type: LangChain Ollama Integration\n- Model: llama3.2:latest\n- Purpose: Provides the language model capabilities",
+        "height": 200,
+        "width": 560
+      },
+      "id": "8ddce1fc-1a42-4f45-8068-fdb8e97e0ed7",
+      "name": "Sticky Note1",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -40,
+        520
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Trigger Node\n- Name: When chat message received\n- Type: Chat Trigger\n- Purpose: Initiates the workflow when a new chat message arrives",
+        "height": 400,
+        "width": 280,
+        "color": 6
+      },
+      "id": "66a0b01d-2b39-44b0-9e17-a4b224ec568f",
+      "name": "Sticky Note2",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -180,
+        80
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Processing Node\n- Name: Basic LLM Chain\n- Type: LangChain LLM Chain\n- Purpose: Handles the processing of messages through the language model and returns a structured JSON object.\n\n",
+        "height": 620,
+        "width": 500,
+        "color": 3
+      },
+      "id": "eb182b07-a56f-40d8-a716-1504459a08d4",
+      "name": "Sticky Note3",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        140,
+        -140
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "### Prompt (Change this for your use case)\nProvide the users prompt and response as a JSON object with two fields:\n- Prompt\n- Response\n\n\nAvoid any preample or further explanation.\nThis is the question: {{ $json.chatInput }}",
+        "height": 200,
+        "width": 420,
+        "color": 7
+      },
+      "id": "200d1584-7505-4ccf-849d-28433d39aafd",
+      "name": "Sticky Note4",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        180,
+        40
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## JSON to Object Node\n- Type: Set Node\n- Purpose: A node designed to transform and structure response data in a specific format before sending it through the workflow. It operates in manual mapping mode to allow precise control over the response format.\n\n**Key Features**\n- Manual field mapping capabilities\n- Object transformation and restructuring\n- Support for JSON data formatting\n- Field-to-field value mapping\n- Includes option to add additional input fields\n",
+        "height": 520,
+        "width": 420,
+        "color": 5
+      },
+      "id": "a0bb5951-d22b-437a-b48f-0aaea7994c65",
+      "name": "Sticky Note5",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        680,
+        -40
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "content": "## Structured Response Node\n- Type: Set Node\n- Purpose: Controls how the workflow responds to users chat prompt.\n\n**Response Mode**\n- Manual Mapping: Allows custom formatting of response data\n- Fields to Set: Specify which data fields to include in response\n\n",
+        "height": 420,
+        "width": 460,
+        "color": 6
+      },
+      "id": "d9897b76-9705-4581-b8e7-6bffaab65bd2",
+      "name": "Sticky Note6",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1140,
+        60
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "13c4058d-2d50-46b7-a5a6-c788828a1764",
+              "name": "text",
+              "type": "string",
+              "value": "=Your prompt was: {{ $json.response.Prompt }}\n\nMy response is: {{ $json.response.Response }}\n\nThis is the JSON object:\n\n{{ $('Basic LLM Chain').item.json.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "f384da66-cea4-46ff-9314-3c77f1c81550",
+      "name": "Structured Response",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1320,
+        300
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "13c4058d-2d50-46b7-a5a6-c788828a1764",
+              "name": "text",
+              "type": "string",
+              "value": "=There was an error."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "6cd239f9-2f8d-4113-83eb-08ca4385a5b4",
+      "name": "Error Response",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        1080,
+        900
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "content": "## Error Response Node\n- Type: Set Node\n- Purpose: Handles error cases when the Basic LLM Chain fails to process the chat message properly. It provides a fallback response mechanism to ensure the workflow remains robust.\n\n**Key Features**\n- Provides default error messaging\n- Maintains consistent response structure\n- Connects to the error output branch of the LLM Chain\n- Ensures graceful failure handling\n\nThe Error Response node activates when the main processing chain encounters issues, ensuring users always receive feedback even when errors occur in the language model processing.\n",
+        "height": 560,
+        "width": 540,
+        "color": 2
+      },
+      "id": "817add62-5d09-415b-ae50-105c6f9f7f55",
+      "name": "Sticky Note7",
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        860,
+        520
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "12af1a54-62a2-44c3-9001-95bb0d7c769d",
+              "name": "response",
+              "type": "object",
+              "value": "={{ $json.text }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "990dcbdf-5601-4386-9a1e-f61d2167dc91",
+      "name": "JSON to Object",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        840,
+        300
+      ],
+      "typeVersion": 3.4
+    }
+  ],
+  "connections": {
+    "Ollama Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "JSON to Object": {
+      "main": [
+        [
+          {
+            "node": "Structured Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "JSON to Object",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd8ff33dde04e389346982f06c7f2feed2561d3ea2af8c05544f44d32c7108d4"
+  },
+  "pinData": {},
+  "versionId": "51b9376e-cdc3-4533-acd3-4c0a3cd70a9e",
+  "triggerCount": 0,
+  "tags": [
+    {
+      "createdAt": "2025-07-09T21:41:38.773Z",
+      "updatedAt": "2025-07-09T21:41:38.773Z",
+      "id": "G5Lcoe2jTgqCJuSy",
+      "name": "OpenAI"
+    },
+    {
+      "createdAt": "2025-07-09T23:31:21.052Z",
+      "updatedAt": "2025-07-09T23:31:21.052Z",
+      "id": "JXtwH1KWn3HpvHrm",
+      "name": "templates"
+    },
+    {
+      "createdAt": "2025-07-09T23:31:21.059Z",
+      "updatedAt": "2025-07-09T23:31:21.059Z",
+      "id": "giPr8wYqaJHn1OWx",
+      "name": "creator"
+    },
+    {
+      "createdAt": "2025-07-09T21:41:38.763Z",
+      "updatedAt": "2025-07-09T21:41:38.763Z",
+      "id": "pz5LfYMpyppJnoPT",
+      "name": "WooCommerce"
+    }
+  ],
+  "shared": [
+    {
+      "createdAt": "2025-10-25T12:28:46.216Z",
+      "updatedAt": "2025-10-25T12:28:46.216Z",
+      "role": "workflow:owner",
+      "workflowId": "xqyQlvHel6vXea5R",
+      "projectId": "gRDCuWZgtIsQJhnE",
+      "project": {
+        "createdAt": "2025-10-25T12:28:30.681Z",
+        "updatedAt": "2025-10-25T12:30:12.034Z",
+        "id": "gRDCuWZgtIsQJhnE",
+        "name": "Leonardo Sepúlveda <lsepulvedatabares@gmail.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null
+      }
+    }
+  ]
+}
