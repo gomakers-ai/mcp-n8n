@@ -66,13 +66,30 @@ npm install -g mcp-n8n
 
 2. **Configure Claude Desktop**:
 
-Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
+Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (Mac/Linux) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
 
+**Option A - Using global installation (if you ran `npm install -g mcp-n8n`):**
 ```json
 {
   "mcpServers": {
     "n8n": {
       "command": "mcp-n8n",
+      "env": {
+        "N8N_BASE_URL": "https://your-n8n-instance.com",
+        "N8N_API_KEY": "your-api-key-here"
+      }
+    }
+  }
+}
+```
+
+**Option B - Using npx (no installation needed, always latest version):**
+```json
+{
+  "mcpServers": {
+    "n8n": {
+      "command": "npx",
+      "args": ["-y", "mcp-n8n"],
       "env": {
         "N8N_BASE_URL": "https://your-n8n-instance.com",
         "N8N_API_KEY": "your-api-key-here"
@@ -84,13 +101,15 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
 3. **Configure Cursor**:
 
-Add to Cursor MCP settings:
+Add to Cursor MCP settings (Settings → Extensions → MCP):
 
+**Recommended - Using npx (always uses latest version):**
 ```json
 {
   "mcpServers": {
     "n8n": {
-      "command": "mcp-n8n",
+      "command": "npx",
+      "args": ["-y", "mcp-n8n"],
       "env": {
         "N8N_BASE_URL": "https://your-n8n-instance.com",
         "N8N_API_KEY": "your-api-key-here"
@@ -99,6 +118,8 @@ Add to Cursor MCP settings:
   }
 }
 ```
+
+> **Note**: Cursor requires using `npx` for MCP servers. The `-y` flag automatically installs/updates the package without prompting.
 
 4. **Restart Claude Desktop or Cursor**
 
