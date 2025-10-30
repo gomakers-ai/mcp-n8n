@@ -50,7 +50,9 @@ Transform your n8n workflow management with natural language commands. Create co
 
 ## 🚀 Quick Start
 
-### Installation
+### Installation via npm (Recommended)
+
+This is the easiest way to get started:
 
 ```bash
 npm install -g mcp-n8n
@@ -88,8 +90,7 @@ Add to Cursor MCP settings:
 {
   "mcpServers": {
     "n8n": {
-      "command": "node",
-      "args": ["/path/to/mcp-n8n/dist/index.js"],
+      "command": "mcp-n8n",
       "env": {
         "N8N_BASE_URL": "https://your-n8n-instance.com",
         "N8N_API_KEY": "your-api-key-here"
@@ -274,11 +275,15 @@ mcp-n8n/
 
 ## 🔧 Development
 
-### Setup
+### Local Installation (For Development)
+
+If you want to contribute or test local changes:
+
+#### 1. Setup
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/mcp-n8n.git
+git clone https://github.com/gomakers-ai/mcp-n8n.git
 cd mcp-n8n
 
 # Install dependencies
@@ -291,7 +296,45 @@ npm run build
 npm run watch
 ```
 
-### Local Testing
+#### 2. Configure with Local Build
+
+**For Claude Desktop**, add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "n8n": {
+      "command": "node",
+      "args": ["/absolute/path/to/mcp-n8n/dist/index.js"],
+      "env": {
+        "N8N_BASE_URL": "https://your-n8n-instance.com",
+        "N8N_API_KEY": "your-api-key-here"
+      }
+    }
+  }
+}
+```
+
+**For Cursor**, add to MCP settings:
+
+```json
+{
+  "mcpServers": {
+    "n8n": {
+      "command": "node",
+      "args": ["/absolute/path/to/mcp-n8n/dist/index.js"],
+      "env": {
+        "N8N_BASE_URL": "https://your-n8n-instance.com",
+        "N8N_API_KEY": "your-api-key-here"
+      }
+    }
+  }
+}
+```
+
+**Important**: Replace `/absolute/path/to/mcp-n8n/` with the actual absolute path to your cloned repository (e.g., `/Users/yourname/projects/mcp-n8n/`).
+
+#### 3. Testing
 
 ```bash
 # Set environment variables
