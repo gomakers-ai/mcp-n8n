@@ -168,7 +168,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: 'n8n_list_workflows',
-        description: 'List all workflows. Can filter by active status, tags, name, or project.',
+        description: 'List all workflows with full details. Can filter by active status, tags, name, or project. WARNING: Returns complete workflow data including nodes and connections - use n8n_list_workflows_summary for better token efficiency.',
         inputSchema: {
           type: 'object',
           properties: {
@@ -176,7 +176,27 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             tags: { type: 'string', description: 'Filter by tag ID' },
             name: { type: 'string', description: 'Filter by workflow name' },
             projectId: { type: 'string', description: 'Filter by project ID' },
-            limit: { type: 'number', description: 'Number of results (max 250)', default: 100 },
+            limit: { type: 'number', description: 'Number of results (max 250)', default: 10 },
+            cursor: { type: 'string', description: 'Pagination cursor' },
+            fields: {
+              type: 'array',
+              items: { type: 'string' },
+              description: 'Specific fields to return (e.g., ["id", "name", "active"]). Reduces token usage significantly.'
+            },
+          },
+        },
+      },
+      {
+        name: 'n8n_list_workflows_summary',
+        description: 'List workflows with minimal data (id, name, active, tags, updatedAt only). Recommended for browsing and listing - uses 90% fewer tokens than n8n_list_workflows. Use n8n_get_workflow to fetch full details of a specific workflow.',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            active: { type: 'boolean', description: 'Filter by active status' },
+            tags: { type: 'string', description: 'Filter by tag ID' },
+            name: { type: 'string', description: 'Filter by workflow name' },
+            projectId: { type: 'string', description: 'Filter by project ID' },
+            limit: { type: 'number', description: 'Number of results (max 250)', default: 20 },
             cursor: { type: 'string', description: 'Pagination cursor' },
           },
         },
@@ -280,7 +300,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       // ========== EXECUTION TOOLS ==========
       {
         name: 'n8n_list_executions',
-        description: 'List workflow executions. Can filter by status, workflow ID, or project.',
+        description: 'List workflow executions. Can filter by status, workflow ID, or project. TIP: Set includeData=false and use fields parameter to reduce token usage.',
         inputSchema: {
           type: 'object',
           properties: {
@@ -291,9 +311,14 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             },
             workflowId: { type: 'string', description: 'Filter by workflow ID' },
             projectId: { type: 'string', description: 'Filter by project ID' },
-            includeData: { type: 'boolean', description: 'Include execution data' },
-            limit: { type: 'number', description: 'Number of results', default: 100 },
+            includeData: { type: 'boolean', description: 'Include execution data (WARNING: significantly increases token usage)', default: false },
+            limit: { type: 'number', description: 'Number of results', default: 20 },
             cursor: { type: 'string', description: 'Pagination cursor' },
+            fields: {
+              type: 'array',
+              items: { type: 'string' },
+              description: 'Specific fields to return (e.g., ["id", "status", "workflowId"]). Reduces token usage.'
+            },
           },
         },
       },
@@ -727,6 +752,18 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
     if (name === 'n8n_list_workflows') {
       const result = await n8nClient.getWorkflows(args as any);
+      return {
+        content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
+      };
+    }
+
+    if (name === 'n8n_list_workflows_summary') {
+      // Force minimal fields for summary view
+      const summaryArgs = {
+        ...(args as any),
+        fields: ['id', 'name', 'active', 'tags', 'updatedAt', 'createdAt']
+      };
+      const result = await n8nClient.getWorkflows(summaryArgs);
       return {
         content: [{ type: 'text', text: JSON.stringify(result, null, 2) }],
       };

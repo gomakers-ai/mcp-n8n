@@ -42,9 +42,26 @@ export class N8nClient {
     projectId?: string;
     limit?: number;
     cursor?: string;
+    fields?: string[];
   }): Promise<ApiResponse> {
     try {
-      const response = await this.client.get('/workflows', { params: filters });
+      const { fields, ...apiFilters } = filters || {};
+      const response = await this.client.get('/workflows', { params: apiFilters });
+
+      // If fields are specified, filter the response data
+      if (fields && fields.length > 0 && response.data?.data) {
+        const filteredData = response.data.data.map((workflow: any) => {
+          const filtered: any = {};
+          fields.forEach(field => {
+            if (workflow.hasOwnProperty(field)) {
+              filtered[field] = workflow[field];
+            }
+          });
+          return filtered;
+        });
+        return { data: { ...response.data, data: filteredData } };
+      }
+
       return { data: response.data };
     } catch (error: any) {
       return { error: error.response?.data?.message || error.message };
@@ -127,9 +144,25 @@ export class N8nClient {
 
   // ========== EXECUTIONS ==========
 
-  async getExecutions(filters?: ExecutionFilters): Promise<ApiResponse> {
+  async getExecutions(filters?: ExecutionFilters & { fields?: string[] }): Promise<ApiResponse> {
     try {
-      const response = await this.client.get('/executions', { params: filters });
+      const { fields, ...apiFilters } = filters || {};
+      const response = await this.client.get('/executions', { params: apiFilters });
+
+      // If fields are specified, filter the response data
+      if (fields && fields.length > 0 && response.data?.data) {
+        const filteredData = response.data.data.map((execution: any) => {
+          const filtered: any = {};
+          fields.forEach(field => {
+            if (execution.hasOwnProperty(field)) {
+              filtered[field] = execution[field];
+            }
+          });
+          return filtered;
+        });
+        return { data: { ...response.data, data: filteredData } };
+      }
+
       return { data: response.data };
     } catch (error: any) {
       return { error: error.response?.data?.message || error.message };

@@ -12,6 +12,20 @@ Transform your n8n workflow management with natural language commands. Create co
 
 ---
 
+## 🎯 Token Optimization
+
+**This server is optimized to minimize token consumption**, addressing one of the biggest issues with MCP servers - excessive API token usage.
+
+### What We've Optimized:
+- **90% reduction** in tokens for workflow listing with new `n8n_list_workflows_summary` endpoint
+- **Field filtering** - request only the data you need
+- **Smart defaults** - reduced from 100 to 10-20 results per query
+- **Intelligent warnings** - alerts when operations will consume significant tokens
+
+**See [TOKEN_OPTIMIZATION.md](./TOKEN_OPTIMIZATION.md) for detailed usage guide.**
+
+---
+
 ## ✨ Features
 
 ### 🔄 Workflow Management
@@ -157,6 +171,12 @@ generates charts, and emails them to my team"
 
 ```plaintext
 "Show me all active workflows in the production project"
+→ Uses n8n_list_workflows_summary for efficient token usage
+```
+
+```plaintext
+"Show me the details of workflow abc123"
+→ Uses n8n_get_workflow to fetch complete details only when needed
 ```
 
 ```plaintext
@@ -186,10 +206,11 @@ generates charts, and emails them to my team"
 ## 🛠️ Available Tools
 
 <details>
-<summary><strong>Workflows (10 tools)</strong></summary>
+<summary><strong>Workflows (11 tools)</strong></summary>
 
 - `n8n_create_workflow` - Create new workflows
-- `n8n_list_workflows` - List with filters (active, tags, name, project)
+- `n8n_list_workflows_summary` - ⚡ **Token-efficient** listing (id, name, active, tags only)
+- `n8n_list_workflows` - List with full details and optional field filtering
 - `n8n_get_workflow` - Get detailed workflow information
 - `n8n_update_workflow` - Modify existing workflows
 - `n8n_delete_workflow` - Remove workflows permanently
