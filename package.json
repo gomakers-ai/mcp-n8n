@@ -33,12 +33,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gomakers-ai/mcp-n8n.git"
+    "url": "git+https://github.com/leosepulveda/mcp-n8n.git"
   },
   "bugs": {
-    "url": "https://github.com/gomakers-ai/mcp-n8n/issues"
+    "url": "https://github.com/leosepulveda/mcp-n8n/issues"
   },
-  "homepage": "https://github.com/gomakers-ai/mcp-n8n#readme",
+  "homepage": "https://github.com/leosepulveda/mcp-n8n#readme",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.4",
     "axios": "^1.7.9",

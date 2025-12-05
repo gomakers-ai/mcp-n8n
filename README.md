@@ -325,7 +325,7 @@ If you want to contribute or test local changes:
 
 ```bash
 # Clone repository
-git clone https://github.com/gomakers-ai/mcp-n8n.git
+git clone https://github.com/leosepulveda/mcp-n8n.git
 cd mcp-n8n
 
 # Install dependencies
@@ -386,6 +386,24 @@ cp .env.example .env
 # Build and test
 npm run build
 node dist/index.js
+```
+
+---
+
+## How to Run
+
+To run the main script, execute:
+
+```bash
+python main.py
+```
+
+## How to Test
+
+To run the tests, execute:
+
+```bash
+pytest test_main.py
 ```
 
 ---
@@ -498,8 +516,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📧 Support
 
-- **Issues**: [GitHub Issues](https://github.com/gomakers-ai/mcp-n8n/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/gomakers-ai/mcp-n8n/discussions)
+- **Issues**: [GitHub Issues](https://github.com/leosepulveda/mcp-n8n/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/leosepulveda/mcp-n8n/discussions)
 - **n8n Community**: [community.n8n.io](https://community.n8n.io/)
 
 ---
@@ -508,6 +526,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **[⬆ Back to Top](#mcp-n8n-server)**
 
-Made with ❤️ by [GoMakers.ai](https://gomakers.ai)
 
 </div>
